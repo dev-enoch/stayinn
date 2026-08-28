@@ -2,7 +2,8 @@ import Redis from 'ioredis';
 
 const redisClientSingleton = () => {
   return new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-    maxRetriesPerRequest: null
+    maxRetriesPerRequest: null,
+    lazyConnect: true
   });
 };
 
