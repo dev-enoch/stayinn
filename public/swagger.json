@@ -1,0 +1,410 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Stayinn API",
+    "version": "1.0.0",
+    "description": "API Specification for Stayinn — Hotel Booking Marketplace"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local Development Server"
+    },
+    {
+      "url": "https://stayinn.ng/api",
+      "description": "Production Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Auth"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "phone": { "type": "string", "example": "+2348036930772" },
+                  "password": { "type": "string" },
+                  "role": { "type": "string", "enum": ["BOOKER", "HOTEL_MANAGER"] }
+                },
+                "required": ["fullName", "email", "phone", "password", "role"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Account created successfully" }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": ["Auth"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identifier": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["identifier", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login successful" }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "summary": "Refresh Access Token",
+        "tags": ["Auth"],
+        "security": [],
+        "responses": {
+          "200": { "description": "Token refreshed" }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Logout user",
+        "tags": ["Auth"],
+        "responses": {
+          "200": { "description": "Logged out successfully" }
+        }
+      }
+    },
+    "/hotels": {
+      "get": {
+        "summary": "List approved hotels",
+        "tags": ["Hotels"],
+        "security": [],
+        "responses": {
+          "200": { "description": "List of hotels" }
+        }
+      },
+      "post": {
+        "summary": "Create a hotel",
+        "tags": ["Hotels"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "address": { "type": "string" },
+                  "latitude": { "type": "number" },
+                  "longitude": { "type": "number" },
+                  "coverImage": { "type": "string" },
+                  "amenities": {
+                    "type": "array",
+                    "items": { "type": "string", "enum": ["WIFI", "WATER", "BACKUP_POWER", "PARKING", "POOL", "GYM", "RESTAURANT", "AIR_CONDITIONING"] }
+                  }
+                },
+                "required": ["name", "address", "latitude", "longitude", "coverImage"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Hotel created (pending approval)" }
+        }
+      }
+    },
+    "/hotels/{id}": {
+      "get": {
+        "summary": "Get hotel details",
+        "tags": ["Hotels"],
+        "security": [],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Hotel details" }
+        }
+      },
+      "put": {
+        "summary": "Update hotel details",
+        "tags": ["Hotels"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Hotel updated successfully" }
+        }
+      }
+    },
+    "/hotels/{id}/rooms": {
+      "get": {
+        "summary": "List active room types for a hotel",
+        "tags": ["Rooms"],
+        "security": [],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "List of room types" }
+        }
+      },
+      "post": {
+        "summary": "Create a room type for a hotel",
+        "tags": ["Rooms"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "pricePerNight": { "type": "number" },
+                  "capacity": { "type": "integer" },
+                  "quantity": { "type": "integer" },
+                  "images": { "type": "array", "items": { "type": "string" } }
+                },
+                "required": ["name", "pricePerNight", "capacity", "quantity", "images"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Room type created successfully" }
+        }
+      }
+    },
+    "/hotels/{id}/rooms/{roomId}": {
+      "get": {
+        "summary": "Get room details",
+        "tags": ["Rooms"],
+        "security": [],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "roomId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Room type details" }
+        }
+      },
+      "put": {
+        "summary": "Update room details",
+        "tags": ["Rooms"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "roomId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Room updated successfully" }
+        }
+      }
+    },
+    "/bookings": {
+      "post": {
+        "summary": "Create a booking",
+        "tags": ["Bookings"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hotelId": { "type": "string" },
+                  "roomTypeId": { "type": "string" },
+                  "checkInDate": { "type": "string", "format": "date" },
+                  "checkOutDate": { "type": "string", "format": "date" },
+                  "numberOfGuests": { "type": "integer" }
+                },
+                "required": ["hotelId", "roomTypeId", "checkInDate", "checkOutDate", "numberOfGuests"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Booking created" }
+        }
+      }
+    },
+    "/bookings/me": {
+      "get": {
+        "summary": "Get authenticated user's bookings",
+        "tags": ["Bookings"],
+        "responses": {
+          "200": { "description": "User's bookings" }
+        }
+      }
+    },
+    "/bookings/hotel/{hotelId}": {
+      "get": {
+        "summary": "Get bookings for a specific hotel (MANAGER/ADMIN)",
+        "tags": ["Bookings"],
+        "parameters": [
+          { "name": "hotelId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Hotel's bookings" }
+        }
+      }
+    },
+    "/bookings/{id}": {
+      "get": {
+        "summary": "Get booking details by ID",
+        "tags": ["Bookings"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Booking details" }
+        }
+      }
+    },
+    "/bookings/{id}/confirm": {
+      "post": {
+        "summary": "Confirm a booking via QR scan",
+        "tags": ["Bookings"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "qrData": { "type": "string" },
+                  "qrSignature": { "type": "string" }
+                },
+                "required": ["qrData", "qrSignature"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Booking confirmed" }
+        }
+      }
+    },
+    "/bookings/{id}/cancel": {
+      "post": {
+        "summary": "Cancel a booking",
+        "tags": ["Bookings"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Booking cancelled" }
+        }
+      }
+    },
+    "/payments/initiate": {
+      "post": {
+        "summary": "Initiate Paystack Payment for a booking",
+        "tags": ["Payments"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bookingId": { "type": "string" }
+                },
+                "required": ["bookingId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Payment authorization URL" }
+        }
+      }
+    },
+    "/payments/webhook": {
+      "post": {
+        "summary": "Paystack webhook endpoint",
+        "tags": ["Payments"],
+        "security": [],
+        "responses": {
+          "200": { "description": "Webhook received" }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "summary": "Upload a file (e.g. image)",
+        "tags": ["Uploads"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": { "type": "string", "format": "binary" }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "File uploaded successfully" }
+        }
+      }
+    },
+    "/admin/analytics": {
+      "get": {
+        "summary": "Get platform analytics (ADMIN)",
+        "tags": ["Admin"],
+        "responses": {
+          "200": { "description": "Analytics data" }
+        }
+      }
+    }
+  }
+}

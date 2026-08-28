@@ -1,0 +1,246 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl", "windows"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER
+// ============================================
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  phone        String    @unique
+  passwordHash String
+  fullName     String
+  role         Role      @default(BOOKER)
+  createdAt    DateTime  @default(now()) @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @db.Timestamptz
+
+  hotels       Hotel[]
+  bookings     Booking[]
+  payments     Payment[]
+
+  @@index([role])
+}
+
+enum Role {
+  BOOKER
+  HOTEL_MANAGER
+  ADMIN
+}
+
+// ============================================
+// HOTEL
+// ============================================
+model Hotel {
+  id          String         @id @default(cuid())
+  managerId   String
+  manager     User           @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  name        String
+  description String?        @db.Text
+  address     String
+  latitude    Float
+  longitude   Float
+  coverImage  String?
+  status      HotelStatus    @default(PENDING)
+  createdAt   DateTime       @default(now()) @db.Timestamptz
+  updatedAt   DateTime       @updatedAt @db.Timestamptz
+
+  amenities   HotelAmenity[]
+  roomTypes   RoomType[]
+  bookings    Booking[]
+  payouts     Payout[]
+
+  @@index([status])
+  @@index([latitude, longitude])
+  @@index([managerId])
+}
+
+enum HotelStatus {
+  PENDING
+  APPROVED
+  SUSPENDED
+}
+
+// ============================================
+// HOTEL AMENITY (many-to-many)
+// ============================================
+model HotelAmenity {
+  id       String  @id @default(cuid())
+  hotelId  String
+  hotel    Hotel   @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  amenity  Amenity
+
+  @@unique([hotelId, amenity])
+  @@index([hotelId])
+}
+
+enum Amenity {
+  WIFI
+  WATER
+  BACKUP_POWER
+  PARKING
+  POOL
+  GYM
+  RESTAURANT
+  AIR_CONDITIONING
+}
+
+// ============================================
+// ROOM TYPE
+// ============================================
+model RoomType {
+  id            String       @id @default(cuid())
+  hotelId       String
+  hotel         Hotel        @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  name          String
+  description   String?      @db.Text
+  pricePerNight Int
+  capacity      Int          @default(2)
+  quantity      Int          @default(1)
+  status        RoomStatus   @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @db.Timestamptz
+  updatedAt     DateTime     @updatedAt @db.Timestamptz
+
+  images        RoomImage[]
+  bookings      Booking[]
+
+  @@index([hotelId])
+  @@index([status])
+}
+
+enum RoomStatus {
+  ACTIVE
+  INACTIVE
+}
+
+// ============================================
+// ROOM IMAGE
+// ============================================
+model RoomImage {
+  id         String   @id @default(cuid())
+  roomTypeId String
+  roomType   RoomType @relation(fields: [roomTypeId], references: [id], onDelete: Cascade)
+  url        String
+  sortOrder  Int      @default(0)
+
+  @@index([roomTypeId])
+}
+
+// ============================================
+// BOOKING
+// ============================================
+model Booking {
+  id               String        @id @default(cuid())
+  userId           String
+  user             User          @relation(fields: [userId], references: [id])
+  hotelId          String
+  hotel            Hotel         @relation(fields: [hotelId], references: [id])
+  roomTypeId       String
+  roomType         RoomType      @relation(fields: [roomTypeId], references: [id])
+  checkInDate      DateTime      @db.Date
+  checkOutDate     DateTime      @db.Date
+  numberOfGuests   Int
+  numberOfNights   Int
+  totalAmount      Int
+  commissionRate   Decimal       @db.Decimal(5, 4)
+  commissionAmount Int
+  hotelPayout      Int
+  status           BookingStatus @default(PENDING)
+  qrData           String?       @db.Text
+  qrSignature      String?
+  confirmedAt      DateTime?     @db.Timestamptz
+  cancelledAt      DateTime?     @db.Timestamptz
+  cancelReason     String?
+  createdAt        DateTime      @default(now()) @db.Timestamptz
+  updatedAt        DateTime      @updatedAt @db.Timestamptz
+
+  payment          Payment?
+  payout           Payout?
+
+  @@index([hotelId, checkInDate, checkOutDate])
+  @@index([userId])
+  @@index([status])
+  @@index([roomTypeId])
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ============================================
+// PAYMENT
+// ============================================
+model Payment {
+  id               String         @id @default(cuid())
+  bookingId        String         @unique
+  booking          Booking        @relation(fields: [bookingId], references: [id])
+  userId           String
+  user             User           @relation(fields: [userId], references: [id])
+  amount           Int
+  gateway          PaymentGateway @default(PAYSTACK)
+  gatewayReference String         @unique
+  status           PaymentStatus  @default(INITIATED)
+  createdAt        DateTime       @default(now()) @db.Timestamptz
+  updatedAt        DateTime       @updatedAt @db.Timestamptz
+
+  @@index([bookingId])
+  @@index([status])
+}
+
+enum PaymentGateway {
+  PAYSTACK
+}
+
+enum PaymentStatus {
+  INITIATED
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+// ============================================
+// PAYOUT
+// ============================================
+model Payout {
+  id          String       @id @default(cuid())
+  hotelId     String
+  hotel       Hotel        @relation(fields: [hotelId], references: [id])
+  bookingId   String       @unique
+  booking     Booking      @relation(fields: [bookingId], references: [id])
+  amount      Int
+  status      PayoutStatus @default(PENDING)
+  reference   String?
+  createdAt   DateTime     @default(now()) @db.Timestamptz
+  processedAt DateTime?    @db.Timestamptz
+
+  @@index([hotelId])
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+// ============================================
+// COMMISSION SETTING
+// ============================================
+model CommissionSetting {
+  id        String   @id @default(cuid())
+  rate      Decimal  @db.Decimal(5, 4) @default(0.1000)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
+}
