@@ -1,7 +1,6 @@
-import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { apiClient } from "@/lib/api-client";
 
 import Hero from "@/components/landing/Hero";
 import Amenities from "@/components/landing/Amenities";
@@ -9,18 +8,8 @@ import WhyStayinn from "@/components/landing/WhyStayinn";
 import HotelCard from "@/components/hotel/HotelCard";
 
 export default async function Home() {
-  // Fetch exactly 3 featured hotels for the landing page
-  const featuredHotels = await prisma.hotel.findMany({
-    where: { status: 'APPROVED' },
-    include: {
-      roomTypes: {
-        where: { status: 'ACTIVE' },
-        select: { pricePerNight: true }
-      }
-    },
-    take: 3,
-    orderBy: { createdAt: 'desc' }
-  });
+  const response = await apiClient.get('/api/hotels?limit=3');
+  const featuredHotels = response.success ? response.data.items : [];
 
   return (
     <div className="flex flex-col w-full">
@@ -41,21 +30,16 @@ export default async function Home() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredHotels.map(hotel => {
-              const prices = hotel.roomTypes.map((rt) => rt.pricePerNight);
-              const startingPrice = prices.length > 0 ? Math.min(...prices) : 0;
-              
-              return (
+              {featuredHotels.map((hotel: any) => (
                 <HotelCard 
                   key={hotel.id}
                   id={hotel.id}
                   name={hotel.name}
                   locationName={hotel.address.split(',')[0]}
                   coverImage={hotel.coverImage || ""}
-                  startingPrice={startingPrice}
+                  startingPrice={hotel.startingPrice || 0}
                 />
-              );
-            })}
+              ))}
           </div>
           
           {/* Mobile view all button */}

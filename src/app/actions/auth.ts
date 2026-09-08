@@ -1,10 +1,8 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { comparePassword, hashPassword, signAccessToken, signRefreshToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Role } from "@prisma/client";
+import { apiClient } from "@/lib/api-client";
 
 export async function loginAction(prevState: any, formData: FormData) {
   const identifier = formData.get("identifier") as string;
@@ -15,42 +13,29 @@ export async function loginAction(prevState: any, formData: FormData) {
   }
 
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: identifier },
-          { phone: identifier }
-        ]
-      }
-    });
+    const response = await apiClient.post('/api/auth/login', { identifier, password });
 
-    if (!user) {
-      return { error: "Invalid credentials" };
+    if (!response.success) {
+      return { error: response.error?.message || "Invalid credentials" };
     }
 
-    const isMatch = await comparePassword(password, user.passwordHash);
-    if (!isMatch) {
-      return { error: "Invalid credentials" };
-    }
-
-    const accessToken = await signAccessToken({ userId: user.id, email: user.email, role: user.role });
-    const refreshToken = await signRefreshToken({ userId: user.id });
+    const { accessToken, refreshToken } = response.data;
 
     const cookieStore = await cookies();
-    cookieStore.set("accessToken", accessToken, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === "production", 
-      sameSite: "lax", 
-      path: "/",
-      maxAge: 15 * 60 
-    });
-    
-    cookieStore.set("refreshToken", refreshToken, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === "production", 
+    cookieStore.set("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 7 * 24 * 60 * 60 
+      maxAge: 15 * 60
+    });
+
+    cookieStore.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60
     });
 
   } catch (error) {
@@ -58,7 +43,6 @@ export async function loginAction(prevState: any, formData: FormData) {
     return { error: "Something went wrong. Please try again." };
   }
 
-  // Redirect outside try-catch to avoid swallowing NEXT_REDIRECT
   redirect("/");
 }
 
@@ -73,52 +57,34 @@ export async function registerAction(prevState: any, formData: FormData) {
     return { error: "All fields are required" };
   }
 
-  const role = roleValue === "HOTEL_MANAGER" ? Role.HOTEL_MANAGER : Role.BOOKER;
+  const role = roleValue === "HOTEL_MANAGER" ? "HOTEL_MANAGER" : "BOOKER";
 
   try {
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email },
-          { phone }
-        ]
-      }
+    const response = await apiClient.post('/api/auth/register', {
+      fullName, email, phone, password, role
     });
 
-    if (existingUser) {
-      return { error: "User with this email or phone already exists" };
+    if (!response.success) {
+      return { error: response.error?.message || "Failed to create account" };
     }
 
-    const passwordHash = await hashPassword(password);
-
-    const user = await prisma.user.create({
-      data: {
-        fullName,
-        email,
-        phone,
-        passwordHash,
-        role
-      }
-    });
-
-    const accessToken = await signAccessToken({ userId: user.id, email: user.email, role: user.role });
-    const refreshToken = await signRefreshToken({ userId: user.id });
+    const { accessToken, refreshToken } = response.data;
 
     const cookieStore = await cookies();
-    cookieStore.set("accessToken", accessToken, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === "production", 
-      sameSite: "lax", 
-      path: "/",
-      maxAge: 15 * 60 
-    });
-    
-    cookieStore.set("refreshToken", refreshToken, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === "production", 
+    cookieStore.set("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 7 * 24 * 60 * 60 
+      maxAge: 15 * 60
+    });
+
+    cookieStore.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60
     });
 
   } catch (error) {

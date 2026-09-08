@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiClient } from "@/lib/api-client";
 import { notFound, redirect } from "next/navigation";
 import BookingWizard from "./BookingWizard";
 import { getSession } from "@/lib/auth";
@@ -13,24 +13,17 @@ export default async function BookRoomPage(
     redirect(`/login?callbackUrl=/book/${params.roomId}`);
   }
 
-  const room = await prisma.roomType.findUnique({
-    where: { id: params.roomId },
-    include: {
-      hotel: true,
-      images: {
-        take: 1,
-        orderBy: { sortOrder: 'asc' }
-      }
-    }
-  });
+  const response = await apiClient.get(`/api/rooms/${params.roomId}`);
 
-  if (!room || room.status !== "ACTIVE" || room.hotel.status !== "APPROVED") {
+  if (!response.success || !response.data) {
     notFound();
   }
 
+  const room = response.data;
+
   const serializedRoom = {
     id: room.id,
-    hotelId: room.hotelId,
+    hotelId: room.hotel.id,
     name: room.name,
     hotelName: room.hotel.name,
     capacity: room.capacity,

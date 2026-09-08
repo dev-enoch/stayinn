@@ -18,23 +18,16 @@ export const metadata: Metadata = {
   description: "Experience curated spaces, unparalleled comfort, and authentic local hospitality across Nigeria.",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getSession();
-
   return (
     <html lang="en" className={`${inter.variable}`}>
-      <body className="min-h-screen flex flex-col font-sans bg-gray-50 text-gray-900 pb-[calc(56px+env(safe-area-inset-bottom))] md:pb-0 pt-0 md:pt-20">
+      <body className="min-h-screen flex flex-col font-sans bg-gray-50 text-gray-900">
         <ReactQueryProvider>
-          <Header session={session} />
-          <main className="flex-1 flex flex-col w-full">
-            {children}
-          </main>
-          <Footer />
-          <BottomNav />
+          {children}
         </ReactQueryProvider>
       </body>
     </html>

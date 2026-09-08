@@ -1,28 +1,21 @@
-import { prisma } from "@/lib/prisma";
+import { apiClient } from "@/lib/api-client";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import { Users, ChevronLeft } from "lucide-react";
+import { Users, ArrowLeft, Calendar } from "lucide-react";
 import RoomGallery from "./RoomGallery";
 
 export default async function RoomDetailPage(
   props: { params: Promise<{ id: string; roomId: string }> }
 ) {
   const params = await props.params;
-  const { id: hotelId, roomId } = params;
+  const response = await apiClient.get(`/api/rooms/${params.roomId}`);
 
-  const room = await prisma.roomType.findUnique({
-    where: { id: roomId, hotelId: hotelId, status: "ACTIVE" },
-    include: {
-      images: {
-        orderBy: { sortOrder: 'asc' }
-      },
-      hotel: true
-    }
-  });
-
-  if (!room || room.hotel.status !== "APPROVED") {
+  if (!response.success || !response.data) {
     notFound();
   }
+
+  const room = response.data;
 
   const formattedPrice = new Intl.NumberFormat("en-NG", {
     style: "currency",
@@ -32,7 +25,7 @@ export default async function RoomDetailPage(
 
   // Default image if none exist
   const images = room.images.length > 0
-    ? room.images.map(img => img.url)
+    ? room.images.map((img: any) => img.url)
     : ["https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"];
 
   return (
@@ -40,8 +33,8 @@ export default async function RoomDetailPage(
       {/* Top navigation */}
       <div className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 h-20 flex items-center">
-          <Link href={`/hotels/${hotelId}`} className="flex items-center text-gray-900 hover:text-green-600 font-semibold transition-colors">
-            <ChevronLeft size={24} className="mr-1" />
+          <Link href={`/hotels/${room.hotel.id}`} className="flex items-center text-gray-900 hover:text-green-600 font-semibold transition-colors">
+            <ArrowLeft size={24} className="mr-1" />
             Back to {room.hotel.name}
           </Link>
         </div>

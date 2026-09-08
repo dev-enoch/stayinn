@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiClient } from "@/lib/api-client";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -10,17 +10,8 @@ export default async function ManagerDashboardPage() {
     redirect("/login");
   }
 
-  const hotel = await prisma.hotel.findFirst({
-    where: { managerId: session.userId },
-    include: {
-      roomTypes: true,
-      bookings: {
-        where: { status: { in: ["PAID", "CONFIRMED", "COMPLETED"] } },
-        orderBy: { createdAt: 'desc' },
-        include: { roomType: true, user: true }
-      }
-    }
-  });
+  const response = await apiClient.get('/api/hotels/me');
+  const hotel = response.success ? response.data : null;
 
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -48,8 +39,8 @@ export default async function ManagerDashboardPage() {
     );
   }
 
-  const totalEarnings = hotel.bookings.reduce((sum, b) => sum + (b.totalAmount * 0.9), 0); // Hotel keeps 90%
-  const pendingCheckins = hotel.bookings.filter(b => b.status === "PAID").length;
+  const totalEarnings = hotel.totalEarnings;
+  const pendingCheckins = hotel.pendingCheckins;
 
   return (
     <div className="min-h-screen bg-gray-50 pt-28 pb-32">
@@ -82,7 +73,7 @@ export default async function ManagerDashboardPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total Bookings</p>
-              <p className="text-2xl font-bold text-gray-900">{hotel.bookings.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{hotel.bookingsCount}</p>
             </div>
           </div>
           <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-6">
@@ -113,14 +104,14 @@ export default async function ManagerDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {hotel.bookings.map(booking => (
+                {hotel.bookings.map((booking: any) => (
                   <tr key={booking.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="p-4 font-medium text-gray-900">{booking.user.fullName}</td>
-                    <td className="p-4 text-gray-600">{booking.roomType.name}</td>
+                    <td className="p-4 font-medium text-gray-900">{booking.guestName}</td>
+                    <td className="p-4 text-gray-600">{booking.roomName}</td>
                     <td className="p-4 text-gray-600">
                       {new Date(booking.checkInDate).toLocaleDateString()} &mdash; {new Date(booking.checkOutDate).toLocaleDateString()}
                     </td>
-                    <td className="p-4 font-medium text-gray-900">{formatPrice(booking.totalAmount * 0.9)}</td>
+                    <td className="p-4 font-medium text-gray-900">{formatPrice(booking.payoutAmount)}</td>
                     <td className="p-4">
                       <span className={`px-3 py-1 text-xs font-bold rounded-full ${
                         booking.status === 'PAID' ? 'bg-orange-100 text-orange-700' :

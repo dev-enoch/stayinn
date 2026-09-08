@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { bookingSchema } from '@/lib/validation/booking';
 import { verifyAccessToken } from '@/lib/auth';
+import { initializeTransaction } from '@/lib/paystack';
+import { v4 as uuidv4 } from "uuid";
 import { Prisma } from '@prisma/client';
 
 export async function POST(req: Request) {
@@ -86,12 +88,39 @@ export async function POST(req: Request) {
         }
       });
 
+      // Initialize Paystack
+      const user = await db.user.findUnique({ where: { id: payload.userId } });
+      const reference = `STAYINN_${uuidv4()}`;
+      const paystackRes = await initializeTransaction(
+        user!.email,
+        totalAmount, // already in kobo
+        reference,
+        { bookingId: booking.id }
+      );
+
+      // Upsert Payment Record
+      await db.payment.upsert({
+        where: { bookingId: booking.id },
+        create: {
+          bookingId: booking.id,
+          userId: payload.userId,
+          amount: totalAmount,
+          gatewayReference: reference,
+          status: "INITIATED"
+        },
+        update: {
+          gatewayReference: reference,
+          status: "INITIATED"
+        }
+      });
+
       return NextResponse.json({
         success: true,
         data: {
           id: booking.id,
           totalAmount: booking.totalAmount / 100,
-          status: booking.status
+          status: booking.status,
+          authorizationUrl: paystackRes.data.authorization_url
         },
         message: 'Booking created'
       }, { status: 201 });

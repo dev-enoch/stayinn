@@ -1,7 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { apiClient } from "@/lib/api-client";
 import HotelCard from "@/components/hotel/HotelCard";
 import { Search } from "lucide-react";
-import { HotelStatus } from "@prisma/client";
 
 export default async function ExplorePage({
   searchParams,
@@ -10,31 +9,9 @@ export default async function ExplorePage({
 }) {
   const { q } = await searchParams;
 
-  const whereClause = q
-    ? {
-        status: HotelStatus.APPROVED,
-        OR: [
-          { name: { contains: q, mode: "insensitive" as any } },
-          { address: { contains: q, mode: "insensitive" as any } },
-        ],
-      }
-    : {
-        status: HotelStatus.APPROVED,
-      };
-
-  const hotels = await prisma.hotel.findMany({
-    where: whereClause,
-    include: {
-      roomTypes: {
-        where: {
-          status: "ACTIVE",
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const url = q ? `/api/hotels?search=${encodeURIComponent(q)}&limit=50` : `/api/hotels?limit=50`;
+  const response = await apiClient.get(url);
+  const hotels = response.success ? response.data.items : [];
 
   return (
     <div className="w-full min-h-screen bg-white pt-32 pb-24">
@@ -80,22 +57,16 @@ export default async function ExplorePage({
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {hotels.map(hotel => {
-              const minPrice = hotel.roomTypes.length > 0 
-                ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight))
-                : 0;
-                
-              return (
-                <HotelCard 
-                  key={hotel.id}
-                  id={hotel.id}
-                  name={hotel.name}
-                  locationName={hotel.address.split(',')[0]}
-                  coverImage={hotel.coverImage || ""}
-                  startingPrice={minPrice}
-                />
-              );
-            })}
+            {hotels.map((hotel: any) => (
+              <HotelCard 
+                key={hotel.id}
+                id={hotel.id}
+                name={hotel.name}
+                locationName={hotel.address.split(',')[0]}
+                coverImage={hotel.coverImage || ""}
+                startingPrice={hotel.startingPrice || 0}
+              />
+            ))}
           </div>
         )}
       </div>

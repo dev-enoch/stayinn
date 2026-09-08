@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiClient } from "@/lib/api-client";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Building2, CheckCircle, Clock, XCircle, Settings, BarChart3 } from "lucide-react";
@@ -10,18 +10,14 @@ export default async function AdminDashboardPage() {
     redirect("/login");
   }
 
-  const [hotels, bookings] = await Promise.all([
-    prisma.hotel.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { manager: true }
-    }),
-    prisma.booking.findMany({
-      where: { status: { in: ["PAID", "CONFIRMED", "COMPLETED"] } }
-    })
-  ]);
+  const response = await apiClient.get('/api/admin/analytics');
+  
+  if (!response.success || !response.data) {
+    return <div>Error loading admin dashboard.</div>;
+  }
 
-  const totalRevenue = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
-  const totalCommission = totalRevenue * 0.10; // 10% platform fee
+  const { totalUsers, totalHotels, totalBookings, totalRevenue, hotels } = response.data;
+  const totalCommission = totalRevenue; // Platform fee is calculated on backend if it's commissionAmount
 
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -31,8 +27,8 @@ export default async function AdminDashboardPage() {
     }).format(amount);
   };
 
-  const pendingHotels = hotels.filter(h => h.status === "PENDING");
-  const approvedHotels = hotels.filter(h => h.status === "APPROVED");
+  const pendingHotels = hotels.filter((h: any) => h.status === "PENDING");
+  const approvedHotels = hotels.filter((h: any) => h.status === "APPROVED");
 
   return (
     <div className="min-h-screen bg-gray-50 pt-28 pb-32">
@@ -97,10 +93,10 @@ export default async function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {hotels.map(hotel => (
+                {hotels.map((hotel: any) => (
                   <tr key={hotel.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="p-4 font-medium text-gray-900">{hotel.name}</td>
-                    <td className="p-4 text-gray-600">{hotel.manager.fullName}</td>
+                    <td className="p-4 text-gray-600">{hotel.manager?.fullName}</td>
                     <td className="p-4 text-gray-600">{hotel.address}</td>
                     <td className="p-4">
                       <span className={`px-3 py-1 text-xs font-bold rounded-full ${

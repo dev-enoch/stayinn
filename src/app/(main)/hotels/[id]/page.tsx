@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiClient } from "@/lib/api-client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,25 +24,17 @@ const getAmenityLabel = (amenity: Amenity) => {
   return amenity.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
 };
 
-export default async function HotelStorePage(
+export default async function HotelDetailPage(
   props: { params: Promise<{ id: string }> }
 ) {
   const params = await props.params;
-  const hotelId = params.id;
+  const response = await apiClient.get(`/api/hotels/${params.id}`);
 
-  const hotel = await prisma.hotel.findUnique({
-    where: { id: hotelId },
-    include: {
-      amenities: true,
-      roomTypes: {
-        where: { status: "ACTIVE" },
-      },
-    },
-  });
-
-  if (!hotel || hotel.status !== "APPROVED") {
+  if (!response.success || !response.data) {
     notFound();
   }
+
+  const hotel = response.data;
 
   return (
     <div className="w-full min-h-screen bg-white pt-20">
@@ -91,10 +83,10 @@ export default async function HotelStorePage(
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-6 tracking-tight">What this place offers</h3>
                 <div className="flex flex-wrap gap-4">
-                  {hotel.amenities.map(a => (
-                    <div key={a.id} className="flex items-center gap-2 px-5 py-3 rounded-full border border-gray-200 text-gray-700 bg-gray-50/50 hover:bg-gray-50 transition-colors">
-                      {getAmenityIcon(a.amenity)}
-                      <span className="font-medium">{getAmenityLabel(a.amenity)}</span>
+                  {hotel.amenities.map((a: any) => (
+                    <div key={a.code} className="flex items-center gap-2 px-5 py-3 rounded-full border border-gray-200 text-gray-700 bg-gray-50/50 hover:bg-gray-50 transition-colors">
+                      {getAmenityIcon(a.code)}
+                      <span className="font-medium">{getAmenityLabel(a.code)}</span>
                     </div>
                   ))}
                 </div>
@@ -133,7 +125,7 @@ export default async function HotelStorePage(
             <p className="text-gray-500 text-lg">No rooms currently available.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {hotel.roomTypes.map(room => {
+              {hotel.roomTypes.map((room: any) => {
                 const formattedPrice = new Intl.NumberFormat("en-NG", {
                   style: "currency",
                   currency: "NGN",

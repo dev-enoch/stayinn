@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiClient } from "@/lib/api-client";
 import { notFound, redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import Image from "next/image";
@@ -6,7 +6,7 @@ import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import { CheckCircle, AlertCircle, ArrowLeft, Download, Calendar as CalendarIcon, MapPin } from "lucide-react";
 
-export default async function BookingConfirmationPage(
+export default async function BookingDetailPage(
   props: { params: Promise<{ id: string }>, searchParams: Promise<{ status?: string }> }
 ) {
   const params = await props.params;
@@ -14,26 +14,16 @@ export default async function BookingConfirmationPage(
   const session = await getSession();
 
   if (!session) {
-    redirect("/login");
+    redirect(`/login?callbackUrl=/bookings/${params.id}`);
   }
 
-  const booking = await prisma.booking.findUnique({
-    where: { id: params.id },
-    include: {
-      hotel: true,
-      roomType: {
-        include: {
-          images: { take: 1 }
-        }
-      },
-      payment: true,
-      user: true,
-    }
-  });
+  const response = await apiClient.get(`/api/bookings/${params.id}`);
 
-  if (!booking) {
+  if (!response.success || !response.data) {
     notFound();
   }
+
+  const booking = response.data;
 
   // Ensure user owns this booking, or is hotel manager for this hotel, or is admin
   if (booking.userId !== session.userId && session.role !== "ADMIN" && session.role !== "HOTEL_MANAGER") {
