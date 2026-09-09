@@ -443,10 +443,10 @@ export default function SupportPage() {
                   <span>Guest Terms of Service</span>
                   <ExternalLink size={16} />
                 </a>
-                <a href="#" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
+                <Link href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Privacy Policy & NDPR Compliance</span>
                   <ExternalLink size={16} />
-                </a>
+                </Link>
                 <a href="#" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Party & Photography Strict Policy</span>
                   <ExternalLink size={16} />

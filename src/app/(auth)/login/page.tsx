@@ -66,7 +66,7 @@ export default function LoginPage() {
         </div>
 
         <div className="flex items-center justify-between pt-4">
-          <Link href="#" className="text-sm text-green-600 font-medium hover:text-green-700 transition-colors">
+          <Link href="/forgot-password" className="text-sm text-green-600 font-medium hover:text-green-700 transition-colors">
             Forgot Password?
           </Link>
           <button 

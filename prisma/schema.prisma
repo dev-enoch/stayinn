@@ -23,6 +23,8 @@ model User {
   twoFactorEnabled   Boolean       @default(false)
   powerRequirement   String?
   internetRequirement String?
+  resetToken         String?
+  resetTokenExpiry   DateTime?
 
   hotels             Hotel[]
   bookings           Booking[]

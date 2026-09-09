@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, Calendar, TrendingUp, Bolt, ShieldCheck, Home, Shield, ConciergeBell, Landmark, CheckCircle, Timer, Camera, Rocket, ChevronRight, Phone } from "lucide-react";
+import YieldEstimator from "@/components/host/YieldEstimator";
 
 export default function HostPage() {
   return (
@@ -120,141 +121,7 @@ export default function HostPage() {
 
       {/* Interactive Earnings Calculator Section */}
       <section className="w-full max-w-[1280px] mx-auto px-4 md:px-12 py-16 -mt-16 relative z-30" id="calculator">
-        <div className="p-8 lg:p-12 rounded-3xl bg-white shadow-2xl shadow-teal-900/5 border border-slate-100">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-10 border-b border-slate-100">
-            <div className="max-w-xl">
-              <span className="text-xs uppercase tracking-widest text-orange-600 font-bold">Simulate Your Yield</span>
-              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 tracking-tight mt-2 font-bold">
-                Estimate Your Monthly Rental Income
-              </h2>
-              <p className="text-slate-600 mt-3 leading-relaxed">
-                Calculated against real-time Stayinn booking volume, seasonal surge rates, and corporate lease averages across Nigeria.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 p-1.5 rounded-full bg-slate-100 self-stretch sm:self-auto border border-slate-200">
-              <button className="px-6 py-2 rounded-full bg-white text-sm font-bold shadow-sm text-teal-900 transition-all">
-                NGN (₦)
-              </button>
-              <button className="px-6 py-2 rounded-full text-slate-500 text-sm hover:text-slate-900 font-bold transition-all">
-                USD ($)
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-10">
-            {/* Interactive Controls */}
-            <div className="lg:col-span-7 flex flex-col gap-8">
-
-              {/* City Selection */}
-              <div className="flex flex-col gap-3">
-                <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">City</label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <button className="px-4 py-4 rounded-2xl bg-teal-900 text-white font-bold transition-all text-center flex items-center justify-center gap-2 shadow-md">
-                    Lagos
-                  </button>
-                  <button className="px-4 py-4 rounded-2xl bg-slate-50 text-slate-700 font-bold hover:bg-slate-100 border border-slate-200 transition-all text-center flex items-center justify-center gap-2">
-                    Abuja
-                  </button>
-                  <button className="px-4 py-4 rounded-2xl bg-slate-50 text-slate-700 font-bold hover:bg-slate-100 border border-slate-200 transition-all text-center flex items-center justify-center gap-2">
-                    Port Harcourt
-                  </button>
-                </div>
-              </div>
-
-              {/* Neighborhood Selection */}
-              <div className="flex flex-col gap-3">
-                <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Prime Neighborhood</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <button className="px-3 py-3 rounded-xl bg-teal-50 text-teal-900 border border-teal-200 text-sm font-bold transition-all text-center shadow-sm">
-                    Ikoyi
-                  </button>
-                  <button className="px-3 py-3 rounded-xl bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold hover:bg-slate-100 transition-all text-center">
-                    Victoria Island
-                  </button>
-                  <button className="px-3 py-3 rounded-xl bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold hover:bg-slate-100 transition-all text-center">
-                    Lekki Phase 1
-                  </button>
-                  <button className="px-3 py-3 rounded-xl bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold hover:bg-slate-100 transition-all text-center">
-                    Maitama
-                  </button>
-                </div>
-              </div>
-
-              {/* Bedroom Capacity Selection */}
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between items-center">
-                  <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Property Size</label>
-                  <span className="text-sm text-teal-900 font-bold">2 Bedroom Luxury Flat</span>
-                </div>
-                <div className="grid grid-cols-4 gap-3">
-                  <button className="px-3 py-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold hover:bg-slate-100 transition-all text-center">
-                    1 Bed
-                  </button>
-                  <button className="px-3 py-4 rounded-xl bg-teal-900 border border-teal-900 text-white font-bold transition-all text-center shadow-md">
-                    2 Bed
-                  </button>
-                  <button className="px-3 py-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold hover:bg-slate-100 transition-all text-center">
-                    3 Bed
-                  </button>
-                  <button className="px-3 py-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold hover:bg-slate-100 transition-all text-center">
-                    4+ Bed
-                  </button>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Calculated Yield Output Display */}
-            <div className="lg:col-span-5 p-8 rounded-3xl bg-slate-50 flex flex-col justify-between h-full border border-slate-200 shadow-inner relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-teal-900/5 rounded-bl-[100px] pointer-events-none"></div>
-
-              <div className="flex flex-col gap-4 relative z-10">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <span className="text-xs uppercase tracking-widest text-slate-500 font-bold">Estimated Monthly Payout</span>
-                  <span className="px-3 py-1.5 rounded-full bg-teal-100 text-teal-900 text-xs font-bold flex items-center gap-1.5 border border-teal-200">
-                    <span className="w-2 h-2 rounded-full bg-teal-900"></span> 82% Occupancy
-                  </span>
-                </div>
-
-                <div className="my-4">
-                  <span className="font-serif text-5xl md:text-6xl text-teal-900 font-bold tracking-tight block">
-                    ₦2,400,000
-                  </span>
-                  <span className="text-slate-500 font-medium mt-2 block">
-                    approx. <span className="font-bold text-slate-900">$1,600 USD</span> net per calendar month
-                  </span>
-                </div>
-
-                {/* Yield breakdown chips */}
-                <div className="space-y-3 pt-4 border-t border-slate-200">
-                  <div className="flex items-center justify-between text-sm py-2.5 px-4 rounded-xl bg-white border border-slate-100 shadow-sm">
-                    <span className="text-slate-500 font-bold">Projected ADR (Avg Daily Rate)</span>
-                    <span className="font-bold text-slate-900">₦97,500 / night</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm py-2.5 px-4 rounded-xl bg-white border border-slate-100 shadow-sm">
-                    <span className="text-slate-500 font-bold">Concierge & Housekeeping</span>
-                    <span className="font-bold text-teal-900">Fully Included (0% added)</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm py-2.5 px-4 rounded-xl bg-white border border-slate-100 shadow-sm">
-                    <span className="text-slate-500 font-bold">Host Protection Insurance</span>
-                    <span className="font-bold text-orange-600">Up to ₦25,000,000</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-8 flex flex-col gap-4 relative z-10">
-                <button className="w-full h-14 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 transition-all">
-                  <span>Continue with this Estimate</span>
-                  <ChevronRight size={20} />
-                </button>
-                <p className="text-xs text-slate-500 font-semibold text-center">
-                  No long-term lock-in. Retain complete personal stay privileges anytime.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
+        <YieldEstimator />
       </section>
 
       {/* Three-Pillar Host Benefits Grid */}
