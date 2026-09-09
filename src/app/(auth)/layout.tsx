@@ -49,11 +49,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Right side - Form Container */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 md:p-12 xl:p-24 bg-slate-50">
+      <main className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 md:p-12 xl:p-24 bg-slate-50">
         <div className="w-full max-w-[440px] bg-white p-8 sm:p-10 rounded-2xl border border-slate-200 shadow-xl relative overflow-y-auto max-h-[90vh] scrollbar-hide">
            {children}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

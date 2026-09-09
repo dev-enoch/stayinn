@@ -28,6 +28,14 @@ export async function POST(req: Request) {
           { email: identifier },
           { phone: identifier }
         ]
+      },
+      select: {
+        id: true,
+        email: true,
+        phone: true,
+        fullName: true,
+        role: true,
+        passwordHash: true,
       }
     });
 

@@ -33,7 +33,8 @@ export default function LoginPage() {
             name="identifier"
             type="text" 
             required
-            className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2.5 text-slate-900 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors placeholder:text-slate-400"
+            autoComplete="username"
+            className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-3 md:py-2.5 text-slate-900 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors placeholder:text-slate-400 min-h-[44px]"
           />
         </div>
 
@@ -46,18 +47,19 @@ export default function LoginPage() {
             name="password"
             type="password" 
             required
-            className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2.5 text-slate-900 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors placeholder:text-slate-400"
+            autoComplete="current-password"
+            className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-3 md:py-2.5 text-slate-900 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors placeholder:text-slate-400 min-h-[44px]"
           />
         </div>
 
         <div className="flex items-center justify-between pt-4">
-          <Link href="/forgot-password" className="text-sm text-green-600 font-medium hover:text-green-700 transition-colors">
+          <Link href="/forgot-password" className="text-sm text-green-600 font-medium hover:text-green-700 transition-colors min-h-[44px] inline-flex items-center">
             Forgot Password?
           </Link>
           <button 
             type="submit" 
             disabled={isPending}
-            className="bg-slate-900 text-white text-sm font-semibold py-2 px-6 rounded hover:bg-slate-800 transition-colors disabled:opacity-70 border border-slate-900"
+            className="bg-slate-900 text-white text-sm font-semibold py-3 px-6 rounded hover:bg-slate-800 transition-colors disabled:opacity-70 border border-slate-900 min-h-[44px]"
           >
             {isPending ? "Logging in..." : "Login"}
           </button>

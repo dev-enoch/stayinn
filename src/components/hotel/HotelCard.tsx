@@ -72,20 +72,20 @@ export default function HotelCard({
         
         {/* Top Badges */}
         <div className="absolute top-3 left-3 flex items-center gap-1.5">
-          <span className="px-2.5 py-1 rounded-full bg-teal-900/90 text-white text-[11px] font-bold backdrop-blur-sm shadow-sm flex items-center gap-1">
+          <span className="px-3 py-1.5 rounded-full bg-teal-900/90 text-white text-xs font-bold backdrop-blur-sm shadow-sm flex items-center gap-1">
             Verified
           </span>
-          <span className="px-2.5 py-1 rounded-full bg-orange-700 text-white text-[11px] font-bold backdrop-blur-sm shadow-sm">
+          <span className="px-3 py-1.5 rounded-full bg-orange-700 text-white text-xs font-bold backdrop-blur-sm shadow-sm">
             Superhost
           </span>
         </div>
         
         {/* Wishlist Button (prevent default to avoid navigating) */}
         <button 
-          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-slate-600 hover:text-red-500 flex items-center justify-center backdrop-blur-sm transition-colors shadow-sm z-10"
+          className="absolute top-3 right-3 w-[44px] h-[44px] rounded-full bg-white/80 hover:bg-white text-slate-600 hover:text-red-500 flex items-center justify-center backdrop-blur-sm transition-colors shadow-sm z-10"
           onClick={(e) => e.preventDefault()}
         >
-          <Heart size={16} />
+          <Heart size={20} />
         </button>
         
         {/* Gallery Dots */}

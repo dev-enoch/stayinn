@@ -117,7 +117,13 @@ export default async function ExplorePage(
 
   return (
     <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
-      
+      {/* Visually-hidden h1 for SEO & screen readers (SI-31) */}
+      <h1 className="sr-only">
+        {searchQuery
+          ? `Serviced apartments in ${searchQuery} — Stayinn`
+          : "Explore Verified Serviced Apartments in Nigeria — Stayinn"}
+      </h1>
+
       {/* Sticky Filter Bar */}
       <section className="sticky top-20 z-30 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
         <div className="max-w-[1440px] mx-auto px-4 md:px-12 py-3 flex flex-col gap-3">
