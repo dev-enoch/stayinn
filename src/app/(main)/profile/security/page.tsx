@@ -2,18 +2,22 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { verifyAccessToken } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import SecurityClient from './SecurityClient';
+import ProfileSecurityClient from './ProfileSecurityClient';
 
 export const dynamic = 'force-dynamic';
 
-export default async function SecurityPage() {
+export default async function ProfileSecurityPage() {
   const cookieStore = await cookies();
   const token = cookieStore.get('accessToken')?.value;
 
-  if (!token) redirect('/login');
+  if (!token) {
+    redirect('/login');
+  }
 
   const session = await verifyAccessToken(token);
-  if (!session?.userId) redirect('/login');
+  if (!session?.userId) {
+    redirect('/login');
+  }
 
   const user = await prisma.user.findUnique({
     where: { id: session.userId },
@@ -22,7 +26,13 @@ export default async function SecurityPage() {
     }
   });
 
-  if (!user) redirect('/login');
+  if (!user) {
+    redirect('/login');
+  }
 
-  return <SecurityClient user={user} />;
+  return (
+    <div className="animate-in fade-in duration-500 slide-in-from-bottom-4">
+      <ProfileSecurityClient user={user} />
+    </div>
+  );
 }

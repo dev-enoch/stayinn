@@ -6,6 +6,9 @@ import { z } from 'zod';
 const updateProfileSchema = z.object({
   fullName: z.string().min(2, "Full name is required").optional(),
   phone: z.string().min(10, "Valid phone number is required").optional(),
+  powerRequirement: z.string().nullable().optional(),
+  internetRequirement: z.string().nullable().optional(),
+  twoFactorEnabled: z.boolean().optional(),
 });
 
 export async function GET() {
@@ -23,6 +26,9 @@ export async function GET() {
         fullName: true,
         phone: true,
         role: true,
+        powerRequirement: true,
+        internetRequirement: true,
+        twoFactorEnabled: true,
         createdAt: true,
       }
     });
@@ -56,7 +62,7 @@ export async function PUT(req: Request) {
       }, { status: 400 });
     }
 
-    const { fullName, phone } = validatedData.data;
+    const { fullName, phone, powerRequirement, internetRequirement, twoFactorEnabled } = validatedData.data;
 
     // Optional: check if phone is unique if changed
     if (phone) {
@@ -73,6 +79,9 @@ export async function PUT(req: Request) {
       data: {
         ...(fullName && { fullName }),
         ...(phone && { phone }),
+        ...(powerRequirement !== undefined && { powerRequirement }),
+        ...(internetRequirement !== undefined && { internetRequirement }),
+        ...(twoFactorEnabled !== undefined && { twoFactorEnabled }),
       },
       select: {
         id: true,
@@ -80,6 +89,9 @@ export async function PUT(req: Request) {
         fullName: true,
         phone: true,
         role: true,
+        powerRequirement: true,
+        internetRequirement: true,
+        twoFactorEnabled: true,
         createdAt: true,
       }
     });
