@@ -4,54 +4,54 @@ import { ArrowRight, Calendar, TrendingUp, Bolt, ShieldCheck, Home, Shield, Conc
 
 export default function HostPage() {
   return (
-    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-20">
-      
+    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-10">
+
       {/* Immersive Editorial Hero */}
       <section className="relative w-full overflow-hidden bg-teal-950 text-white min-h-[90vh] flex items-center">
         <div className="absolute inset-0 z-0 opacity-40 mix-blend-luminosity">
-          <div 
-            className="w-full h-full bg-cover bg-center" 
+          <div
+            className="w-full h-full bg-cover bg-center"
             style={{ backgroundImage: `url('https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80')` }}
           ></div>
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-teal-950 via-teal-950/95 to-teal-950/60 z-10"></div>
         <div className="absolute -right-32 -bottom-32 w-96 h-96 rounded-full bg-orange-500/15 blur-3xl pointer-events-none z-10"></div>
-        
+
         <div className="relative z-20 max-w-[1280px] mx-auto px-4 md:px-12 w-full py-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             {/* Left: Text & High Impact Value Pitch */}
             <div className="lg:col-span-7 flex flex-col gap-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md w-fit border border-white/20">
                 <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
                 <span className="text-xs uppercase tracking-widest text-teal-100 font-bold">Partner Portal & Host Yield Engine</span>
               </div>
-              
+
               <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-white font-bold">
                 Turn Your Luxury Space into <span className="italic font-normal text-orange-400">Exceptional Returns</span>
               </h1>
-              
+
               <p className="text-lg md:text-xl text-teal-100 max-w-xl leading-relaxed">
                 Join over 1,200 property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.
               </p>
-              
+
               <div className="flex flex-wrap items-center gap-4 pt-4">
-                <a 
-                  href="#calculator" 
+                <a
+                  href="#calculator"
                   className="h-14 px-8 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold flex items-center justify-center gap-2 shadow-xl shadow-orange-500/20 transition-all duration-200 hover:-translate-y-0.5"
                 >
                   <span>List Your Property</span>
                   <ChevronRight size={20} />
                 </a>
-                <a 
-                  href="#inspection" 
+                <a
+                  href="#inspection"
                   className="h-14 px-8 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold backdrop-blur-md flex items-center justify-center gap-2 transition-all"
                 >
                   <Calendar size={20} />
                   <span>Schedule Inspection</span>
                 </a>
               </div>
-              
+
               {/* Trust Badges Bar */}
               <div className="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 border-t border-teal-800/50 mt-4">
                 <div className="flex flex-col">
@@ -68,13 +68,13 @@ export default function HostPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Right: Premium Floating Showcase Card */}
             <div className="lg:col-span-5 relative hidden lg:block">
               <div className="relative z-10 p-6 rounded-3xl bg-white text-slate-900 shadow-2xl border border-slate-100 transform rotate-1">
                 <div className="relative h-64 rounded-2xl overflow-hidden mb-6">
-                  <div 
-                    className="w-full h-full bg-cover bg-center" 
+                  <div
+                    className="w-full h-full bg-cover bg-center"
                     style={{ backgroundImage: `url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80')` }}
                   ></div>
                   <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-teal-900/90 backdrop-blur-md text-white text-xs font-bold flex items-center gap-1.5 shadow-md">
@@ -85,7 +85,7 @@ export default function HostPage() {
                     Ikoyi Waterfront Loft
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between pb-6 border-b border-slate-100">
                   <div>
                     <span className="text-xs uppercase tracking-wider text-slate-500 font-bold">Host Yield Highlight</span>
@@ -96,7 +96,7 @@ export default function HostPage() {
                     <span className="block text-xs text-slate-500 font-bold mt-0.5">August 2024 Net</span>
                   </div>
                 </div>
-                
+
                 {/* Mini Sparkline Visualization */}
                 <div className="mt-6 p-4 rounded-2xl bg-slate-50 flex flex-col gap-3 border border-slate-100">
                   <div className="flex items-center justify-between text-xs font-bold">
@@ -140,11 +140,11 @@ export default function HostPage() {
               </button>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-10">
             {/* Interactive Controls */}
             <div className="lg:col-span-7 flex flex-col gap-8">
-              
+
               {/* City Selection */}
               <div className="flex flex-col gap-3">
                 <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">City</label>
@@ -160,7 +160,7 @@ export default function HostPage() {
                   </button>
                 </div>
               </div>
-              
+
               {/* Neighborhood Selection */}
               <div className="flex flex-col gap-3">
                 <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Prime Neighborhood</label>
@@ -179,7 +179,7 @@ export default function HostPage() {
                   </button>
                 </div>
               </div>
-              
+
               {/* Bedroom Capacity Selection */}
               <div className="flex flex-col gap-3">
                 <div className="flex justify-between items-center">
@@ -201,13 +201,13 @@ export default function HostPage() {
                   </button>
                 </div>
               </div>
-              
+
             </div>
-            
+
             {/* Calculated Yield Output Display */}
             <div className="lg:col-span-5 p-8 rounded-3xl bg-slate-50 flex flex-col justify-between h-full border border-slate-200 shadow-inner relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-teal-900/5 rounded-bl-[100px] pointer-events-none"></div>
-              
+
               <div className="flex flex-col gap-4 relative z-10">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <span className="text-xs uppercase tracking-widest text-slate-500 font-bold">Estimated Monthly Payout</span>
@@ -215,7 +215,7 @@ export default function HostPage() {
                     <span className="w-2 h-2 rounded-full bg-teal-900"></span> 82% Occupancy
                   </span>
                 </div>
-                
+
                 <div className="my-4">
                   <span className="font-serif text-5xl md:text-6xl text-teal-900 font-bold tracking-tight block">
                     ₦2,400,000
@@ -224,7 +224,7 @@ export default function HostPage() {
                     approx. <span className="font-bold text-slate-900">$1,600 USD</span> net per calendar month
                   </span>
                 </div>
-                
+
                 {/* Yield breakdown chips */}
                 <div className="space-y-3 pt-4 border-t border-slate-200">
                   <div className="flex items-center justify-between text-sm py-2.5 px-4 rounded-xl bg-white border border-slate-100 shadow-sm">
@@ -241,7 +241,7 @@ export default function HostPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="pt-8 flex flex-col gap-4 relative z-10">
                 <button className="w-full h-14 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 transition-all">
                   <span>Continue with this Estimate</span>
@@ -252,7 +252,7 @@ export default function HostPage() {
                 </p>
               </div>
             </div>
-            
+
           </div>
         </div>
       </section>
@@ -268,7 +268,7 @@ export default function HostPage() {
             We handle the complexities of high-end short stays so you enjoy passive, institutional-grade cash flow.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Pillar 1 */}
           <div className="group p-8 rounded-3xl bg-white border border-slate-100 hover:border-teal-100 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-xl hover:shadow-teal-900/5">
@@ -285,7 +285,7 @@ export default function HostPage() {
               </p>
             </div>
           </div>
-          
+
           {/* Pillar 2 */}
           <div className="group p-8 rounded-3xl bg-white border border-slate-100 hover:border-teal-100 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-xl hover:shadow-teal-900/5">
             <div className="flex flex-col gap-4">
@@ -301,7 +301,7 @@ export default function HostPage() {
               </p>
             </div>
           </div>
-          
+
           {/* Pillar 3 */}
           <div className="group p-8 rounded-3xl bg-white border border-slate-100 hover:border-teal-100 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-xl hover:shadow-teal-900/5">
             <div className="flex flex-col gap-4">
@@ -334,7 +334,7 @@ export default function HostPage() {
               From first submission to welcome cocktails for your first guest in under seven business days.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
             {/* Step 1 */}
             <div className="p-8 rounded-3xl bg-teal-900/50 border border-teal-800 flex flex-col justify-between hover:bg-teal-900 transition-colors">
@@ -349,7 +349,7 @@ export default function HostPage() {
                 <Timer size={16} /> Under 5 minutes
               </div>
             </div>
-            
+
             {/* Step 2 */}
             <div className="p-8 rounded-3xl bg-teal-900/50 border border-teal-800 flex flex-col justify-between hover:bg-teal-900 transition-colors">
               <div>
@@ -363,7 +363,7 @@ export default function HostPage() {
                 <CheckCircle size={16} /> 54-Point Standard
               </div>
             </div>
-            
+
             {/* Step 3 */}
             <div className="p-8 rounded-3xl bg-teal-900/50 border border-teal-800 flex flex-col justify-between hover:bg-teal-900 transition-colors">
               <div>
@@ -377,7 +377,7 @@ export default function HostPage() {
                 <Camera size={16} /> 100% Sponsored
               </div>
             </div>
-            
+
             {/* Step 4 */}
             <div className="p-8 rounded-3xl bg-teal-900/50 border border-teal-800 flex flex-col justify-between hover:bg-teal-900 transition-colors">
               <div>
@@ -398,7 +398,7 @@ export default function HostPage() {
       {/* Bottom Heroic Conversion Banner */}
       <section className="w-full max-w-[1280px] mx-auto px-4 md:px-12 py-20">
         <div className="p-8 md:p-16 rounded-[2.5rem] bg-orange-500 text-white shadow-2xl shadow-orange-500/20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12">
-          
+
           <div className="max-w-xl z-10 text-center md:text-left">
             <span className="text-xs uppercase tracking-widest text-orange-950 font-bold bg-orange-400/50 px-4 py-2 rounded-full inline-block mb-4">Start Maximizing Today</span>
             <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
@@ -408,7 +408,7 @@ export default function HostPage() {
               Partner with Nigeria's most trusted hospitality curator. Our onboarding team is available across Lagos, Abuja, and Port Harcourt.
             </p>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row items-center gap-4 z-10 w-full md:w-auto">
             <a href="#calculator" className="w-full sm:w-auto h-14 px-8 rounded-xl bg-white text-orange-600 hover:bg-orange-50 font-bold flex items-center justify-center gap-2 shadow-xl transition-all">
               <span>Apply as Host</span>
@@ -419,13 +419,13 @@ export default function HostPage() {
               <span>+234 1 888 STAY</span>
             </a>
           </div>
-          
+
           {/* Ambient decorative rings */}
           <div className="absolute -right-24 -bottom-24 w-[500px] h-[500px] rounded-full bg-white/10 pointer-events-none"></div>
           <div className="absolute -left-12 -top-12 w-64 h-64 rounded-full bg-orange-600/50 blur-3xl pointer-events-none"></div>
         </div>
       </section>
-      
+
     </div>
   );
 }

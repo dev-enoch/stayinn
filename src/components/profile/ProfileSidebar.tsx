@@ -1,14 +1,28 @@
 import React from 'react';
-import Image from 'next/image';
 import { Verified, Shield, Luggage, Star, Calendar, Heart, BadgeCheck, Wallet, Bolt, Settings, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { verifyAccessToken } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 
 export default async function ProfileSidebar() {
-  // Simulate network delay for isolated loading
-  await new Promise(resolve => setTimeout(resolve, 800));
+  const cookieStore = await cookies();
+  const token = cookieStore.get('accessToken')?.value;
+  let user = null;
+  
+  if (token) {
+    const session = await verifyAccessToken(token);
+    if (session?.userId) {
+      user = await prisma.user.findUnique({
+        where: { id: session.userId },
+        select: { fullName: true, createdAt: true, role: true }
+      });
+    }
+  }
 
-  // In a real scenario, fetch user profile data
-  // const res = await apiClient.get('/api/users/me');
+  const joinDate = user ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'March 2023';
+  const name = user?.fullName || 'Amina Adebayo';
+  const initials = name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase();
 
   return (
     <aside className="lg:col-span-4 flex flex-col gap-6">
@@ -16,23 +30,21 @@ export default async function ProfileSidebar() {
       <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex flex-col gap-6">
         <div className="flex flex-col items-center text-center">
           <div className="relative mb-3">
-            <img 
-              className="w-24 h-24 rounded-full object-cover shadow-md border-4 border-white" 
-              alt="Amina Adebayo" 
-              src="https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?auto=format&fit=crop&q=80"
-            />
+            <div className="w-24 h-24 rounded-full shadow-md border-4 border-white bg-teal-100 flex items-center justify-center text-teal-900 text-3xl font-bold uppercase">
+              {initials}
+            </div>
             <span className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-teal-900 text-white flex items-center justify-center shadow-sm" title="Verified Identity">
               <Verified size={16} />
             </span>
           </div>
           <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-xl text-slate-900 font-bold">Amina Adebayo</h2>
+            <h2 className="text-xl text-slate-900 font-bold">{name}</h2>
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-900 text-xs font-semibold mb-2">
             <Shield size={14} />
             Verified Super Guest
           </span>
-          <p className="text-xs text-slate-500">Member since March 2023</p>
+          <p className="text-xs text-slate-500">Member since {joinDate}</p>
         </div>
         
         {/* Trust Badges Strip */}
@@ -57,7 +69,7 @@ export default async function ProfileSidebar() {
 
       {/* Navigation Menu */}
       <nav className="bg-white rounded-xl p-3 shadow-sm border border-slate-100 flex flex-col gap-1">
-        <Link href="/profile/bookings" className="w-full flex items-center justify-between px-3 py-3 rounded-lg bg-teal-900 text-white transition-all shadow-sm">
+        <Link href="/profile" className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm">
           <div className="flex items-center gap-3">
             <Calendar size={20} />
             <span className="font-semibold text-sm">Bookings & Trips</span>
