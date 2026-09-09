@@ -24,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
-      <body className="min-h-screen flex flex-col font-sans bg-gray-50 text-gray-900">
+    <html lang="en" className={`${inter.variable} bg-slate-50`}>
+      <body className="min-h-screen flex flex-col font-sans bg-white text-gray-900 mx-auto max-w-[1600px] w-full shadow-2xl ring-1 ring-slate-200">
         <ReactQueryProvider>
           {children}
         </ReactQueryProvider>
