@@ -28,9 +28,25 @@ export default async function RoomDetailPage(
     maximumFractionDigits: 0,
   }).format(room.pricePerNight);
 
+  const REPLACEMENTS: Record<string, string> = {
+    '1626245107068-18e404bf7cba': '1600585154340-be6161a56a0c',
+    '1577977461421-4f1647413a96': '1600607686527-6fb886090705',
+    '1590483736622-398bb2c45980': '1618221118493-9cfa1a1c00da',
+  };
+
+  const sanitizeUrl = (url: string) => {
+    let safeUrl = url;
+    for (const [oldId, newId] of Object.entries(REPLACEMENTS)) {
+      if (safeUrl?.includes(oldId)) {
+        safeUrl = safeUrl.replace(oldId, newId);
+      }
+    }
+    return safeUrl;
+  };
+
   // Default image if none exist
   const images = room.images.length > 0
-    ? room.images.map((img: any) => img.url)
+    ? room.images.map((img: any) => sanitizeUrl(img.url))
     : ["https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"];
 
   return (

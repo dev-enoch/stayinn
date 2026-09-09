@@ -267,7 +267,7 @@ export default async function Home() {
                 <Link href="/host" className="px-6 py-4 rounded-xl bg-orange-700 text-white text-sm font-bold hover:bg-orange-600 transition-all shadow-lg active:scale-95">
                   List Your Property
                 </Link>
-                <Link href="/host/estimate" className="px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold backdrop-blur-md transition-all border border-white/20">
+                <Link href="/host#calculator" className="px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold backdrop-blur-md transition-all border border-white/20">
                   Calculate Your Earnings
                 </Link>
               </div>

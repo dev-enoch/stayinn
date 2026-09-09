@@ -46,11 +46,24 @@ export default function HotelCard({
     maximumFractionDigits: 0,
   }).format(startingPrice);
 
+  const REPLACEMENTS: Record<string, string> = {
+    '1626245107068-18e404bf7cba': '1600585154340-be6161a56a0c',
+    '1577977461421-4f1647413a96': '1600607686527-6fb886090705',
+    '1590483736622-398bb2c45980': '1618221118493-9cfa1a1c00da',
+  };
+  
+  let safeCoverImage = coverImage;
+  for (const [oldId, newId] of Object.entries(REPLACEMENTS)) {
+    if (safeCoverImage?.includes(oldId)) {
+      safeCoverImage = safeCoverImage.replace(oldId, newId);
+    }
+  }
+
   return (
     <article className="group rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden border border-slate-100 h-full">
       <Link href={`/hotels/${id}`} className="block relative w-full h-56 overflow-hidden bg-slate-100">
         <Image
-          src={coverImage}
+          src={safeCoverImage || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"}
           alt={name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"

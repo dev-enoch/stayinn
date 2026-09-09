@@ -82,7 +82,7 @@ async function main() {
       address: 'Lekki Phase 1, Lagos',
       latitude: 6.4428,
       longitude: 3.4715,
-      coverImage: 'https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
       status: HotelStatus.APPROVED,
     }
   });
@@ -114,7 +114,7 @@ async function main() {
       address: 'Maitama, Abuja',
       latitude: 9.0833,
       longitude: 7.4933,
-      coverImage: 'https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80',
       status: HotelStatus.APPROVED,
     }
   });
@@ -146,7 +146,7 @@ async function main() {
       address: 'Victoria Island, Lagos',
       latitude: 6.4281,
       longitude: 3.4219,
-      coverImage: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80',
       status: HotelStatus.APPROVED,
     }
   });

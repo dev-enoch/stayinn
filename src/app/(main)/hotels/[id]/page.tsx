@@ -130,7 +130,12 @@ export default async function HotelDetailPage(
             <div className="md:col-span-2 h-full relative group cursor-pointer overflow-hidden bg-slate-200">
               {hotel.coverImage ? (
                 <Image 
-                  src={hotel.coverImage}
+                  src={
+                    hotel.coverImage
+                      .replace('1626245107068-18e404bf7cba', '1600585154340-be6161a56a0c')
+                      .replace('1577977461421-4f1647413a96', '1600607686527-6fb886090705')
+                      .replace('1590483736622-398bb2c45980', '1618221118493-9cfa1a1c00da')
+                  }
                   alt={hotel.name}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -150,9 +155,9 @@ export default async function HotelDetailPage(
             {/* Right 2x2 Subgrid (Placeholders for other images) */}
             <div className="md:col-span-2 grid grid-cols-2 gap-2 h-full hidden sm:grid">
               {[
-                "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80",
-                "https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80",
-                "https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80",
                 "https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80"
               ].map((imgUrl, i) => (
                 <div key={i} className="relative group cursor-pointer overflow-hidden bg-slate-200 h-full">

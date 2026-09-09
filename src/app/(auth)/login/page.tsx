@@ -14,22 +14,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">Sign in</h1>
       </div>
 
-      {/* SSO Buttons */}
-      <div className="flex justify-center gap-6 mb-8">
-        <button type="button" className="flex flex-col items-center gap-2 group">
-          <div className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center group-hover:bg-slate-50 transition-colors shadow-sm">
-            <Mail size={20} className="text-red-500" />
-          </div>
-          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700">Google</span>
-        </button>
-      </div>
 
-      {/* Divider */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="flex-1 h-px bg-slate-200"></div>
-        <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">Or</span>
-        <div className="flex-1 h-px bg-slate-200"></div>
-      </div>
 
       <form action={formAction} className="space-y-5">
         {state?.error && (
@@ -88,7 +73,7 @@ export default function LoginPage() {
 
       <div className="mt-8 text-center text-xs text-slate-400 leading-relaxed">
         By signing in, you acknowledge that you agree to our<br/>
-        <Link href="/terms" className="text-green-600 hover:underline">Terms of Service</Link> and{" "}
+        <Link href="/support/terms" className="text-green-600 hover:underline">Terms of Service</Link> and{" "}
         <Link href="/privacy" className="text-green-600 hover:underline">Privacy Policy</Link>.
       </div>
     </div>

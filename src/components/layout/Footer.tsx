@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Phone, Home, MapPin } from "lucide-react";
+import { Mail, Phone, Home, MapPin, Instagram, Twitter, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -20,14 +20,14 @@ export default function Footer() {
             Experience curated architectural spaces, uncompromised comfort, and the warmth of Nigerian hospitality. The premium standard for extended stays.
           </p>
           <div className="flex items-center gap-4 pt-2">
-            <a href="/privacy" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
-              IN
+            <a href="https://instagram.com/stayinn_ng" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
+              <Instagram size={18} />
             </a>
-            <a href="/privacy" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
-              X
+            <a href="https://x.com/stayinn_ng" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
+              <Twitter size={18} />
             </a>
-            <a href="/privacy" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
-              LI
+            <a href="https://linkedin.com/company/stayinn-ng" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
+              <Linkedin size={18} />
             </a>
           </div>
         </div>
@@ -39,7 +39,7 @@ export default function Footer() {
             <li><Link href="/about" className="text-slate-400 hover:text-white text-sm transition-colors">About Us</Link></li>
             <li><Link href="/explore" className="text-slate-400 hover:text-white text-sm transition-colors">Explore Stays</Link></li>
             <li><Link href="/cities" className="text-slate-400 hover:text-white text-sm transition-colors">Destinations</Link></li>
-            <li><Link href="/careers" className="text-slate-400 hover:text-white text-sm transition-colors">Careers</Link></li>
+            <li><Link href="/about#careers" className="text-slate-400 hover:text-white text-sm transition-colors">Careers</Link></li>
           </ul>
         </div>
         
@@ -48,8 +48,8 @@ export default function Footer() {
           <h4 className="font-semibold text-sm tracking-wider text-white uppercase">Hosting</h4>
           <ul className="space-y-3">
             <li><Link href="/host" className="text-slate-400 hover:text-white text-sm transition-colors">Become a Host</Link></li>
-            <li><Link href="/host/protection" className="text-slate-400 hover:text-white text-sm transition-colors">Host Protection</Link></li>
-            <li><Link href="/host/resources" className="text-slate-400 hover:text-white text-sm transition-colors">Community Forum</Link></li>
+            <li><Link href="/host#protection" className="text-slate-400 hover:text-white text-sm transition-colors">Host Protection</Link></li>
+            <li><Link href="/support#faq" className="text-slate-400 hover:text-white text-sm transition-colors">Community Forum</Link></li>
           </ul>
         </div>
         
@@ -82,7 +82,7 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link href="/support/terms" className="hover:text-slate-300 transition-colors">Terms of Service</Link>
             <Link href="/privacy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
-            <Link href="/support/safety" className="hover:text-slate-300 transition-colors">Safety Center</Link>
+            <Link href="/support#faq" className="hover:text-slate-300 transition-colors">Safety Center</Link>
           </div>
         </div>
       </div>
