@@ -1,21 +1,26 @@
-import { apiClient } from "@/lib/api-client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Users, ArrowLeft, Calendar } from "lucide-react";
 import RoomGallery from "./RoomGallery";
+import { prisma } from "@/lib/prisma";
 
 export default async function RoomDetailPage(
   props: { params: Promise<{ id: string; roomId: string }> }
 ) {
   const params = await props.params;
-  const response = await apiClient.get(`/api/rooms/${params.roomId}`);
+  
+  const room = await prisma.roomType.findUnique({
+    where: { id: params.roomId, status: 'ACTIVE' },
+    include: {
+      hotel: true,
+      images: { orderBy: { sortOrder: 'asc' } }
+    }
+  });
 
-  if (!response.success || !response.data) {
+  if (!room || room.hotel.status !== 'APPROVED') {
     notFound();
   }
-
-  const room = response.data;
 
   const formattedPrice = new Intl.NumberFormat("en-NG", {
     style: "currency",

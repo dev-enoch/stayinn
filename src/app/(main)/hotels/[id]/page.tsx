@@ -1,9 +1,9 @@
-import { apiClient } from "@/lib/api-client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Users, Wifi, Droplets, Zap, Car, Waves, Dumbbell, Utensils, Wind, ChevronRight, Share, Heart, Star, Shield, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
 import { Amenity } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 // Helper to map DB amenities to icons
 const getAmenityIcon = (amenity: Amenity) => {
@@ -28,14 +28,32 @@ export default async function HotelDetailPage(
   props: { params: Promise<{ id: string }> }
 ) {
   const params = await props.params;
-  const response = await apiClient.get(`/api/hotels/${params.id}`);
+  
+  const hotel = await prisma.hotel.findUnique({
+    where: { id: params.id, status: 'APPROVED' },
+    include: {
+      amenities: { select: { amenity: true } },
+      roomTypes: {
+        where: { status: 'ACTIVE' },
+        include: { images: true }
+      }
+    }
+  });
 
-  if (!response.success || !response.data) {
+  if (!hotel) {
     notFound();
   }
 
-  const hotel = response.data;
-  const startingPrice = hotel.startingPrice || 0;
+  // Format data
+  const formattedHotel = {
+    ...hotel,
+    amenities: hotel.amenities.map(a => ({ code: a.amenity })),
+    startingPrice: hotel.roomTypes.length > 0
+      ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight))
+      : 0
+  };
+
+  const startingPrice = formattedHotel.startingPrice;
   
   const formattedPrice = new Intl.NumberFormat("en-NG", {
     style: "currency",
