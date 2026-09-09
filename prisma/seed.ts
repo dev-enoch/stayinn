@@ -1,113 +1,177 @@
-import { PrismaClient, Role, HotelStatus, RoomStatus } from '@prisma/client';
+import { PrismaClient, Role, HotelStatus, Amenity, RoomStatus } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-const cities = [
-  { name: 'Lagos, Nigeria', lat: 6.5244, lng: 3.3792 },
-  { name: 'Abuja, Nigeria', lat: 9.0579, lng: 7.4951 },
-  { name: 'Port Harcourt, Nigeria', lat: 4.8156, lng: 7.0498 },
-  { name: 'Ibadan, Nigeria', lat: 7.3775, lng: 3.9470 },
-  { name: 'Enugu, Nigeria', lat: 6.4584, lng: 7.5464 },
-  { name: 'Calabar, Nigeria', lat: 4.9757, lng: 8.3417 },
-  { name: 'Kano, Nigeria', lat: 12.0022, lng: 8.5920 },
-];
-
-const hotelNames = [
-  'Grand', 'Royal', 'Luxury', 'Continental', 'Boutique', 'Palace', 'Oasis', 'Heritage', 'View', 'Springs', 'Gardens', 'Suites', 'Resort', 'Lodge'
-];
-
-const images = [
-  'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
-  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
-  'https://images.unsplash.com/photo-1542314831-c6a4d142104d?w=800&q=80',
-  'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80',
-  'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
-  'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
-  'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
-  'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80'
-];
-
 async function main() {
-  console.log('Starting seed...');
+  console.log('Seeding database...');
+  
+  // Clear existing data (optional, for safety, we might skip clearing to avoid wiping real data)
+  // Let's rely on upsert or just create unique items if they don't exist.
+  
+  const passwordHash = await bcrypt.hash('password123', 10);
 
-  // 1. Create Admin User
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@stayinn.ng';
-  const adminPasswordHash = '$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW'; // 'admin123'
-
-  const admin = await prisma.user.upsert({
-    where: { email: adminEmail },
-    update: {},
-    create: {
-      email: adminEmail,
-      phone: '+2348000000000',
-      passwordHash: adminPasswordHash,
-      fullName: 'System Admin',
-      role: Role.ADMIN,
-    },
-  });
-  console.log(`Admin user created: ${admin.email}`);
-
-  // 2. Create Manager User
   const manager = await prisma.user.upsert({
-    where: { email: 'manager@stayinn.ng' },
+    where: { email: 'manager@stayinn.com' },
     update: {},
     create: {
-      email: 'manager@stayinn.ng',
-      phone: '+2349000000000',
-      passwordHash: adminPasswordHash,
-      fullName: 'Test Manager',
+      email: 'manager@stayinn.com',
+      phone: '+2348000000001',
+      passwordHash,
+      fullName: 'Stayinn Manager',
       role: Role.HOTEL_MANAGER,
     },
   });
 
-  // 3. Create Commission Setting (10%)
-  await prisma.commissionSetting.create({
-    data: {
-      rate: 0.1000,
-      active: true,
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@stayinn.com' },
+    update: {},
+    create: {
+      email: 'admin@stayinn.com',
+      phone: '+2348000000002',
+      passwordHash,
+      fullName: 'Stayinn Admin',
+      role: Role.ADMIN,
     },
   });
 
-  // 4. Create 30 Hotels
-  console.log('Seeding 30 hotels...');
-  for (let i = 1; i <= 30; i++) {
-    const city = cities[i % cities.length];
-    const namePrefix = hotelNames[i % hotelNames.length];
-    const nameSuffix = hotelNames[(i + 3) % hotelNames.length];
-    const price = Math.floor(Math.random() * (250000 - 30000 + 1) + 30000); // 30k to 250k NGN
-    
-    await prisma.hotel.create({
-      data: {
-        managerId: manager.id,
-        name: `The ${namePrefix} ${nameSuffix} ${city.name.split(',')[0]}`,
-        description: `Experience the finest luxury at this premium destination located in the heart of ${city.name}. Offering breathtaking views and uncompromising comfort.`,
-        address: city.name,
-        latitude: city.lat + (Math.random() * 0.1 - 0.05),
-        longitude: city.lng + (Math.random() * 0.1 - 0.05),
-        coverImage: images[i % images.length],
-        status: HotelStatus.APPROVED,
-        roomTypes: {
-          create: [
-            {
-              name: 'Deluxe Room',
-              description: 'A beautiful deluxe room with modern amenities.',
-              pricePerNight: price,
-              capacity: 2,
-              quantity: Math.floor(Math.random() * 10) + 2,
-              status: RoomStatus.ACTIVE
-            }
-          ]
-        }
-      }
-    });
-  }
+  // Hotel 1
+  const hotel1 = await prisma.hotel.upsert({
+    where: { id: 'hotel-1-ikoyi' },
+    update: {},
+    create: {
+      id: 'hotel-1-ikoyi',
+      managerId: manager.id,
+      name: 'The Courtyard Residence',
+      description: 'Luxury Boutique Serviced Residence with 24/7 Power',
+      address: 'Ikoyi, Lagos',
+      latitude: 6.45,
+      longitude: 3.43,
+      coverImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80',
+      status: HotelStatus.APPROVED,
+    }
+  });
 
-  console.log('Seed completed successfully. Added 30 hotels.');
+  // Ensure amenities exist
+  // (We're skipping Amenity for now to just create room types)
+  
+  await prisma.roomType.upsert({
+    where: { id: 'room-1-hotel-1' },
+    update: {},
+    create: {
+      id: 'room-1-hotel-1',
+      hotelId: hotel1.id,
+      name: 'Executive Suite',
+      description: 'Spacious suite with king-size bed and city views.',
+      pricePerNight: 150000,
+      capacity: 2,
+      quantity: 5,
+      status: RoomStatus.ACTIVE,
+    }
+  });
+
+  // Hotel 2
+  const hotel2 = await prisma.hotel.upsert({
+    where: { id: 'hotel-2-lekki' },
+    update: {},
+    create: {
+      id: 'hotel-2-lekki',
+      managerId: manager.id,
+      name: 'Lekki Phase 1 Loft',
+      description: 'Creative and Tech Hub Loft with Dedicated Fiber',
+      address: 'Lekki Phase 1, Lagos',
+      latitude: 6.44,
+      longitude: 3.47,
+      coverImage: 'https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80',
+      status: HotelStatus.APPROVED,
+    }
+  });
+
+  await prisma.roomType.upsert({
+    where: { id: 'room-1-hotel-2' },
+    update: {},
+    create: {
+      id: 'room-1-hotel-2',
+      hotelId: hotel2.id,
+      name: 'Studio Loft',
+      description: 'Modern studio with open-concept design and blazing fast internet.',
+      pricePerNight: 95000,
+      capacity: 2,
+      quantity: 10,
+      status: RoomStatus.ACTIVE,
+    }
+  });
+
+  // Hotel 3
+  const hotel3 = await prisma.hotel.upsert({
+    where: { id: 'hotel-3-maitama' },
+    update: {},
+    create: {
+      id: 'hotel-3-maitama',
+      managerId: manager.id,
+      name: 'Maitama Diplomatic Villa',
+      description: 'Exclusive villa in the heart of Abuja\'s diplomatic zone.',
+      address: 'Maitama, Abuja',
+      latitude: 9.08,
+      longitude: 7.49,
+      coverImage: 'https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80',
+      status: HotelStatus.APPROVED,
+    }
+  });
+
+  await prisma.roomType.upsert({
+    where: { id: 'room-1-hotel-3' },
+    update: {},
+    create: {
+      id: 'room-1-hotel-3',
+      hotelId: hotel3.id,
+      name: 'Presidential Villa',
+      description: 'Entire 5-bedroom villa with private pool.',
+      pricePerNight: 500000,
+      capacity: 10,
+      quantity: 1,
+      status: RoomStatus.ACTIVE,
+    }
+  });
+
+  // Hotel 4
+  const hotel4 = await prisma.hotel.upsert({
+    where: { id: 'hotel-4-vi' },
+    update: {},
+    create: {
+      id: 'hotel-4-vi',
+      managerId: manager.id,
+      name: 'Victoria Island Penthouse',
+      description: 'High-rise luxury living in the financial center.',
+      address: 'Victoria Island, Lagos',
+      latitude: 6.42,
+      longitude: 3.42,
+      coverImage: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80',
+      status: HotelStatus.APPROVED,
+    }
+  });
+
+  await prisma.roomType.upsert({
+    where: { id: 'room-1-hotel-4' },
+    update: {},
+    create: {
+      id: 'room-1-hotel-4',
+      hotelId: hotel4.id,
+      name: 'Panoramic Penthouse',
+      description: 'Stunning city and ocean views.',
+      pricePerNight: 200000,
+      capacity: 4,
+      quantity: 2,
+      status: RoomStatus.ACTIVE,
+    }
+  });
+
+  console.log('Seeding finished.');
 }
 
 main()
   .catch((e) => {
-    console.error('Error during seed:', e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

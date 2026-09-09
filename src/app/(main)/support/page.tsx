@@ -1,8 +1,28 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Headset, TrendingUp, ShieldCheck, MessageCircle, Calendar, CreditCard, Bolt, Shield, Building, Building2, ExternalLink, ChevronRight, CheckCircle, Phone, Lock, ChevronDown, ArrowRight } from "lucide-react";
 
 export default function SupportPage() {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Interactive mock
+    alert("Search feature is indexing articles...");
+  };
+
+  const handleTicketSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      alert("Ticket submitted successfully! Our guest operations team will contact you shortly.");
+    }, 1500);
+  };
+
   return (
     <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-20">
       
@@ -34,7 +54,7 @@ export default function SupportPage() {
           </p>
           
           {/* Desktop Search Bar */}
-          <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-2 flex items-center gap-2 transition-all duration-300 focus-within:shadow-2xl focus-within:ring-4 focus-within:ring-teal-500/30">
+          <form onSubmit={handleSearch} className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-2 flex items-center gap-2 transition-all duration-300 focus-within:shadow-2xl focus-within:ring-4 focus-within:ring-teal-500/30">
             <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-teal-900 flex-shrink-0">
               <Search size={24} />
             </div>
@@ -42,11 +62,12 @@ export default function SupportPage() {
               className="w-full bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none py-2 text-lg" 
               placeholder="Search topics, policies, booking queries, or safety guidelines..." 
               type="text"
+              required
             />
-            <button className="px-6 py-3 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold text-sm uppercase tracking-wider flex-shrink-0 transition-colors shadow-md">
+            <button type="submit" className="px-6 py-3 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold text-sm uppercase tracking-wider flex-shrink-0 transition-colors shadow-md">
               Search
             </button>
-          </div>
+          </form>
           
           {/* Trending Search Tags */}
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8 text-teal-100 text-sm font-bold">
@@ -315,11 +336,11 @@ export default function SupportPage() {
       </section>
 
       {/* Host & Traveler Direct Contact & Ticket Submission */}
-      <section className="max-w-[1280px] mx-auto w-full px-4 md:px-12 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <section className="max-w-[1280px] mx-auto w-full px-4 md:px-12 py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
           
           {/* Left Column: Submit a Request Ticket */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-slate-200/50 border border-slate-100">
+          <div className="lg:col-span-7 bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
             <div className="mb-8 border-b border-slate-100 pb-8">
               <span className="text-xs uppercase tracking-widest text-orange-600 font-bold">Direct Assistance</span>
               <h3 className="font-serif text-3xl text-slate-900 font-bold mt-2">Submit a Support Request</h3>
@@ -328,7 +349,7 @@ export default function SupportPage() {
               </p>
             </div>
             
-            <form className="flex flex-col gap-6">
+            <form onSubmit={handleTicketSubmit} className="flex flex-col gap-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Your Full Name</label>
@@ -348,7 +369,7 @@ export default function SupportPage() {
                 <div className="flex flex-col gap-2">
                   <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Department / Topic</label>
                   <div className="relative">
-                    <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all appearance-none">
+                    <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all appearance-none" required>
                       <option value="power">24/7 Power or Generator Maintenance</option>
                       <option value="booking">Reservation Change or Cancellation</option>
                       <option value="access">Estate Access & Gate Pass</option>
@@ -363,7 +384,7 @@ export default function SupportPage() {
               
               <div className="flex flex-col gap-2">
                 <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Describe the Situation</label>
-                <textarea className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all resize-y min-h-[120px]" placeholder="Please provide details such as estate address, unit number, or specific assistance required..." required rows={4}></textarea>
+                <textarea className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all resize-y min-h-[140px]" placeholder="Please provide details such as estate address, unit number, or specific assistance required..." required rows={4}></textarea>
               </div>
               
               <div className="flex flex-col sm:flex-row items-center justify-between pt-4 gap-4">
@@ -371,8 +392,12 @@ export default function SupportPage() {
                   <Lock size={16} className="text-teal-900" />
                   <span>Encrypted SSL ticket tracking</span>
                 </div>
-                <button className="w-full sm:w-auto px-8 py-4 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-teal-900/20 transition-all active:scale-95" type="button">
-                  Submit Ticket
+                <button 
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-teal-900/20 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center" 
+                  type="submit"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Ticket"}
                 </button>
               </div>
             </form>

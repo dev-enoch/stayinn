@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Search, MapPin, Calendar, Users, Zap, Wifi, Shield, ShieldCheck, ChevronRight } from "lucide-react";
+import { ArrowRight, Zap, Wifi, Shield, ShieldCheck } from "lucide-react";
 import { apiClient } from "@/lib/api-client";
 import HotelCard from "@/components/hotel/HotelCard";
+import HeroSearch from "@/components/home/HeroSearch";
 
 export default async function Home() {
   let featuredHotels = [];
@@ -17,7 +18,7 @@ export default async function Home() {
     <div className="flex flex-col w-full bg-slate-50 min-h-screen">
       
       {/* HERO SECTION */}
-      <section className="relative w-full pt-32 pb-16 px-4 md:px-12 max-w-[1440px] mx-auto">
+      <section className="relative w-full pt-40 pb-24 px-4 md:px-12 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           {/* Left: Text & Search */}
@@ -81,43 +82,12 @@ export default async function Home() {
 
         {/* Floating Search Widget */}
         <div className="relative z-20 mt-12 lg:-mt-8 bg-white rounded-2xl shadow-xl p-4 sm:p-5 border border-slate-100 max-w-5xl mx-auto">
-          <form className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-            <div className="md:col-span-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group cursor-text border border-slate-100">
-              <MapPin className="text-teal-900 shrink-0" size={20} />
-              <div className="flex flex-col min-w-0 flex-1">
-                <label className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Destination</label>
-                <input className="bg-transparent border-0 p-0 text-slate-900 text-sm font-semibold focus:outline-none placeholder:text-slate-400 truncate" placeholder="e.g. Ikoyi, Maitama" type="text" />
-              </div>
-            </div>
-            
-            <div className="md:col-span-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group cursor-text border border-slate-100">
-              <Calendar className="text-teal-900 shrink-0" size={20} />
-              <div className="flex flex-col min-w-0 flex-1">
-                <label className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Dates</label>
-                <input className="bg-transparent border-0 p-0 text-slate-900 text-sm font-semibold focus:outline-none placeholder:text-slate-400 truncate" placeholder="Check in - Check out" type="text" />
-              </div>
-            </div>
-            
-            <div className="md:col-span-2 flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group cursor-text border border-slate-100">
-              <Users className="text-teal-900 shrink-0" size={20} />
-              <div className="flex flex-col min-w-0 flex-1">
-                <label className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Guests</label>
-                <input className="bg-transparent border-0 p-0 text-slate-900 text-sm font-semibold focus:outline-none placeholder:text-slate-400 truncate" placeholder="2 Adults" type="text" />
-              </div>
-            </div>
-            
-            <div className="md:col-span-2">
-              <button className="w-full h-[52px] rounded-xl bg-orange-700 hover:bg-orange-800 text-white text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all" type="button">
-                <Search size={18} />
-                <span>Search</span>
-              </button>
-            </div>
-          </form>
+          <HeroSearch />
         </div>
       </section>
 
       {/* VALUE PROPOSITIONS */}
-      <section className="w-full bg-white py-16 border-y border-slate-200">
+      <section className="w-full bg-white py-24 border-y border-slate-200">
         <div className="max-w-[1440px] mx-auto px-4 md:px-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="flex items-start gap-4">
