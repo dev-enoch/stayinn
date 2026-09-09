@@ -5,7 +5,7 @@ import { getSession } from '@/lib/auth';
 
 export default async function WishlistsPreview() {
   const session = await getSession();
-  
+
   let wishlists: any[] = [];
   if (session) {
     try {
@@ -18,7 +18,6 @@ export default async function WishlistsPreview() {
     }
   }
 
-  // The user requested: "remove every mock data and replace with empty state or completely hide the section"
   if (!wishlists || wishlists.length === 0) {
     return (
       <div className="flex flex-col gap-4">
@@ -51,14 +50,14 @@ export default async function WishlistsPreview() {
           <Plus size={16} />
         </button>
       </div>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {wishlists.map((list: any, i: number) => (
           <div key={i} className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer border border-slate-100">
             <div className="relative h-40 overflow-hidden bg-slate-100">
-              <img 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                alt={list.name} 
+              <img
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                alt={list.name}
                 src={list.image || 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&q=80'}
               />
               <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-slate-900/75 text-white text-xs font-semibold backdrop-blur-sm">

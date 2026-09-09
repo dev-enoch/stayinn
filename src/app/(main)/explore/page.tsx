@@ -1,30 +1,67 @@
 import React from "react";
 import Link from "next/link";
-import { Search, MapPin, SlidersHorizontal, ChevronDown, Filter, Zap, Wifi, Shield, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, MapPin, Shield } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import HotelCard from "@/components/hotel/HotelCard";
+import ExploreFilters from "@/components/explore/ExploreFilters";
+import ExplorePagination from "@/components/explore/ExplorePagination";
+import { Prisma } from "@prisma/client";
 
-export default async function ExplorePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string; sort?: string; city?: string }>;
-}) {
-  const { q, city } = await searchParams;
+export default async function ExplorePage(
+  props: {
+    searchParams: Promise<{
+      q?: string;
+      city?: string;
+      dates?: string;
+      guests?: string;
+      power?: string;
+      wifi?: string;
+      security?: string;
+      sort?: string;
+      page?: string;
+    }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const { q, city, dates, guests, power, wifi, security, sort, page: pageStr } = searchParams;
 
   const searchQuery = city || q;
+  const page = parseInt(pageStr || "1", 10) || 1;
+  const limit = 4; // Use 4 so pagination is visible for small DB sizes
+
+  const AND: Prisma.HotelWhereInput[] = [{ status: 'APPROVED' }];
   
-  const hotelsData = await prisma.hotel.findMany({
-    where: { 
-      status: 'APPROVED',
-      ...(searchQuery ? {
-        OR: [
-          { name: { contains: searchQuery, mode: 'insensitive' } },
-          { address: { contains: searchQuery, mode: 'insensitive' } },
-        ]
-      } : {})
-    },
-    take: 50,
-    orderBy: { createdAt: 'desc' },
+  if (searchQuery) {
+    AND.push({
+      OR: [
+        { name: { contains: searchQuery, mode: 'insensitive' } },
+        { address: { contains: searchQuery, mode: 'insensitive' } },
+      ]
+    });
+  }
+
+  if (power === 'true') {
+    AND.push({ amenities: { some: { amenity: { contains: "Power", mode: 'insensitive' } } } });
+  }
+  if (wifi === 'true') {
+    AND.push({ amenities: { some: { amenity: { contains: "Wi-Fi", mode: 'insensitive' } } } });
+  }
+  if (security === 'true') {
+    AND.push({ amenities: { some: { amenity: { contains: "Security", mode: 'insensitive' } } } });
+  }
+
+  const orderBy: Prisma.HotelOrderByWithRelationInput = 
+    sort === 'price_asc' ? { roomTypes: { _count: 'asc' } } : // Can't easily order by relation min price natively without raw, so we'll sort in memory later if needed, but for now fallback to createdAt
+    sort === 'price_desc' ? { createdAt: 'desc' } : 
+    { createdAt: 'desc' };
+
+  const total = await prisma.hotel.count({ where: { AND } });
+
+  let hotelsData = await prisma.hotel.findMany({
+    where: { AND },
+    skip: (page - 1) * limit,
+    take: limit,
+    orderBy: { createdAt: 'desc' }, // Base sorting
     include: {
       roomTypes: {
         where: { status: 'ACTIVE' },
@@ -40,6 +77,18 @@ export default async function ExplorePage({
       : 0
   }));
 
+  // In-memory price sort
+  if (sort === 'price_asc') {
+    hotels.sort((a, b) => a.startingPrice - b.startingPrice);
+  } else if (sort === 'price_desc') {
+    hotels.sort((a, b) => b.startingPrice - a.startingPrice);
+  }
+
+  // Calculate dynamic min/max price for the UI filter button
+  const allPrices = hotels.map(h => h.startingPrice);
+  const minPriceDisplay = allPrices.length > 0 ? Math.min(...allPrices) : 50000;
+  const maxPriceDisplay = allPrices.length > 0 ? Math.max(...allPrices) : 300000;
+
   return (
     <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
       
@@ -54,55 +103,25 @@ export default async function ExplorePage({
                 <MapPin size={16} className="text-teal-900" />
                 <span className="text-sm font-bold">{city || q || 'Nigeria'}</span>
                 <span className="text-slate-300">•</span>
-                <span className="text-sm text-slate-500 font-semibold">Any dates</span>
+                <span className="text-sm text-slate-500 font-semibold">{dates || 'Any dates'}</span>
                 <span className="text-slate-300">•</span>
-                <span className="text-sm text-slate-500 font-semibold">Guests</span>
+                <span className="text-sm text-slate-500 font-semibold">{guests || 'Guests'}</span>
               </div>
-              <button className="text-teal-900 hover:text-teal-700 text-xs uppercase tracking-wider font-bold transition-colors">
+              <Link href="/" className="text-teal-900 hover:text-teal-700 text-xs uppercase tracking-wider font-bold transition-colors">
                 Modify Search
-              </button>
+              </Link>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-sm text-slate-500">Showing <strong className="text-slate-900">{hotels.length} verified stays</strong></span>
+              <span className="text-sm text-slate-500">Showing <strong className="text-slate-900">{total} verified stays</strong></span>
               <div className="h-4 w-px bg-slate-300"></div>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-900 hover:bg-slate-200 text-sm font-medium transition-all">
-                <span>Sort: <strong className="font-bold">Recommended</strong></span>
-                <ChevronDown size={16} />
-              </button>
+              {/* Note: Sort moved into ExploreFilters */}
             </div>
           </div>
 
           {/* Quick Filters */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide text-sm">
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-teal-900 text-white font-bold hover:bg-teal-800 transition-colors shadow-sm shrink-0">
-              <SlidersHorizontal size={16} />
-              <span>₦50k – ₦300k+</span>
-            </button>
-            <button className="flex items-center gap-1 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold transition-colors shrink-0">
-              <span>Property Type</span>
-              <ChevronDown size={16} />
-            </button>
-            <button className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-teal-50 border border-teal-100 text-teal-900 hover:bg-teal-100 font-bold transition-colors shrink-0">
-              <Zap size={16} />
-              <span>24/7 Power Guaranteed</span>
-            </button>
-            <button className="flex items-center gap-1 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold transition-colors shrink-0">
-              <Wifi size={16} />
-              <span>Fiber Wi-Fi</span>
-            </button>
-            <button className="flex items-center gap-1 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold transition-colors shrink-0">
-              <Shield size={16} />
-              <span>Gated Security</span>
-            </button>
-            
-            <div className="h-6 w-px bg-slate-200 shrink-0 mx-2"></div>
-            
-            <button className="flex items-center gap-1 px-4 py-2 rounded-full bg-slate-100 text-slate-900 hover:bg-slate-200 font-bold ml-auto shrink-0 transition-colors">
-              <Filter size={16} />
-              <span>More Filters (4)</span>
-            </button>
-          </div>
+          <ExploreFilters minPrice={minPriceDisplay} maxPrice={maxPriceDisplay} />
+          
         </div>
       </section>
 
@@ -160,24 +179,8 @@ export default async function ExplorePage({
             )}
 
             {/* Pagination */}
-            {hotels.length > 0 && (
-              <div className="pt-8 pb-12 flex flex-col items-center justify-center gap-4">
-                <div className="flex items-center gap-2">
-                  <button className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 disabled:opacity-50" disabled>
-                    <ChevronLeft size={20} />
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-teal-900 text-white font-bold shadow-sm">1</button>
-                  <button className="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-colors">2</button>
-                  <button className="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-colors">3</button>
-                  <span className="px-2 text-slate-400">...</span>
-                  <button className="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-colors">7</button>
-                  <button className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-colors">
-                    <ChevronRight size={20} />
-                  </button>
-                </div>
-                <p className="text-sm text-slate-500 font-semibold">Showing 1 – {hotels.length} of {hotels.length} properties</p>
-              </div>
-            )}
+            <ExplorePagination totalItems={total} itemsPerPage={limit} />
+            
           </div>
 
           {/* Right: Map (5 Cols, Sticky) */}
