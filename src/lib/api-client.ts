@@ -1,14 +1,20 @@
 import { cookies } from "next/headers";
 
 const getBaseUrl = () => {
-  if (typeof window === "undefined" && process.env.NODE_ENV === "development") {
-    return "http://localhost:3000";
-  }
+  if (typeof window !== "undefined") return ""; // browser should use relative url
+
   if (process.env.NEXT_PUBLIC_APP_URL) {
     return process.env.NEXT_PUBLIC_APP_URL;
   }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
   // Fallback for local development if NEXT_PUBLIC_APP_URL is not set
-  return process.env.NODE_ENV === "development" ? "http://localhost:3000" : "";
+  return process.env.NODE_ENV === "development" ? "http://localhost:3000" : "http://localhost:3000";
 };
 
 const getHeaders = async (initHeaders?: HeadersInit) => {
