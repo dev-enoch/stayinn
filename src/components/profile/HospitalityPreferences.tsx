@@ -15,7 +15,7 @@ export default async function HospitalityPreferences() {
       if (user) {
         preferences = {
           billing: { 
-            title: user.currency === "USD" ? "USD ($)" : "NGN (₦ Naira)", 
+            title: "NGN (₦ Naira)", // Defaulting since currency is not in schema
             desc: "Direct bank transfers & Card billing" 
           },
           estate: { 
@@ -23,7 +23,7 @@ export default async function HospitalityPreferences() {
             desc: "WhatsApp QR delivery to driver & guest" 
           },
           chef: { 
-            title: user.dietaryRequirements || "On-call Private Chef", 
+            title: "On-call Private Chef", 
             desc: "Selected meal preferences applied" 
           }
         };

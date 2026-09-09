@@ -41,14 +41,16 @@ export default async function Home() {
 
     totalProperties = await prisma.hotel.count({ where: { status: 'APPROVED' } });
     
-    const groups = await prisma.hotel.groupBy({
-      by: ['city'],
-      _count: { city: true },
+    const addressData = await prisma.hotel.findMany({
+      select: { address: true },
       where: { status: 'APPROVED' }
     });
     
-    groups.forEach(g => {
-      cityCounts[g.city] = g._count.city;
+    addressData.forEach(h => {
+      if (h.address.includes('Lagos')) cityCounts['Lagos'] = (cityCounts['Lagos'] || 0) + 1;
+      else if (h.address.includes('Abuja')) cityCounts['Abuja'] = (cityCounts['Abuja'] || 0) + 1;
+      else if (h.address.includes('Port Harcourt') || h.address.includes('PH')) cityCounts['Port Harcourt'] = (cityCounts['Port Harcourt'] || 0) + 1;
+      else if (h.address.includes('Calabar')) cityCounts['Calabar'] = (cityCounts['Calabar'] || 0) + 1;
     });
 
   } catch (error) {

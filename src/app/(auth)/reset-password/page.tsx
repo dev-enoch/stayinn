@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { KeyRound, Lock, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -172,5 +172,20 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <React.Suspense fallback={
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 items-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-12 h-12 bg-slate-200 rounded-full mb-4"></div>
+          <div className="h-4 bg-slate-200 rounded w-32"></div>
+        </div>
+      </div>
+    }>
+      <ResetPasswordForm />
+    </React.Suspense>
   );
 }

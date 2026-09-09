@@ -42,13 +42,14 @@ export default async function ExplorePage(
   }
 
   if (power === 'true') {
-    AND.push({ amenities: { some: { amenity: { contains: "Power", mode: 'insensitive' } } } });
+    AND.push({ amenities: { some: { amenity: 'BACKUP_POWER' } } });
   }
   if (wifi === 'true') {
-    AND.push({ amenities: { some: { amenity: { contains: "Wi-Fi", mode: 'insensitive' } } } });
+    AND.push({ amenities: { some: { amenity: 'WIFI' } } });
   }
   if (security === 'true') {
-    AND.push({ amenities: { some: { amenity: { contains: "Security", mode: 'insensitive' } } } });
+    // There is no security amenity enum right now, so we will filter by something else or just skip it
+    // For now we will just use parking as a proxy or skip it
   }
 
   const orderBy: Prisma.HotelOrderByWithRelationInput = 
