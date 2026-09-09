@@ -312,11 +312,17 @@ export default async function HotelDetailPage(
               
               {/* Pricing Header */}
               <div className="flex items-baseline justify-between pb-4 border-b border-slate-100">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mr-1">From</span>
-                  <span className="font-serif text-3xl font-bold text-slate-900">{formattedPrice}</span>
-                  <span className="text-sm font-semibold text-slate-500">/ night</span>
-                </div>
+                {startingPrice > 0 ? (
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mr-1">From</span>
+                    <span className="font-serif text-3xl font-bold text-slate-900">{formattedPrice}</span>
+                    <span className="text-sm font-semibold text-slate-500">/ night</span>
+                  </div>
+                ) : (
+                  <div className="flex items-baseline gap-1">
+                    <span className="font-serif text-2xl font-bold text-slate-900">Price Unavailable</span>
+                  </div>
+                )}
               </div>
 
               <div className="text-sm text-slate-600 font-medium bg-teal-50/50 p-4 rounded-xl border border-teal-100">

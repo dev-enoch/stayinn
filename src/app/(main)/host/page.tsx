@@ -292,9 +292,9 @@ export default async function HostPage() {
               <span>Apply as Host</span>
               <ChevronRight size={20} />
             </a>
-            <a href="tel:+23418887829" className="w-full sm:w-auto h-14 px-8 rounded-xl bg-orange-600/50 hover:bg-orange-600 border border-orange-400 text-white font-bold flex items-center justify-center gap-2 transition-all backdrop-blur-sm">
+            <a href="tel:+2348130007829" className="w-full sm:w-auto h-14 px-8 rounded-xl bg-orange-600/50 hover:bg-orange-600 border border-orange-400 text-white font-bold flex items-center justify-center gap-2 transition-all backdrop-blur-sm">
               <Phone size={20} />
-              <span>+234 1 888 STAY</span>
+              <span>+234 813 000 7829</span>
             </a>
           </div>
 

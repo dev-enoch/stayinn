@@ -195,7 +195,7 @@ export default function YieldEstimator() {
               </div>
               <div className="flex items-center justify-between text-sm py-2.5 px-4 rounded-xl bg-white border border-slate-100 shadow-sm">
                 <span className="text-slate-500 font-bold">Host Protection Insurance</span>
-                <span className="font-bold text-orange-600">Up to ₦25,000,000</span>
+                <span className="font-bold text-orange-600">Up to {currency === "NGN" ? "₦25,000,000" : "$15,625"}</span>
               </div>
             </div>
           </div>

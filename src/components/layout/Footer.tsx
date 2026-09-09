@@ -20,13 +20,13 @@ export default function Footer() {
             Experience curated architectural spaces, uncompromised comfort, and the warmth of Nigerian hospitality. The premium standard for extended stays.
           </p>
           <div className="flex items-center gap-4 pt-2">
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
+            <a href="/privacy" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
               IN
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
+            <a href="/privacy" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
               X
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
+            <a href="/privacy" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-teal-900 hover:text-white transition-colors">
               LI
             </a>
           </div>
@@ -67,7 +67,7 @@ export default function Footer() {
             </li>
             <li className="text-slate-400 text-sm flex items-center gap-3">
               <Phone size={18} className="text-teal-500 shrink-0" />
-              <span>+234 800 STAYINN</span>
+              <span>+234 813 000 7829</span>
             </li>
           </ul>
         </div>

@@ -35,7 +35,7 @@ export default function ContactPage() {
                 href="tel:+234800STAYINN" 
                 className="text-xl text-gray-900 font-medium hover:text-green-600 transition-colors"
               >
-                +234 800 STAYINN
+                +234 813 000 7829
               </a>
             </div>
             

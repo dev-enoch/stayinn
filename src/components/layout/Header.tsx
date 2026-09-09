@@ -59,12 +59,11 @@ export default function Header({ session }: { session: any }) {
           <div className="hidden md:flex items-center gap-6">
             
             <div className="flex items-center gap-4">
-              {/* Currency Selector Mock */}
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all">
+              {/* Currency Status Badge */}
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                 <span className="text-xs font-bold uppercase tracking-wider">NGN</span>
                 <span className="text-teal-900 font-bold text-sm">₦</span>
-                <ChevronDown size={14} />
-              </button>
+              </div>
               
               {/* Notifications */}
               <button className="relative p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all">

@@ -16,19 +16,28 @@ export default async function Home() {
       take: 3,
       orderBy: { createdAt: 'desc' },
       include: {
+        amenities: true,
         roomTypes: {
           where: { status: 'ACTIVE' },
-          select: { pricePerNight: true }
+          select: { pricePerNight: true, capacity: true }
         }
       }
     });
 
-    featuredHotels = hotels.map(hotel => ({
-      ...hotel,
-      startingPrice: hotel.roomTypes.length > 0 
+    featuredHotels = hotels.map(hotel => {
+      const startingPrice = hotel.roomTypes.length > 0 
         ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight)) 
-        : 0
-    }));
+        : 0;
+      const capacity = hotel.roomTypes.length > 0
+        ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
+        : 2;
+      return {
+        ...hotel,
+        startingPrice,
+        capacity,
+        amenityList: hotel.amenities.map(a => a.amenity),
+      };
+    });
 
     totalProperties = await prisma.hotel.count({ where: { status: 'APPROVED' } });
     
@@ -225,6 +234,8 @@ export default async function Home() {
                 locationName={hotel.address.split(',')[0]}
                 coverImage={hotel.coverImage || ""}
                 startingPrice={hotel.startingPrice || 0}
+                capacity={hotel.capacity}
+                amenities={hotel.amenityList}
               />
             ))}
             

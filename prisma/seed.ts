@@ -38,15 +38,15 @@ async function main() {
   // Hotel 1
   const hotel1 = await prisma.hotel.upsert({
     where: { id: 'hotel-1-ikoyi' },
-    update: {},
+    update: { latitude: 6.4520, longitude: 3.4350 },
     create: {
       id: 'hotel-1-ikoyi',
       managerId: manager.id,
       name: 'The Courtyard Residence',
       description: 'Luxury Boutique Serviced Residence with 24/7 Power',
       address: 'Ikoyi, Lagos',
-      latitude: 6.45,
-      longitude: 3.43,
+      latitude: 6.4520,
+      longitude: 3.4350,
       coverImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80',
       status: HotelStatus.APPROVED,
     }
@@ -73,15 +73,15 @@ async function main() {
   // Hotel 2
   const hotel2 = await prisma.hotel.upsert({
     where: { id: 'hotel-2-lekki' },
-    update: {},
+    update: { latitude: 6.4428, longitude: 3.4715 },
     create: {
       id: 'hotel-2-lekki',
       managerId: manager.id,
       name: 'Lekki Phase 1 Loft',
       description: 'Creative and Tech Hub Loft with Dedicated Fiber',
       address: 'Lekki Phase 1, Lagos',
-      latitude: 6.44,
-      longitude: 3.47,
+      latitude: 6.4428,
+      longitude: 3.4715,
       coverImage: 'https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80',
       status: HotelStatus.APPROVED,
     }
@@ -105,15 +105,15 @@ async function main() {
   // Hotel 3
   const hotel3 = await prisma.hotel.upsert({
     where: { id: 'hotel-3-maitama' },
-    update: {},
+    update: { latitude: 9.0833, longitude: 7.4933 },
     create: {
       id: 'hotel-3-maitama',
       managerId: manager.id,
       name: 'Maitama Diplomatic Villa',
       description: 'Exclusive villa in the heart of Abuja\'s diplomatic zone.',
       address: 'Maitama, Abuja',
-      latitude: 9.08,
-      longitude: 7.49,
+      latitude: 9.0833,
+      longitude: 7.4933,
       coverImage: 'https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80',
       status: HotelStatus.APPROVED,
     }
@@ -137,15 +137,15 @@ async function main() {
   // Hotel 4
   const hotel4 = await prisma.hotel.upsert({
     where: { id: 'hotel-4-vi' },
-    update: {},
+    update: { latitude: 6.4281, longitude: 3.4219 },
     create: {
       id: 'hotel-4-vi',
       managerId: manager.id,
       name: 'Victoria Island Penthouse',
       description: 'High-rise luxury living in the financial center.',
       address: 'Victoria Island, Lagos',
-      latitude: 6.42,
-      longitude: 3.42,
+      latitude: 6.4281,
+      longitude: 3.4219,
       coverImage: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80',
       status: HotelStatus.APPROVED,
     }

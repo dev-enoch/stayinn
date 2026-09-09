@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import HotelCard from "@/components/hotel/HotelCard";
 import ExploreFilters from "@/components/explore/ExploreFilters";
 import ExplorePagination from "@/components/explore/ExplorePagination";
+import ExploreMap from "@/components/explore/ExploreMap";
 import { Prisma } from "@prisma/client";
 
 export default async function ExplorePage(
@@ -63,19 +64,28 @@ export default async function ExplorePage(
     take: limit,
     orderBy: { createdAt: 'desc' }, // Base sorting
     include: {
+      amenities: true,
       roomTypes: {
         where: { status: 'ACTIVE' },
-        select: { pricePerNight: true }
+        select: { pricePerNight: true, capacity: true }
       }
     }
   });
 
-  const hotels = hotelsData.map(hotel => ({
-    ...hotel,
-    startingPrice: hotel.roomTypes.length > 0 
+  const hotels = hotelsData.map(hotel => {
+    const startingPrice = hotel.roomTypes.length > 0 
       ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight)) 
-      : 0
-  }));
+      : 0;
+    const capacity = hotel.roomTypes.length > 0
+      ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
+      : 2;
+    return {
+      ...hotel,
+      startingPrice,
+      capacity,
+      amenityList: hotel.amenities.map(a => a.amenity),
+    };
+  });
 
   // In-memory price sort
   if (sort === 'price_asc') {
@@ -173,6 +183,8 @@ export default async function ExplorePage(
                     locationName={hotel.address.split(',')[0]}
                     coverImage={hotel.coverImage || ""}
                     startingPrice={hotel.startingPrice || 0}
+                    capacity={hotel.capacity}
+                    amenities={hotel.amenityList}
                   />
                 ))}
               </div>
@@ -184,48 +196,9 @@ export default async function ExplorePage(
           </div>
 
           {/* Right: Map (5 Cols, Sticky) */}
-          <aside className="hidden xl:flex xl:col-span-5 sticky top-[180px] h-[calc(100vh-210px)] rounded-2xl overflow-hidden bg-slate-100 shadow-inner flex-col border border-slate-200">
+          <aside className="flex flex-col xl:col-span-5 w-full h-[500px] xl:sticky xl:top-[180px] xl:h-[calc(100vh-210px)] rounded-2xl overflow-hidden bg-slate-100 shadow-inner border border-slate-200 order-first xl:order-last mb-8 xl:mb-0">
             <div className="relative w-full h-full">
-              {/* Map Background Placeholder */}
-              <div 
-                className="w-full h-full bg-cover bg-center" 
-                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800')` }}
-              >
-              </div>
-              
-              {/* Top Scrim */}
-              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/30 to-transparent pointer-events-none"></div>
-              
-              <div className="absolute top-4 inset-x-4 flex items-center justify-between z-10">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 backdrop-blur-md shadow-md text-slate-900 text-xs font-bold">
-                  <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-                  <span>{city || q || 'Nigeria'} Map View</span>
-                </div>
-              </div>
-
-              {/* Fake Map Pins based on hotels length */}
-              {hotels.slice(0, 5).map((hotel: any, index: number) => {
-                // Random position for effect
-                const top = 20 + (index * 15) + (Math.random() * 10);
-                const left = 30 + (index * 10) + (Math.random() * 20);
-                
-                return (
-                  <div key={index} className="absolute z-20 group cursor-pointer" style={{ top: `${top}%`, left: `${left}%` }}>
-                    <div className="px-3 py-1.5 rounded-full bg-teal-900 text-white font-bold text-xs shadow-lg flex items-center gap-1 border-2 border-white hover:scale-110 transition-transform">
-                      <span>₦{Math.round(hotel.startingPrice / 1000)}k</span>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {/* Location Chips */}
-              <div className="absolute bottom-4 inset-x-4 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide z-20">
-                {['Ikoyi', 'Victoria Island', 'Lekki Phase 1', 'Abuja', 'Port Harcourt'].map((loc) => (
-                  <Link key={loc} href={`/explore?city=${loc}`} className="px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-md shadow-md text-slate-700 font-bold text-xs hover:bg-teal-900 hover:text-white transition-colors shrink-0">
-                    {loc}
-                  </Link>
-                ))}
-              </div>
+              <ExploreMap hotels={hotels} />
             </div>
           </aside>
           

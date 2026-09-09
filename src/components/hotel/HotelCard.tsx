@@ -10,7 +10,26 @@ interface HotelCardProps {
   locationName: string;
   coverImage: string;
   startingPrice: number;
+  amenities?: string[];
+  capacity?: number;
 }
+
+const amenityIconMap: Record<string, React.ReactNode> = {
+  WIFI: <Wifi size={12} />,
+  WATER: <Zap size={12} />, // Using Zap for Water as placeholder, or add a Drop icon
+  BACKUP_POWER: <Zap size={12} />,
+};
+
+const amenityNameMap: Record<string, string> = {
+  WIFI: "Fiber Wi-Fi",
+  WATER: "Constant Water",
+  BACKUP_POWER: "24/7 Power",
+  PARKING: "Secure Parking",
+  POOL: "Swimming Pool",
+  GYM: "Fitness Center",
+  RESTAURANT: "Restaurant",
+  AIR_CONDITIONING: "Air Conditioning"
+};
 
 export default function HotelCard({
   id,
@@ -18,6 +37,8 @@ export default function HotelCard({
   locationName,
   coverImage,
   startingPrice,
+  amenities = [],
+  capacity = 2,
 }: HotelCardProps) {
   const formattedPrice = new Intl.NumberFormat("en-NG", {
     style: "currency",
@@ -68,9 +89,7 @@ export default function HotelCard({
           <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
             <span className="font-bold text-teal-900 uppercase tracking-wider">{locationName}</span>
             <div className="flex items-center gap-1 text-slate-900 font-bold">
-              <Star size={14} className="text-orange-500 fill-orange-500" />
-              <span>4.96</span>
-              <span className="text-slate-400 font-normal ml-1">Verified</span>
+              <span className="text-slate-500 font-normal ml-1">Verified</span>
             </div>
           </div>
           
@@ -80,17 +99,21 @@ export default function HotelCard({
             </h3>
           </Link>
           
-          <p className="text-xs text-slate-500 mt-1">2 Beds • 2.5 Baths • Premium Serviced</p>
+          <p className="text-xs text-slate-500 mt-1">Sleeps {capacity} Guests • Premium Serviced</p>
         </div>
         
         {/* Amenities Chips */}
         <div className="flex flex-wrap gap-1.5">
-          <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-100 text-teal-900 font-bold text-[10px] flex items-center gap-1">
-            <Zap size={12} /> 24/7 Power
-          </span>
-          <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-100 text-teal-900 font-bold text-[10px] flex items-center gap-1">
-            <Wifi size={12} /> Fiber Wi-Fi
-          </span>
+          {amenities.slice(0, 3).map(amenity => (
+            <span key={amenity} className="px-2 py-1 rounded-md bg-slate-50 border border-slate-100 text-teal-900 font-bold text-[10px] flex items-center gap-1">
+              {amenityIconMap[amenity] || <Zap size={12} />} {amenityNameMap[amenity] || amenity}
+            </span>
+          ))}
+          {amenities.length === 0 && (
+            <span className="px-2 py-1 rounded-md bg-slate-50 border border-slate-100 text-slate-500 font-medium text-[10px] flex items-center gap-1">
+              Serviced Suite
+            </span>
+          )}
         </div>
         
         {/* Price & Action */}

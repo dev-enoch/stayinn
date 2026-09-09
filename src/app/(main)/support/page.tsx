@@ -107,7 +107,7 @@ export default function SupportPage() {
             <a href="#emergency-section" className="px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-teal-900 font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-colors">
               <ShieldCheck size={18} /> Emergency Protocols
             </a>
-            <a href="https://wa.me/2348007829466" target="_blank" rel="noopener noreferrer" className="px-5 py-3 rounded-xl bg-teal-900 text-white hover:bg-teal-800 font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-colors shadow-md">
+            <a href="https://wa.me/2348130007829" target="_blank" rel="noopener noreferrer" className="px-5 py-3 rounded-xl bg-teal-900 text-white hover:bg-teal-800 font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-colors shadow-md">
               <MessageCircle size={18} /> WhatsApp Support
             </a>
           </div>
@@ -126,7 +126,7 @@ export default function SupportPage() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div id="faq" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1: Bookings */}
           <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:border-teal-100 transition-all flex flex-col justify-between group">
             <div>
@@ -139,9 +139,9 @@ export default function SupportPage() {
                 Modifying dates, managing group itineraries, automated check-in codes, and booking extensions.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Self check-in smart lock access</span><ChevronRight size={16} /></a></li>
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Itinerary changes & date extensions</span><ChevronRight size={16} /></a></li>
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Group stays & ID verification</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Self check-in smart lock access</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Itinerary changes & date extensions</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Group stays & ID verification</span><ChevronRight size={16} /></a></li>
               </ul>
             </div>
             <div className="mt-8 pt-4 border-t border-slate-100">
@@ -163,9 +163,9 @@ export default function SupportPage() {
                 Seamless payments via NGN Debit Cards, USSD, Bank Transfer, USD Cards, and caution deposit handling.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Refund schedules & timelines</span><ChevronRight size={16} /></a></li>
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Caution deposit holds & release</span><ChevronRight size={16} /></a></li>
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>FIRS compliant tax invoices</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Refund schedules & timelines</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Caution deposit holds & release</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>FIRS compliant tax invoices</span><ChevronRight size={16} /></a></li>
               </ul>
             </div>
             <div className="mt-8 pt-4 border-t border-slate-100">
@@ -187,9 +187,9 @@ export default function SupportPage() {
                 Solar and generator backup switch times, Enterprise Starlink & Fiber Wi-Fi, private chefs, and housekeeping.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Guaranteed 24/7 power policies</span><ChevronRight size={16} /></a></li>
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Fibre & satellite broadband resets</span><ChevronRight size={16} /></a></li>
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>In-villa catering & cleaning</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Guaranteed 24/7 power policies</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Fibre & satellite broadband resets</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>In-villa catering & cleaning</span><ChevronRight size={16} /></a></li>
               </ul>
             </div>
             <div className="mt-8 pt-4 border-t border-slate-100">
@@ -211,8 +211,8 @@ export default function SupportPage() {
                 Gated estate gate-pass generation, guest registrations, noise curfews, and verified host credentials.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Generating estate gate codes</span><ChevronRight size={16} /></a></li>
-                <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Visitor limits & party restrictions</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Generating estate gate codes</span><ChevronRight size={16} /></a></li>
+                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Visitor limits & party restrictions</span><ChevronRight size={16} /></a></li>
                 <li><a href="#emergency-section" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Armed escort & transit info</span><ChevronRight size={16} /></a></li>
               </ul>
             </div>
@@ -285,11 +285,11 @@ export default function SupportPage() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:w-auto">
-                <a href="tel:+2348007829466" className="px-6 py-4 rounded-xl bg-white text-orange-700 hover:bg-orange-50 font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors">
+                <a href="tel:+2348130007829" className="px-6 py-4 rounded-xl bg-white text-orange-700 hover:bg-orange-50 font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors">
                   <Phone size={20} />
-                  <span>+234 800 STAYINN</span>
+                  <span>+234 813 000 7829</span>
                 </a>
-                <a href="https://wa.me/2348007829466" target="_blank" rel="noopener noreferrer" className="px-6 py-4 rounded-xl bg-orange-700 hover:bg-orange-800 text-white font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-colors border border-orange-500">
+                <a href="https://wa.me/2348130007829" target="_blank" rel="noopener noreferrer" className="px-6 py-4 rounded-xl bg-orange-700 hover:bg-orange-800 text-white font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-colors border border-orange-500">
                   <MessageCircle size={20} />
                   <span>WhatsApp Concierge</span>
                 </a>
@@ -439,7 +439,7 @@ export default function SupportPage() {
                 Policies & Legal Framework
               </h4>
               <div className="flex flex-col gap-4 text-sm font-semibold">
-                <a href="#" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
+                <a href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Guest Terms of Service</span>
                   <ExternalLink size={16} />
                 </a>
@@ -447,11 +447,11 @@ export default function SupportPage() {
                   <span>Privacy Policy & NDPR Compliance</span>
                   <ExternalLink size={16} />
                 </Link>
-                <a href="#" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
+                <a href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Party & Photography Strict Policy</span>
                   <ExternalLink size={16} />
                 </a>
-                <a href="#" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
+                <a href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Estate By-Laws & Curfews</span>
                   <ExternalLink size={16} />
                 </a>

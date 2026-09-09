@@ -89,7 +89,7 @@ export default function PrivacyPolicyPage() {
           <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 mt-4">
             <p className="font-bold text-slate-900 mb-1">Stayinn Privacy Team</p>
             <p className="text-slate-600">Email: <a href="mailto:privacy@stayinn.ng" className="text-teal-900 hover:underline">privacy@stayinn.ng</a></p>
-            <p className="text-slate-600">Phone: +234 1 888 STAY</p>
+            <p className="text-slate-600">Phone: +234 813 000 7829</p>
           </div>
         </div>
       </div>
