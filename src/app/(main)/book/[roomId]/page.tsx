@@ -360,8 +360,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                 <div className="w-24 h-24 rounded-xl overflow-hidden shrink-0 shadow-sm relative">
                   <img 
                     className="w-full h-full object-cover" 
-                    alt="Courtyard" 
+                    alt="The Courtyard Residence, Ikoyi Lagos" 
                     src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
+                    width={96}
+                    height={96}
                   />
                   <span className="absolute bottom-1 right-1 bg-white/90 backdrop-blur-sm text-teal-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">Ikoyi</span>
                 </div>

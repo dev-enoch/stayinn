@@ -111,8 +111,10 @@ export default function CitiesPage() {
                 <div className="relative h-[340px] w-full overflow-hidden">
                   <img 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    alt="Ikoyi" 
-                    src="https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"
+                    alt="Ikoyi, Lagos — Luxury Serviced Apartments" 
+                    src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
+                    width={900}
+                    height={340}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent"></div>
                   <div className="absolute top-5 left-5 flex gap-2">
@@ -171,8 +173,10 @@ export default function CitiesPage() {
                   <div className="relative h-48 w-full overflow-hidden shrink-0">
                     <img 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                      alt="Victoria Island" 
-                      src="https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"
+                      alt="Victoria Island, Lagos — Serviced Apartments" 
+                      src="https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80"
+                      width={600}
+                      height={192}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
                     <div className="absolute top-4 left-4">
@@ -202,8 +206,10 @@ export default function CitiesPage() {
                   <div className="relative h-48 w-full overflow-hidden shrink-0">
                     <img 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                      alt="Lekki Phase 1" 
-                      src="https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80"
+                      alt="Lekki Phase 1, Lagos — Serviced Apartments" 
+                      src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80"
+                      width={600}
+                      height={192}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
                     <div className="absolute top-4 left-4">
@@ -257,8 +263,10 @@ export default function CitiesPage() {
                 <div className="relative h-72 w-full overflow-hidden">
                   <img 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    alt="Maitama Abuja" 
-                    src="https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80"
+                    alt="Maitama, Abuja — Serviced Apartments" 
+                    src="https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80"
+                    width={700}
+                    height={288}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent"></div>
                   <div className="absolute top-5 left-5">
@@ -292,8 +300,10 @@ export default function CitiesPage() {
                 <div className="relative h-72 w-full overflow-hidden">
                   <img 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    alt="Wuse II Abuja" 
+                    alt="Wuse II, Abuja — Serviced Apartments" 
                     src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
+                    width={700}
+                    height={288}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent"></div>
                   <div className="absolute top-5 left-5">

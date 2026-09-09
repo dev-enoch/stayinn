@@ -1,9 +1,13 @@
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Zap, Wifi, Shield, ShieldCheck } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import HotelCard from "@/components/hotel/HotelCard";
 import HeroSearch from "@/components/home/HeroSearch";
+
+// Revalidate every hour so Vercel CDN edge-caches this page (SI-27)
+export const revalidate = 3600;
 
 export default async function Home() {
   let featuredHotels: any[] = [];
@@ -101,10 +105,13 @@ export default async function Home() {
           {/* Right: Hero Image */}
           <div className="lg:col-span-5 relative mt-12 lg:mt-0">
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl h-[500px] w-full">
-              <img 
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80" 
-                alt="Luxury Villa" 
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              <Image
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
+                alt="Luxury serviced apartment interior in Lagos Nigeria"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 40vw"
+                className="object-cover transition-transform duration-700 hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-teal-900/80 via-transparent to-transparent"></div>
               

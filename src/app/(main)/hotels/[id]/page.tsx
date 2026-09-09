@@ -231,6 +231,8 @@ export default async function HotelDetailPage(
                   <img 
                     src={imgUrl} 
                     alt="Gallery thumbnail" 
+                    width={400}
+                    height={250}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" 
                   />
                 </div>

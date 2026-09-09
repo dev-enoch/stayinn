@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
+// Revalidate every 5 min — respects searchParams freshness (SI-27)
+export const revalidate = 300;
 
 export default async function ExplorePage(
   props: {

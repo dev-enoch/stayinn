@@ -16,7 +16,8 @@ export const metadata: Metadata = {
   },
 };
 
-
+// Revalidate every hour for Vercel edge CDN caching (SI-27)
+export const revalidate = 3600;
 
 export default async function HostPage() {
   let managerCount = 0;
