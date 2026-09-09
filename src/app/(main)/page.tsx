@@ -8,8 +8,13 @@ import WhyStayinn from "@/components/landing/WhyStayinn";
 import HotelCard from "@/components/hotel/HotelCard";
 
 export default async function Home() {
-  const response = await apiClient.get('/api/hotels?limit=3');
-  const featuredHotels = response.success ? response.data.items : [];
+  let featuredHotels = [];
+  try {
+    const response = await apiClient.get('/api/hotels?limit=3');
+    featuredHotels = response.success ? response.data.items : [];
+  } catch (error) {
+    console.error("Failed to fetch featured hotels:", error);
+  }
 
   return (
     <div className="flex flex-col w-full">
