@@ -14,11 +14,23 @@ export default async function ProfileHeaderStats() {
     console.error("Failed to fetch user profile", error);
   }
 
-  const profileName = user?.fullName || "Amina Adebayo";
-  const memberSince = user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : "March 2023";
-  const stays = user?.staysCount || 12;
-  const reviews = user?.reviewsCount || 4;
-  const rating = user?.rating || 4.95;
+  if (!user) {
+    return (
+      <section className="px-4 py-8 flex flex-col items-center justify-center text-center">
+        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+          <Camera size={32} className="text-slate-300" />
+        </div>
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900">Guest User</h2>
+        <p className="text-sm text-slate-500 mt-1">Please sign in to view your profile</p>
+      </section>
+    );
+  }
+
+  const profileName = user.fullName || "User";
+  const memberSince = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : "";
+  const stays = user.staysCount || 0;
+  const reviews = user.reviewsCount || 0;
+  const rating = user.rating || 0;
 
   return (
     <section className="px-4 py-8">
@@ -29,7 +41,7 @@ export default async function ProfileHeaderStats() {
           <div className="relative group">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-slate-100 ring-1 ring-slate-200 relative shadow-sm">
               <Image 
-                src="https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?q=80&w=400&auto=format&fit=crop" 
+                src={user.avatarUrl || "https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?q=80&w=400&auto=format&fit=crop"} 
                 alt={`${profileName} profile`}
                 fill 
                 className="object-cover"

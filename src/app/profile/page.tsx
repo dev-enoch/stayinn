@@ -17,10 +17,11 @@ import ProfileHeaderStats, { ProfileHeaderStatsSkeleton } from '@/components/pro
 import UpcomingStay, { UpcomingStaySkeleton } from '@/components/profile/UpcomingStay';
 import WishlistsPreview, { WishlistsPreviewSkeleton } from '@/components/profile/WishlistsPreview';
 import Link from 'next/link';
+import BottomNav from '@/components/ui/BottomNav';
 
 export default function ProfilePage() {
   return (
-    <div className="flex flex-col min-h-screen w-full bg-white text-slate-900 pb-24 lg:max-w-3xl lg:mx-auto lg:border-x lg:border-slate-200">
+    <div className="flex flex-col min-h-screen w-full bg-white text-slate-900 pb-24">
       
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 pt-safe">
@@ -164,6 +165,7 @@ export default function ProfilePage() {
 
         </div>
       </main>
+      <BottomNav />
     </div>
   );
 }

@@ -15,25 +15,20 @@ export default async function WishlistsPreview() {
     console.error("Failed to fetch wishlists", error);
   }
 
-  const isMock = wishlists.length === 0;
-  const listsToDisplay = isMock ? [
-    { id: 1, name: "Abuja Getaways", count: 5, img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=400&auto=format&fit=crop" },
-    { id: 2, name: "Lagos Workations", count: 8, img: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=400&auto=format&fit=crop" },
-    { id: 3, name: "Beachfront Stays", count: 4, img: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=400&auto=format&fit=crop" }
-  ] : wishlists.slice(0, 3);
+  if (!wishlists || wishlists.length === 0) return null;
 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold tracking-tight text-slate-900">Saved Wishlists</h3>
         <Link href="/wishlists" className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1">
-          View all ({isMock ? 3 : wishlists.length})
+          View all ({wishlists.length})
           <ArrowRight size={14} />
         </Link>
       </div>
       
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {listsToDisplay.map((list: any) => (
+        {wishlists.slice(0, 3).map((list: any) => (
           <Link href={`/wishlists/${list.id}`} key={list.id} className="group block">
             <div className="w-full aspect-square rounded-xl bg-slate-100 overflow-hidden mb-2 relative border border-slate-200/60">
               <Image 

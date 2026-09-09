@@ -14,11 +14,12 @@ export default async function UpcomingStay() {
     console.error("Failed to fetch upcoming stay", error);
   }
 
-  const isMock = !booking;
-  const hotelName = booking?.hotel?.name || "The Serene Oasis Villa";
-  const location = booking?.hotel?.address || "Maitama, Abuja";
-  const bookingRef = booking?.id ? `#STN-${booking.id.substring(0, 5)}` : "#STN-84920";
-  const dateStr = isMock ? "Nov 14 – 18, 2024" : `${new Date(booking.checkIn).toLocaleDateString()} - ${new Date(booking.checkOut).toLocaleDateString()}`;
+  if (!booking) return null;
+
+  const hotelName = booking.hotel?.name || "Hotel Name";
+  const location = booking.hotel?.address || "Address";
+  const bookingRef = booking.id ? `#STN-${booking.id.substring(0, 5)}` : "#STN-XXXXX";
+  const dateStr = `${new Date(booking.checkIn).toLocaleDateString()} - ${new Date(booking.checkOut).toLocaleDateString()}`;
 
   return (
     <div className="space-y-3">
@@ -30,7 +31,7 @@ export default async function UpcomingStay() {
       <div className="group rounded-xl border border-slate-200 bg-white overflow-hidden flex flex-col md:flex-row transition-shadow hover:shadow-sm">
         <div className="relative h-48 md:h-auto md:w-2/5 bg-slate-100">
           <Image 
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop" 
+            src={booking.hotel?.image || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop"} 
             alt={hotelName} 
             fill
             className="object-cover"
