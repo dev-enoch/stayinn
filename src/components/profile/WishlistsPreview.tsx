@@ -1,12 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
 
 export default async function WishlistsPreview() {
   let wishlists = [];
   try {
-    // Attempt to fetch wishlists
     const res = await apiClient.get('/api/wishlists');
     if (res?.data) {
       wishlists = res.data;
@@ -15,7 +15,6 @@ export default async function WishlistsPreview() {
     console.error("Failed to fetch wishlists", error);
   }
 
-  // Fallback to mock data if empty
   const isMock = wishlists.length === 0;
   const listsToDisplay = isMock ? [
     { id: 1, name: "Abuja Getaways", count: 5, img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=400&auto=format&fit=crop" },
@@ -24,17 +23,19 @@ export default async function WishlistsPreview() {
   ] : wishlists.slice(0, 3);
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-bold text-slate-900">Saved & Wishlists</h3>
-        <Link href="/wishlists" className="text-xs font-bold text-green-700 hover:underline">
-          View All ({isMock ? 3 : wishlists.length})
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold tracking-tight text-slate-900">Saved Wishlists</h3>
+        <Link href="/wishlists" className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1">
+          View all ({isMock ? 3 : wishlists.length})
+          <ArrowRight size={14} />
         </Link>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {listsToDisplay.map((list: any) => (
-          <div key={list.id} className="bg-white rounded-xl p-2 shadow-sm border border-slate-200 flex flex-col items-center text-center group cursor-pointer hover:border-green-300 transition-colors">
-            <div className="w-full aspect-square rounded-lg bg-slate-200 overflow-hidden mb-2 relative">
+          <Link href={`/wishlists/${list.id}`} key={list.id} className="group block">
+            <div className="w-full aspect-square rounded-xl bg-slate-100 overflow-hidden mb-2 relative border border-slate-200/60">
               <Image 
                 src={list.img || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=400&auto=format&fit=crop"} 
                 alt={list.name} 
@@ -42,9 +43,11 @@ export default async function WishlistsPreview() {
                 className="object-cover group-hover:scale-105 transition-transform duration-500" 
               />
             </div>
-            <span className="text-xs font-bold text-slate-900 truncate w-full">{list.name}</span>
-            <span className="text-[10px] font-semibold text-slate-500 mt-0.5">{list.count || 0} places</span>
-          </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-slate-900 truncate">{list.name}</span>
+              <span className="text-xs text-slate-500 mt-0.5">{list.count || 0} saved items</span>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
@@ -54,17 +57,17 @@ export default async function WishlistsPreview() {
 // Skeleton Fallback
 export function WishlistsPreviewSkeleton() {
   return (
-    <div className="animate-pulse">
-      <div className="flex items-center justify-between mb-4">
-        <div className="h-6 w-40 bg-slate-200 rounded" />
-        <div className="h-4 w-20 bg-slate-200 rounded" />
+    <div className="space-y-3 animate-pulse">
+      <div className="flex items-center justify-between">
+        <div className="h-6 w-32 bg-slate-200 rounded" />
+        <div className="h-5 w-20 bg-slate-200 rounded" />
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {[1, 2, 3].map(i => (
-          <div key={i} className="bg-white rounded-xl p-2 shadow-sm border border-slate-200 flex flex-col items-center">
-            <div className="w-full aspect-square rounded-lg bg-slate-200 mb-2" />
-            <div className="h-3 w-16 bg-slate-200 rounded mb-1" />
-            <div className="h-2 w-10 bg-slate-200 rounded" />
+          <div key={i} className="flex flex-col">
+            <div className="w-full aspect-square rounded-xl bg-slate-200 mb-2" />
+            <div className="h-4 w-24 bg-slate-200 rounded mb-1" />
+            <div className="h-3 w-16 bg-slate-200 rounded" />
           </div>
         ))}
       </div>

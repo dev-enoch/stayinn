@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 export default function ProfileBackButton() {
   const router = useRouter();
@@ -10,10 +10,10 @@ export default function ProfileBackButton() {
   return (
     <button 
       onClick={() => router.back()}
-      className="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-200 transition-colors"
+      className="w-9 h-9 flex items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 transition-colors"
       aria-label="Go back"
     >
-      <ArrowLeft size={24} />
+      <ChevronLeft size={20} />
     </button>
   );
 }

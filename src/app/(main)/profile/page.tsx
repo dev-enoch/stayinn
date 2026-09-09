@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import {
   Bell,
   Home,
-  ArrowRight,
   ChevronRight,
   IdCard,
   Wallet,
@@ -17,198 +16,149 @@ import ProfileBackButton from '@/components/profile/ProfileBackButton';
 import ProfileHeaderStats, { ProfileHeaderStatsSkeleton } from '@/components/profile/ProfileHeaderStats';
 import UpcomingStay, { UpcomingStaySkeleton } from '@/components/profile/UpcomingStay';
 import WishlistsPreview, { WishlistsPreviewSkeleton } from '@/components/profile/WishlistsPreview';
-import Image from 'next/image';
+import Link from 'next/link';
 
 export default function ProfilePage() {
   return (
-    <div className="flex flex-col min-h-screen w-full bg-slate-50 text-slate-900 pb-24 lg:max-w-3xl lg:mx-auto lg:border-x lg:border-slate-200 lg:bg-white lg:shadow-sm">
+    <div className="flex flex-col min-h-screen w-full bg-white text-slate-900 pb-24 lg:max-w-3xl lg:mx-auto lg:border-x lg:border-slate-200">
       
-      {/* Custom Mobile Header */}
-      <header className="sticky top-0 z-40 bg-slate-50/80 lg:bg-white/80 backdrop-blur-xl border-b border-slate-200/60 pt-safe">
-        <div className="h-16 px-4 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-3 min-w-0">
-            <ProfileBackButton />
-            <h1 className="text-xl font-bold font-serif text-slate-900 truncate">Profile & Account</h1>
-          </div>
+      {/* Header */}
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 pt-safe">
+        <div className="h-14 px-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-200 transition-colors relative">
-              <Bell size={24} />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500"></span>
-            </button>
-            <div className="relative w-8 h-8 rounded-full ring-2 ring-slate-300 overflow-hidden shrink-0">
-              <Image 
-                src="https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?q=80&w=200&auto=format&fit=crop" 
-                alt="Profile" 
-                fill 
-                className="object-cover"
-              />
-            </div>
+            <ProfileBackButton />
+            <h1 className="text-lg font-semibold tracking-tight text-slate-900">Profile</h1>
           </div>
+          <button className="w-9 h-9 flex items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 transition-colors relative">
+            <Bell size={20} />
+            <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-red-500 border border-white"></span>
+          </button>
         </div>
       </header>
 
       <main className="flex-1 flex flex-col w-full relative">
         
-        {/* Profile Header Tier with Suspense */}
+        {/* Profile Stats */}
         <Suspense fallback={<ProfileHeaderStatsSkeleton />}>
           <ProfileHeaderStats />
         </Suspense>
 
-        {/* Main Body Content */}
-        <div className="px-4 py-6 space-y-8">
+        <div className="w-full h-px bg-slate-200"></div>
+
+        {/* Content Body */}
+        <div className="px-4 py-8 space-y-10">
           
-          {/* Switch to Host Mode Promotion */}
-          <div className="relative overflow-hidden bg-green-700 text-white rounded-xl p-6 shadow-md border border-green-800">
-            <div className="relative z-10 flex flex-col gap-3">
-              <div className="flex items-start justify-between">
-                <span className="text-xs font-bold text-green-200 uppercase tracking-wider">Host Program</span>
-                <div className="w-8 h-8 rounded-full bg-green-900/60 flex items-center justify-center text-green-200">
-                  <Home size={18} />
-                </div>
+          {/* Host Program Promotion */}
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-900 shrink-0 shadow-sm">
+                <Home size={18} />
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-1">Become a Stayinn Host</h3>
-                <p className="text-sm text-green-100/90 leading-relaxed">Earn extra income sharing your premium space in Lagos, Abuja, or Port Harcourt.</p>
-              </div>
-              <div className="pt-2">
-                <button className="px-5 py-2.5 rounded-full bg-green-500 hover:bg-green-400 text-white font-semibold text-sm shadow-sm active:scale-95 transition-all flex items-center gap-2">
-                  <span>Get Started</span>
-                  <ArrowRight size={16} />
-                </button>
+                <h3 className="text-base font-semibold tracking-tight text-slate-900">Stayinn Host Program</h3>
+                <p className="text-sm text-slate-500 mt-1 max-w-sm">Earn extra income by sharing your premium space with verified guests.</p>
               </div>
             </div>
-            {/* Tactile background illustration */}
-            <div className="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-green-800/50 pointer-events-none"></div>
+            <button className="self-start md:self-auto px-4 py-2 rounded-md bg-white border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors shadow-sm">
+              Learn More
+            </button>
           </div>
 
-          {/* Active Booking Spotlight with Suspense */}
+          {/* Active Booking Spotlight */}
           <Suspense fallback={<UpcomingStaySkeleton />}>
             <UpcomingStay />
           </Suspense>
 
-          {/* Wishlists Preview with Suspense */}
+          {/* Wishlists Preview */}
           <Suspense fallback={<WishlistsPreviewSkeleton />}>
             <WishlistsPreview />
           </Suspense>
 
-          {/* Account Settings Section */}
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 mb-4">Account Settings</h3>
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
-              
-              <button className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-green-700 shrink-0">
-                    <IdCard size={20} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-base font-semibold text-slate-900">Personal Information</p>
-                    <p className="text-xs text-slate-500 truncate mt-0.5">Name, Phone, NIN • Verified</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0 ml-2">
-                  <span className="px-2 py-0.5 rounded-full bg-green-700/10 text-green-700 text-[10px] font-bold uppercase tracking-wider">Verified</span>
-                  <ChevronRight size={20} className="text-slate-400" />
-                </div>
-              </button>
-              
-              <button className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-green-700 shrink-0">
-                    <Wallet size={20} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-base font-semibold text-slate-900">Payments & Payouts</p>
-                    <p className="text-xs text-slate-500 truncate mt-0.5">Cards, GTBank, Zenith Bank</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0 ml-2">
-                  <span className="text-xs font-semibold text-slate-500">2 saved</span>
-                  <ChevronRight size={20} className="text-slate-400" />
-                </div>
-              </button>
-              
-              <button className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-green-700 shrink-0">
-                    <Lock size={20} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-base font-semibold text-slate-900">Security & Login</p>
-                    <p className="text-xs text-slate-500 truncate mt-0.5">2FA active • Biometrics enabled</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0 ml-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                  <ChevronRight size={20} className="text-slate-400" />
-                </div>
-              </button>
+          <div className="w-full h-px bg-slate-200"></div>
 
-              <button className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-green-700 shrink-0">
-                    <Settings2 size={20} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-base font-semibold text-slate-900">Preferences & Currency</p>
-                    <p className="text-xs text-slate-500 truncate mt-0.5">NGN (₦) • English (Nigeria)</p>
-                  </div>
+          {/* Settings Section */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-slate-500 uppercase tracking-wider px-2">Account</h3>
+            <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+              <Link href="/profile/personal-info" className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-3">
+                  <IdCard size={18} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-900">Personal Information</span>
                 </div>
-                <div className="flex items-center shrink-0 ml-2">
-                  <ChevronRight size={20} className="text-slate-400" />
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-full bg-green-50 text-green-700 text-[10px] font-semibold uppercase tracking-wider">Verified</span>
+                  <ChevronRight size={16} className="text-slate-400" />
                 </div>
-              </button>
+              </Link>
               
+              <Link href="/profile/payments" className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-3">
+                  <Wallet size={18} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-900">Payments & Payouts</span>
+                </div>
+                <ChevronRight size={16} className="text-slate-400" />
+              </Link>
+              
+              <Link href="/profile/security" className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-3">
+                  <Lock size={18} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-900">Security</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                  <ChevronRight size={16} className="text-slate-400" />
+                </div>
+              </Link>
+
+              <Link href="/profile/preferences" className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-3">
+                  <Settings2 size={18} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-900">Preferences</span>
+                </div>
+                <ChevronRight size={16} className="text-slate-400" />
+              </Link>
             </div>
           </div>
 
-          {/* Support & Legal Section */}
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 mb-4">Support & Trust</h3>
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
-              
-              <button className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-green-700 shrink-0">
-                    <Headphones size={20} />
-                  </div>
-                  <span className="text-base font-semibold text-slate-900">Help & Support Center</span>
+          {/* Support Section */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-slate-500 uppercase tracking-wider px-2">Support & Legal</h3>
+            <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+              <Link href="/support" className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-3">
+                  <Headphones size={18} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-900">Help Center</span>
                 </div>
-                <ChevronRight size={20} className="text-slate-400" />
-              </button>
+                <ChevronRight size={16} className="text-slate-400" />
+              </Link>
               
-              <button className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-green-700 shrink-0">
-                    <Shield size={20} />
-                  </div>
-                  <span className="text-base font-semibold text-slate-900">Safety Guidelines</span>
+              <Link href="/safety" className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-3">
+                  <Shield size={18} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-900">Safety Center</span>
                 </div>
-                <ChevronRight size={20} className="text-slate-400" />
-              </button>
+                <ChevronRight size={16} className="text-slate-400" />
+              </Link>
               
-              <button className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-green-700 shrink-0">
-                    <FileText size={20} />
-                  </div>
-                  <span className="text-base font-semibold text-slate-900">Terms & Privacy</span>
+              <Link href="/terms" className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-3">
+                  <FileText size={18} className="text-slate-400" />
+                  <span className="text-sm font-medium text-slate-900">Terms & Privacy</span>
                 </div>
-                <ChevronRight size={20} className="text-slate-400" />
-              </button>
-              
+                <ChevronRight size={16} className="text-slate-400" />
+              </Link>
             </div>
           </div>
 
           {/* Actions & Version Footer */}
-          <div className="pt-4 pb-8 flex flex-col items-center gap-6">
-            <button className="w-full py-4 rounded-xl bg-red-50 text-red-600 font-bold text-sm flex items-center justify-center gap-2 active:bg-red-100 transition-colors">
-              <LogOut size={20} />
+          <div className="pt-6 pb-4 flex flex-col items-center gap-6">
+            <button className="w-full md:w-auto md:min-w-[200px] py-2.5 rounded-md border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 font-medium text-sm flex items-center justify-center gap-2 transition-colors">
+              <LogOut size={16} />
               <span>Log Out</span>
             </button>
-            <div className="flex flex-col items-center gap-1.5 text-center">
-              <p className="text-xs font-semibold text-slate-400">Stayinn App v2.4.1 (Nigeria)</p>
-              <p className="text-[10px] font-medium text-slate-400/80">Modern Nigerian Hospitality • RC 1948291</p>
+            <div className="flex flex-col items-center gap-1 text-center">
+              <p className="text-xs font-medium text-slate-400">Stayinn App v2.5.0</p>
+              <p className="text-[10px] text-slate-400">RC 1948291</p>
             </div>
           </div>
 
