@@ -18,12 +18,17 @@ model User {
   passwordHash String
   fullName     String
   role         Role      @default(BOOKER)
-  createdAt    DateTime  @default(now()) @db.Timestamptz
-  updatedAt    DateTime  @updatedAt @db.Timestamptz
+  createdAt          DateTime      @default(now()) @db.Timestamptz
+  updatedAt          DateTime      @updatedAt @db.Timestamptz
+  twoFactorEnabled   Boolean       @default(false)
+  powerRequirement   String?
+  internetRequirement String?
 
-  hotels       Hotel[]
-  bookings     Booking[]
-  payments     Payment[]
+  hotels             Hotel[]
+  bookings           Booking[]
+  payments           Payment[]
+  wishlists          Wishlist[]
+  savedCards         SavedCard[]
 
   @@index([role])
 }
@@ -55,6 +60,7 @@ model Hotel {
   roomTypes   RoomType[]
   bookings    Booking[]
   payouts     Payout[]
+  wishlists   Wishlist[]
 
   @@index([status])
   @@index([latitude, longitude])
@@ -243,4 +249,39 @@ model CommissionSetting {
   active    Boolean  @default(true)
   createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt @db.Timestamptz
+}
+
+// ============================================
+// WISHLIST
+// ============================================
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @db.Timestamptz
+
+  @@unique([userId, hotelId])
+  @@index([userId])
+}
+
+// ============================================
+// SAVED CARD
+// ============================================
+model SavedCard {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  authorizationCode String   @unique
+  last4             String
+  expMonth          String
+  expYear           String
+  brand             String
+  bank              String?
+  reusable          Boolean  @default(true)
+  createdAt         DateTime @default(now()) @db.Timestamptz
+  updatedAt         DateTime @updatedAt @db.Timestamptz
+
+  @@index([userId])
 }
