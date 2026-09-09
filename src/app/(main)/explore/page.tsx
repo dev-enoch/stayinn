@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Search, MapPin, Shield } from "lucide-react";
 import { prisma } from "@/lib/prisma";
@@ -7,6 +8,18 @@ import ExploreFilters from "@/components/explore/ExploreFilters";
 import ExplorePagination from "@/components/explore/ExplorePagination";
 import ExploreMap from "@/components/explore/ExploreMap";
 import { Prisma } from "@prisma/client";
+
+export const metadata: Metadata = {
+  title: "Explore Serviced Apartments in Nigeria",
+  description: "Browse premium shortlet apartments in Lagos, Abuja, Port Harcourt and beyond. Filter by amenities, price, and location.",
+  openGraph: {
+    title: "Explore Serviced Apartments in Nigeria — Stayinn",
+    description: "Browse premium shortlet apartments in Lagos, Abuja, Port Harcourt and beyond.",
+    type: "website",
+    url: "/explore",
+  },
+};
+
 
 export default async function ExplorePage(
   props: {

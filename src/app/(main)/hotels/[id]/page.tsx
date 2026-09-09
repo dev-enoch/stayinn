@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Users, Wifi, Droplets, Zap, Car, Waves, Dumbbell, Utensils, Wind, ChevronRight, Share, Heart, Star, Shield, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
@@ -23,6 +24,48 @@ const getAmenityIcon = (amenity: Amenity) => {
 const getAmenityLabel = (amenity: Amenity) => {
   return amenity.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
 };
+
+export async function generateMetadata(
+  props: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const params = await props.params;
+  const hotel = await prisma.hotel.findUnique({
+    where: { id: params.id, status: "APPROVED" },
+    include: { roomTypes: { where: { status: "ACTIVE" }, select: { pricePerNight: true } } },
+  });
+
+  if (!hotel) return { title: "Property Not Found" };
+
+  const location = hotel.address.split(",").slice(-2).join(",").trim();
+  const startingPrice = hotel.roomTypes.length > 0
+    ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight))
+    : 0;
+  const priceStr = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 }).format(startingPrice);
+  const title = `${hotel.name}, ${location}`;
+  const description = hotel.description
+    ? `${hotel.description} From ${priceStr}/night.`
+    : `Luxury serviced apartment in ${location}. From ${priceStr}/night. Book on Stayinn.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/hotels/${hotel.id}`,
+      images: hotel.coverImage
+        ? [{ url: hotel.coverImage, width: 1200, height: 800, alt: hotel.name }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: hotel.coverImage ? [hotel.coverImage] : undefined,
+    },
+  };
+}
 
 export default async function HotelDetailPage(
   props: { params: Promise<{ id: string }> }
@@ -61,8 +104,32 @@ export default async function HotelDetailPage(
     maximumFractionDigits: 0,
   }).format(startingPrice);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "name": hotel.name,
+    "description": hotel.description ?? undefined,
+    "url": `https://stayinn.ng/hotels/${hotel.id}`,
+    "image": hotel.coverImage ?? undefined,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": hotel.address,
+      "addressCountry": "NG",
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": hotel.latitude,
+      "longitude": hotel.longitude,
+    },
+    "priceRange": formattedPrice + "/night",
+  };
+
   return (
     <div className="w-full min-h-screen bg-slate-50 pt-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       
       {/* Breadcrumb & Top Bar */}
       <div className="w-full bg-slate-100/70 py-4 border-b border-slate-200">

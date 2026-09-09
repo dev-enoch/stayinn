@@ -1,9 +1,22 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Calendar, TrendingUp, Bolt, ShieldCheck, Home, Shield, ConciergeBell, Landmark, CheckCircle, Timer, Camera, Rocket, ChevronRight, Phone } from "lucide-react";
 import YieldEstimator from "@/components/host/YieldEstimator";
-
 import { prisma } from "@/lib/prisma";
+
+export const metadata: Metadata = {
+  title: "List Your Property — Become a Stayinn Host",
+  description: "Earn more from your serviced apartment. Join Stayinn's network of verified hosts across Lagos, Abuja and beyond. Transparent payouts, full-service management.",
+  openGraph: {
+    title: "Become a Stayinn Host",
+    description: "Earn more from your serviced apartment in Nigeria. Transparent payouts, full-service management.",
+    type: "website",
+    url: "/host",
+  },
+};
+
+
 
 export default async function HostPage() {
   let managerCount = 0;

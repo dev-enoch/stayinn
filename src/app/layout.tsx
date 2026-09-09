@@ -13,8 +13,43 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Stayinn - Find Your Perfect Stay in Nigeria",
-  description: "Experience curated spaces, unparalleled comfort, and authentic local hospitality across Nigeria.",
+  metadataBase: new URL("https://stayinn.ng"),
+  title: {
+    default: "Stayinn — Premium Serviced Apartments in Nigeria",
+    template: "%s — Stayinn",
+  },
+  description:
+    "Discover curated, fully-serviced apartments across Lagos, Abuja and beyond. 24/7 power, fiber internet, and genuine Nigerian hospitality.",
+  keywords: ["serviced apartments Nigeria", "short stay Lagos", "Airbnb Nigeria", "Abuja apartments", "Lagos shortlet"],
+  openGraph: {
+    type: "website",
+    locale: "en_NG",
+    siteName: "Stayinn",
+    title: "Stayinn — Premium Serviced Apartments in Nigeria",
+    description:
+      "Discover curated, fully-serviced apartments across Lagos, Abuja and beyond. 24/7 power, fiber internet, and genuine Nigerian hospitality.",
+    images: [
+      {
+        url: "/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Stayinn – Premium Serviced Apartments in Nigeria",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@stayinn_ng",
+    title: "Stayinn — Premium Serviced Apartments in Nigeria",
+    description:
+      "Discover curated, fully-serviced apartments across Lagos, Abuja and beyond.",
+    images: ["/og-default.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 };
 
 export default function RootLayout({

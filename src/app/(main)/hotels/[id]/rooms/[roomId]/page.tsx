@@ -1,9 +1,35 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Users, ArrowLeft, Calendar } from "lucide-react";
 import RoomGallery from "./RoomGallery";
 import { prisma } from "@/lib/prisma";
+
+export async function generateMetadata(
+  props: { params: Promise<{ id: string; roomId: string }> }
+): Promise<Metadata> {
+  const params = await props.params;
+  const room = await prisma.roomType.findUnique({
+    where: { id: params.roomId, status: 'ACTIVE' },
+    include: { hotel: { select: { name: true, address: true, status: true } } },
+  });
+
+  if (!room || room.hotel.status !== 'APPROVED') return { title: "Suite Not Found" };
+
+  const priceStr = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 }).format(room.pricePerNight);
+  const title = `${room.name} at ${room.hotel.name}`;
+  const description = room.description
+    ? `${room.description} ${priceStr}/night at ${room.hotel.address}.`
+    : `${room.name} — ${priceStr}/night at ${room.hotel.name}, ${room.hotel.address}. Book on Stayinn.`;
+
+  return {
+    title,
+    description,
+    openGraph: { title, description, type: "website" },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function RoomDetailPage(
   props: { params: Promise<{ id: string; roomId: string }> }

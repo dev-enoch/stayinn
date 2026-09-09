@@ -1,6 +1,14 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Shield, Lock, FileText, CheckCircle } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Stayinn's privacy policy explains how we collect, use and protect your personal data in compliance with Nigeria's NDPA/NDPR.",
+  robots: { index: false, follow: false },
+};
+
 
 export default function PrivacyPolicyPage() {
   return (
