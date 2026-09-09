@@ -1,19 +1,21 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
-import { apiClient } from '@/lib/api-client';
+import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/auth';
 
 export default async function WishlistsPreview() {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1200));
-
-  let wishlists = [];
-  try {
-    const res = await apiClient.get('/api/users/me/wishlists'); // Assuming this endpoint exists
-    if (res?.data) {
-      wishlists = res.data;
+  const session = await getSession();
+  
+  let wishlists: any[] = [];
+  if (session) {
+    try {
+      wishlists = await prisma.wishlist.findMany({
+        where: { userId: session.userId },
+        orderBy: { createdAt: 'desc' }
+      });
+    } catch (error) {
+      console.error("Failed to fetch wishlists", error);
     }
-  } catch (error) {
-    console.error("Failed to fetch wishlists", error);
   }
 
   // The user requested: "remove every mock data and replace with empty state or completely hide the section"

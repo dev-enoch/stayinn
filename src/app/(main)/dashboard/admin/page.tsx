@@ -1,7 +1,7 @@
-import { apiClient } from "@/lib/api-client";
+import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Building2, CheckCircle, Clock, XCircle, Settings, BarChart3 } from "lucide-react";
+import { Building2, CheckCircle, Clock, Settings, BarChart3, Users, CalendarCheck } from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminDashboardPage() {
@@ -10,14 +10,32 @@ export default async function AdminDashboardPage() {
     redirect("/login");
   }
 
-  const response = await apiClient.get('/api/admin/analytics');
-  
-  if (!response.success || !response.data) {
-    return <div>Error loading admin dashboard.</div>;
-  }
+  const [
+    totalUsers,
+    totalHotels,
+    totalBookings,
+    revenueResult,
+    hotels
+  ] = await Promise.all([
+    prisma.user.count(),
+    prisma.hotel.count(),
+    prisma.booking.count(),
+    prisma.booking.aggregate({
+      _sum: {
+        commissionAmount: true
+      },
+      where: {
+        status: { in: ['PAID', 'CONFIRMED', 'COMPLETED'] }
+      }
+    }),
+    prisma.hotel.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { manager: { select: { fullName: true } } }
+    })
+  ]);
 
-  const { totalUsers, totalHotels, totalBookings, totalRevenue, hotels } = response.data;
-  const totalCommission = totalRevenue; // Platform fee is calculated on backend if it's commissionAmount
+  const totalRevenue = (revenueResult._sum.commissionAmount || 0);
+  const totalCommission = totalRevenue;
 
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {

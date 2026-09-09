@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Search, MapPin, SlidersHorizontal, ChevronDown, Filter, Zap, Wifi, Shield, ChevronLeft, ChevronRight } from "lucide-react";
-import { apiClient } from "@/lib/api-client";
+import { prisma } from "@/lib/prisma";
 import HotelCard from "@/components/hotel/HotelCard";
 
 export default async function ExplorePage({
@@ -11,13 +11,34 @@ export default async function ExplorePage({
 }) {
   const { q, city } = await searchParams;
 
-  // Build query
-  let url = '/api/hotels?limit=50';
-  if (q) url += `&search=${encodeURIComponent(q)}`;
-  if (city) url += `&search=${encodeURIComponent(city)}`; // Our basic API searches address/name with the search param
+  const searchQuery = city || q;
+  
+  const hotelsData = await prisma.hotel.findMany({
+    where: { 
+      status: 'APPROVED',
+      ...(searchQuery ? {
+        OR: [
+          { name: { contains: searchQuery, mode: 'insensitive' } },
+          { address: { contains: searchQuery, mode: 'insensitive' } },
+        ]
+      } : {})
+    },
+    take: 50,
+    orderBy: { createdAt: 'desc' },
+    include: {
+      roomTypes: {
+        where: { status: 'ACTIVE' },
+        select: { pricePerNight: true }
+      }
+    }
+  });
 
-  const response = await apiClient.get(url);
-  const hotels = response.success ? response.data.items : [];
+  const hotels = hotelsData.map(hotel => ({
+    ...hotel,
+    startingPrice: hotel.roomTypes.length > 0 
+      ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight)) 
+      : 0
+  }));
 
   return (
     <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">

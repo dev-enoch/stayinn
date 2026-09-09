@@ -1,21 +1,26 @@
 import React from 'react';
 import { ChevronRight, Receipt, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
-import { apiClient } from '@/lib/api-client';
+import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/auth';
 
 export default async function PastTrips() {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
+  const session = await getSession();
 
-  let pastBookings = [];
-  try {
-    // Assuming API has a query for past bookings, e.g. status=completed
-    const res = await apiClient.get('/api/bookings?status=completed');
-    if (res?.data) {
-      pastBookings = res.data;
+  let pastBookings: any[] = [];
+  if (session) {
+    try {
+      pastBookings = await prisma.booking.findMany({
+        where: { 
+          userId: session.userId,
+          status: 'COMPLETED'
+        },
+        orderBy: { checkInDate: 'desc' },
+        include: { hotel: true }
+      });
+    } catch (error) {
+      console.error("Failed to fetch past trips", error);
     }
-  } catch (error) {
-    console.error("Failed to fetch past trips", error);
   }
 
   // The user requested: "remove every mock data and replace with empty state or completely hide the section"

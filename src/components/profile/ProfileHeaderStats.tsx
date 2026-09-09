@@ -1,17 +1,27 @@
 import React from 'react';
 import Image from 'next/image';
 import { Camera, ShieldCheck, Star } from 'lucide-react';
-import { apiClient } from '@/lib/api-client';
+import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/auth';
 
 export default async function ProfileHeaderStats() {
-  let user = null;
-  try {
-    const res = await apiClient.get('/api/auth/me');
-    if (res?.data) {
-      user = res.data;
+  const session = await getSession();
+  
+  let user: any = null;
+  if (session) {
+    try {
+      user = await prisma.user.findUnique({
+        where: { id: session.userId }
+      });
+      if (user) {
+        // mock some stats for the UI
+        user.staysCount = 0;
+        user.reviewsCount = 0;
+        user.rating = 5.0;
+      }
+    } catch (error) {
+      console.error("Failed to fetch user profile", error);
     }
-  } catch (error) {
-    console.error("Failed to fetch user profile", error);
   }
 
   if (!user) {

@@ -1,15 +1,31 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, Zap, Wifi, Shield, ShieldCheck } from "lucide-react";
-import { apiClient } from "@/lib/api-client";
+import { prisma } from "@/lib/prisma";
 import HotelCard from "@/components/hotel/HotelCard";
 import HeroSearch from "@/components/home/HeroSearch";
 
 export default async function Home() {
-  let featuredHotels = [];
+  let featuredHotels: any[] = [];
   try {
-    const response = await apiClient.get('/api/hotels?limit=3');
-    featuredHotels = response.success ? response.data.items : [];
+    const hotels = await prisma.hotel.findMany({
+      where: { status: 'APPROVED' },
+      take: 3,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        roomTypes: {
+          where: { status: 'ACTIVE' },
+          select: { pricePerNight: true }
+        }
+      }
+    });
+
+    featuredHotels = hotels.map(hotel => ({
+      ...hotel,
+      startingPrice: hotel.roomTypes.length > 0 
+        ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight)) 
+        : 0
+    }));
   } catch (error) {
     console.error("Failed to fetch featured hotels:", error);
   }

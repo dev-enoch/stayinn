@@ -1,19 +1,36 @@
 import React from 'react';
 import { SlidersHorizontal, Banknote, KeyRound, ChefHat } from 'lucide-react';
-import { apiClient } from '@/lib/api-client';
+import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/auth';
 
 export default async function HospitalityPreferences() {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 600));
+  const session = await getSession();
 
-  let preferences = null;
-  try {
-    const res = await apiClient.get('/api/users/me/preferences'); // Assuming this endpoint exists
-    if (res?.data) {
-      preferences = res.data;
+  let preferences: any = null;
+  if (session) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: session.userId }
+      });
+      if (user) {
+        preferences = {
+          billing: { 
+            title: user.currency === "USD" ? "USD ($)" : "NGN (₦ Naira)", 
+            desc: "Direct bank transfers & Card billing" 
+          },
+          estate: { 
+            title: "Automated Pass", 
+            desc: "WhatsApp QR delivery to driver & guest" 
+          },
+          chef: { 
+            title: user.dietaryRequirements || "On-call Private Chef", 
+            desc: "Selected meal preferences applied" 
+          }
+        };
+      }
+    } catch (error) {
+      console.error("Failed to fetch preferences", error);
     }
-  } catch (error) {
-    console.error("Failed to fetch preferences", error);
   }
 
   // Use default preferences for display if none returned (as they are usually set to defaults rather than strictly empty)

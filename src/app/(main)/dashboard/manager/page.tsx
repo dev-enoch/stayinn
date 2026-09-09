@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client";
+import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -10,8 +10,34 @@ export default async function ManagerDashboardPage() {
     redirect("/login");
   }
 
-  const response = await apiClient.get('/api/hotels/me');
-  const hotel = response.success ? response.data : null;
+  const dbHotel = await prisma.hotel.findFirst({
+    where: { managerId: session.userId },
+    include: {
+      bookings: {
+        where: { status: { in: ['PAID', 'CONFIRMED', 'COMPLETED'] } },
+        orderBy: { createdAt: 'desc' },
+        include: { roomType: true, user: true }
+      }
+    }
+  });
+
+  const hotel = dbHotel ? {
+    id: dbHotel.id,
+    name: dbHotel.name,
+    status: dbHotel.status,
+    totalEarnings: dbHotel.bookings.reduce((sum, b) => sum + (b.totalAmount * 0.9), 0),
+    pendingCheckins: dbHotel.bookings.filter(b => b.status === 'PAID').length,
+    bookingsCount: dbHotel.bookings.length,
+    bookings: dbHotel.bookings.map(booking => ({
+      id: booking.id,
+      guestName: booking.user.fullName,
+      roomName: booking.roomType.name,
+      checkInDate: booking.checkInDate,
+      checkOutDate: booking.checkOutDate,
+      status: booking.status,
+      payoutAmount: (booking.totalAmount * 0.9),
+    }))
+  } : null;
 
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {

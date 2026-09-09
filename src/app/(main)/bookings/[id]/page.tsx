@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client";
+import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import Image from "next/image";
@@ -17,13 +17,20 @@ export default async function BookingDetailPage(
     redirect(`/login?callbackUrl=/bookings/${params.id}`);
   }
 
-  const response = await apiClient.get(`/api/bookings/${params.id}`);
+  const dbBooking = await prisma.booking.findUnique({
+    where: { id: params.id },
+    include: { hotel: true, roomType: true, user: true }
+  });
 
-  if (!response.success || !response.data) {
+  if (!dbBooking) {
     notFound();
   }
 
-  const booking = response.data;
+  // Format amount back to NGN for UI (if db stores in kobo)
+  const booking = {
+    ...dbBooking,
+    totalAmount: dbBooking.totalAmount / 100
+  };
 
   // Ensure user owns this booking, or is hotel manager for this hotel, or is admin
   if (booking.userId !== session.userId && session.role !== "ADMIN" && session.role !== "HOTEL_MANAGER") {

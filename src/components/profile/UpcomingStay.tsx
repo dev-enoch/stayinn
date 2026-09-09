@@ -1,20 +1,27 @@
 import React from 'react';
 import Image from 'next/image';
 import { MapPin, Bolt, ShieldCheck, MessageCircle, Download, Navigation, CalendarClock } from 'lucide-react';
-import { apiClient } from '@/lib/api-client';
+import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/auth';
 
 export default async function UpcomingStay() {
-  // Add a slight delay for separate loading feel
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  const session = await getSession();
 
-  let booking = null;
-  try {
-    const res = await apiClient.get('/api/bookings');
-    if (res?.data && res.data.length > 0) {
-      booking = res.data[0];
+  let booking: any = null;
+  if (session) {
+    try {
+      booking = await prisma.booking.findFirst({
+        where: { 
+          userId: session.userId,
+          status: { in: ['PAID', 'CONFIRMED'] },
+          checkOutDate: { gte: new Date() }
+        },
+        orderBy: { checkInDate: 'asc' },
+        include: { hotel: true }
+      });
+    } catch (error) {
+      console.error("Failed to fetch upcoming stay", error);
     }
-  } catch (error) {
-    console.error("Failed to fetch upcoming stay", error);
   }
 
   // Fallback to mock data if no booking (since user wants empty state/mock removed, but we need to show the design)
