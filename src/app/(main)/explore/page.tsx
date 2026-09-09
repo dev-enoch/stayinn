@@ -134,10 +134,10 @@ export default async function ExplorePage(
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 text-slate-900 border border-slate-200">
                 <MapPin size={16} className="text-teal-900" />
                 <span className="text-sm font-bold">{city || q || 'Nigeria'}</span>
-                <span className="text-slate-300">•</span>
-                <span className="text-sm text-slate-500 font-semibold">{dates || 'Any dates'}</span>
-                <span className="text-slate-300">•</span>
-                <span className="text-sm text-slate-500 font-semibold">{guests || 'Guests'}</span>
+                <span className="text-slate-400">•</span>
+                <span className="text-sm text-slate-600 font-semibold">{dates || 'Any dates'}</span>
+                <span className="text-slate-400">•</span>
+                <span className="text-sm text-slate-600 font-semibold">{guests || 'Guests'}</span>
               </div>
               <Link href="/" className="text-teal-900 hover:text-teal-700 text-xs uppercase tracking-wider font-bold transition-colors">
                 Modify Search
@@ -145,8 +145,8 @@ export default async function ExplorePage(
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-sm text-slate-500">Showing <strong className="text-slate-900">{total} verified stays</strong></span>
-              <div className="h-4 w-px bg-slate-300"></div>
+              <span className="text-sm text-slate-600">Showing <strong className="text-slate-900">{total} verified stays</strong></span>
+              <div className="h-4 w-px bg-slate-400"></div>
               {/* Note: Sort moved into ExploreFilters */}
             </div>
           </div>

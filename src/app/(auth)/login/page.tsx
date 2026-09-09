@@ -73,7 +73,7 @@ export default function LoginPage() {
         </Link>
       </div>
 
-      <div className="mt-8 text-center text-xs text-slate-400 leading-relaxed">
+      <div className="mt-8 text-center text-xs text-slate-500 leading-relaxed">
         By signing in, you acknowledge that you agree to our<br/>
         <Link href="/support/terms" className="text-green-600 hover:underline">Terms of Service</Link> and{" "}
         <Link href="/privacy" className="text-green-600 hover:underline">Privacy Policy</Link>.

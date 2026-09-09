@@ -66,7 +66,10 @@ export default function Header({ session }: { session: any }) {
               </div>
               
               {/* Notifications */}
-              <button className="relative p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all">
+              <button 
+                aria-label="Notifications"
+                className="relative p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all"
+              >
                 <Bell size={20} />
                 <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-orange-600 ring-2 ring-white"></span>
               </button>
@@ -104,7 +107,7 @@ export default function Header({ session }: { session: any }) {
                 )}
                 
                 <form action={logoutAction}>
-                  <button type="submit" className="p-2 text-slate-400 hover:text-red-600 transition-colors" title="Log out">
+                  <button type="submit" aria-label="Log out" className="p-2 text-slate-400 hover:text-red-600 transition-colors" title="Log out">
                     <LogOut size={18} />
                   </button>
                 </form>
@@ -114,6 +117,8 @@ export default function Header({ session }: { session: any }) {
 
           {/* Mobile Menu Toggle */}
           <button 
+            aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+            aria-expanded={isMobileMenuOpen}
             className="md:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >

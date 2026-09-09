@@ -82,6 +82,7 @@ export default function HotelCard({
         
         {/* Wishlist Button (prevent default to avoid navigating) */}
         <button 
+          aria-label="Save to wishlist"
           className="absolute top-3 right-3 w-[44px] h-[44px] rounded-full bg-white/80 hover:bg-white text-slate-600 hover:text-red-500 flex items-center justify-center backdrop-blur-sm transition-colors shadow-sm z-10"
           onClick={(e) => e.preventDefault()}
         >
@@ -99,10 +100,10 @@ export default function HotelCard({
       
       <div className="p-4 flex flex-col flex-1 justify-between gap-3">
         <div>
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+          <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
             <span className="font-bold text-teal-900 uppercase tracking-wider">{locationName}</span>
             <div className="flex items-center gap-1 text-slate-900 font-bold">
-              <span className="text-slate-500 font-normal ml-1">Verified</span>
+              <span className="text-slate-600 font-normal ml-1">Verified</span>
             </div>
           </div>
           
@@ -112,7 +113,7 @@ export default function HotelCard({
             </h3>
           </Link>
           
-          <p className="text-xs text-slate-500 mt-1">Sleeps {capacity} Guests • Premium Serviced</p>
+          <p className="text-xs text-slate-600 mt-1">Sleeps {capacity} Guests • Premium Serviced</p>
         </div>
         
         {/* Amenities Chips */}

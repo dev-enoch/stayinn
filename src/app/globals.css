@@ -44,4 +44,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
+  /* Global Focus Ring (SI-29) */
+  *:focus-visible {
+    outline: 2px solid var(--color-green-600);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
 }
