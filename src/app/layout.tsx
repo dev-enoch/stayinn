@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import BottomNav from "@/components/ui/BottomNav";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { getSession } from "@/lib/auth";
 import Header from "@/components/layout/Header";
@@ -24,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} bg-slate-50`}>
-      <body className="min-h-screen flex flex-col font-sans bg-white text-gray-900 mx-auto max-w-[1600px] w-full shadow-2xl ring-1 ring-slate-200">
+    <html lang="en" className={`${inter.variable}`}>
+      <body className="min-h-screen flex flex-col font-sans bg-slate-50 text-slate-900">
         <ReactQueryProvider>
           {children}
         </ReactQueryProvider>
