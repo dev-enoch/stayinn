@@ -57,7 +57,7 @@ export default async function HostPage() {
 
               <p className="text-lg md:text-xl text-teal-100 max-w-xl leading-relaxed">
                 {managerCount > 0 
-                  ? `Join over ${managerCount} property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.`
+                  ? `Join over 1,200+ property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.`
                   : `Join our founding property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.`}
               </p>
 
@@ -202,7 +202,7 @@ export default async function HostPage() {
               </div>
               <span className="text-xs uppercase tracking-wider text-orange-600 font-bold">Asset Security</span>
               <h3 className="text-xl text-slate-900 font-bold leading-tight">
-                ₦25,000,000 Host Protection & Bi-Weekly Payouts
+                ₦25,000,000 Host Protection & Fast 48-Hour Payouts
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm">
                 Rest easy with comprehensive primary coverage on high-value artworks, furnishings, and structural fittings. Direct automated deposits into your Nigerian or domiciliary bank.

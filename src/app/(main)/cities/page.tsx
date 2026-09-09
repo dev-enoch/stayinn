@@ -8,13 +8,13 @@ export default function CitiesPage() {
   const [activeCity, setActiveCity] = useState("all");
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
-      
+    <div className="flex flex-col w-full bg-slate-50 min-h-screen">
+
       {/* Atmospheric Hero / Exploration Header */}
       <section className="relative w-full pt-20 pb-16 overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-teal-950/90 via-teal-950/80 to-slate-900"></div>
-        
+
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
             <div className="max-w-2xl">
@@ -29,7 +29,7 @@ export default function CitiesPage() {
                 Make decisions rooted in ground reality. Every district is verified for uninterrupted 24/7 power systems, high-protocol gate access, fiber connectivity, and immediate access to fine dining and lifestyle hubs.
               </p>
             </div>
-            
+
             {/* Metric badges showcasing reliability */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 w-full lg:w-auto">
               <div className="flex flex-col px-4 py-3 bg-white/5 rounded-xl border border-white/5">
@@ -49,33 +49,27 @@ export default function CitiesPage() {
               </div>
             </div>
           </div>
-          
+
           {/* City Switcher Filter Bar */}
           <div className="mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-white/10">
             <div className="flex items-center gap-2 p-1.5 bg-white/5 backdrop-blur-md rounded-full shadow-sm w-full sm:w-auto overflow-x-auto scrollbar-hide">
-              <button 
+              <button
                 onClick={() => setActiveCity("all")}
                 className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider transition-all font-bold whitespace-nowrap ${activeCity === "all" ? "bg-white text-teal-950 shadow-sm" : "text-white hover:bg-white/10"}`}
               >
                 All Cities
               </button>
-              <button 
+              <button
                 onClick={() => setActiveCity("lagos")}
                 className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider transition-all font-bold whitespace-nowrap ${activeCity === "lagos" ? "bg-white text-teal-950 shadow-sm" : "text-white hover:bg-white/10"}`}
               >
                 Lagos
               </button>
-              <button 
+              <button
                 onClick={() => setActiveCity("abuja")}
                 className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider transition-all font-bold whitespace-nowrap ${activeCity === "abuja" ? "bg-white text-teal-950 shadow-sm" : "text-white hover:bg-white/10"}`}
               >
                 Abuja
-              </button>
-              <button 
-                onClick={() => setActiveCity("ph")}
-                className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider transition-all font-bold whitespace-nowrap ${activeCity === "ph" ? "bg-white text-teal-950 shadow-sm" : "text-white hover:bg-white/10"}`}
-              >
-                Port Harcourt
               </button>
             </div>
             <div className="flex items-center gap-2 text-teal-200/80 text-sm font-semibold shrink-0">
@@ -102,16 +96,16 @@ export default function CitiesPage() {
                 From tranquil diplomatic estates to the cosmopolitan pulse of waterfront high-rises and tech creator sanctuaries.
               </p>
             </div>
-            
+
             {/* Asymmetric Bento-Inspired Neighborhood Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              
+
               {/* Ikoyi - Premium Anchor Card (7 Cols) */}
               <article className="lg:col-span-7 bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group border border-slate-100 hover:shadow-xl transition-all">
                 <div className="relative h-[340px] w-full overflow-hidden">
-                  <img 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    alt="Ikoyi, Lagos — Luxury Serviced Apartments" 
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt="Ikoyi, Lagos — Luxury Serviced Apartments"
                     src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
                     width={900}
                     height={340}
@@ -164,16 +158,16 @@ export default function CitiesPage() {
                   </div>
                 </div>
               </article>
-              
+
               {/* Right Stack: Victoria Island & Lekki Phase 1 (5 Cols) */}
               <div className="lg:col-span-5 flex flex-col gap-6">
-                
+
                 {/* Victoria Island Card */}
                 <article className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between group border border-slate-100 hover:shadow-xl transition-all h-full">
                   <div className="relative h-48 w-full overflow-hidden shrink-0">
-                    <img 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                      alt="Victoria Island, Lagos — Serviced Apartments" 
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      alt="Victoria Island, Lagos — Serviced Apartments"
                       src="https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80"
                       width={600}
                       height={192}
@@ -194,7 +188,7 @@ export default function CitiesPage() {
                     </p>
                     <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                       <span className="text-lg text-teal-900 font-bold">₦75,000 <span className="text-xs text-slate-500 font-normal">/ night</span></span>
-                      <Link href="/explore?city=Victoria Island" className="text-teal-900 hover:text-orange-600 text-xs uppercase tracking-wider font-bold inline-flex items-center gap-1 transition-colors">
+                      <Link href="/explore?city=Victoria%20Island" className="text-teal-900 hover:text-orange-600 text-xs uppercase tracking-wider font-bold inline-flex items-center gap-1 transition-colors">
                         Explore VI <ArrowUpRight size={16} />
                       </Link>
                     </div>
@@ -204,9 +198,9 @@ export default function CitiesPage() {
                 {/* Lekki Phase 1 Card */}
                 <article className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between group border border-slate-100 hover:shadow-xl transition-all h-full">
                   <div className="relative h-48 w-full overflow-hidden shrink-0">
-                    <img 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                      alt="Lekki Phase 1, Lagos — Serviced Apartments" 
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      alt="Lekki Phase 1, Lagos — Serviced Apartments"
                       src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80"
                       width={600}
                       height={192}
@@ -256,14 +250,14 @@ export default function CitiesPage() {
                 Defined by rolling monolithic granites, impeccably paved boulevards, diplomatic estates, and lush hill sanctuaries.
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Maitama Luxury Haven */}
               <article className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group border border-slate-200 hover:shadow-xl transition-all">
                 <div className="relative h-72 w-full overflow-hidden">
-                  <img 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    alt="Maitama, Abuja — Serviced Apartments" 
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt="Maitama, Abuja — Serviced Apartments"
                     src="https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80"
                     width={700}
                     height={288}
@@ -294,13 +288,13 @@ export default function CitiesPage() {
                   </div>
                 </div>
               </article>
-              
+
               {/* Wuse II Commercial & Culinary Oasis */}
               <article className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group border border-slate-200 hover:shadow-xl transition-all">
                 <div className="relative h-72 w-full overflow-hidden">
-                  <img 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    alt="Wuse II, Abuja — Serviced Apartments" 
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt="Wuse II, Abuja — Serviced Apartments"
                     src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
                     width={700}
                     height={288}

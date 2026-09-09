@@ -15,7 +15,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
   const basePrice = 750000;
   const fees = 45000;
   const escrow = 50000;
-  
+
   let addonTotal = 0;
   if (addons.chauffeur) addonTotal += 35000;
   if (addons.chef) addonTotal += 45000;
@@ -27,9 +27,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
   };
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
+    <div className="flex flex-col w-full bg-slate-50 min-h-screen">
       <div className="max-w-[1280px] w-full mx-auto px-4 md:px-12 py-12">
-        
+
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 mb-10 text-slate-500 text-sm font-semibold">
           <Link href="/explore" className="hover:text-teal-900 transition-colors">Explore Stays</Link>
@@ -41,10 +41,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
 
         {/* Main Two-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* LEFT COLUMN: Booking Form & Checkout Engine (7 Cols) */}
           <div className="lg:col-span-7 flex flex-col gap-12">
-            
+
             {/* Header / Flow Indicator */}
             <div className="flex flex-col gap-2">
               <span className="text-xs uppercase tracking-wider text-orange-600 font-bold">Reservation Step 3 of 3</span>
@@ -68,7 +68,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                   Edit
                 </button>
               </div>
-              
+
               <div className="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-100">
                 <div className="flex items-center gap-4">
                   <span className="w-12 h-12 rounded-full bg-teal-100 text-teal-900 flex items-center justify-center shrink-0">
@@ -96,7 +96,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                   <Verified size={16} /> Verified via NIN / BVN
                 </span>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Primary Traveler Name</label>
@@ -154,7 +154,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                   <p className="text-sm text-slate-600">Personalize your Ikoyi residence experience prior to arrival.</p>
                 </div>
               </div>
-              
+
               <div className="flex flex-col gap-4">
                 {/* Option 1 */}
                 <label className={`flex items-start gap-4 p-5 rounded-2xl transition-all cursor-pointer border ${addons.chauffeur ? 'bg-teal-50 border-teal-200' : 'bg-slate-50 border-slate-100 hover:bg-slate-100'}`}>
@@ -215,7 +215,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Option 1: Card */}
-                <div 
+                <div
                   className={`cursor-pointer p-5 rounded-2xl border transition-all flex flex-col justify-between h-40 ${selectedPayment === 'card' ? 'bg-teal-50 border-teal-200 shadow-sm' : 'bg-slate-50 border-slate-100 hover:bg-slate-100'}`}
                   onClick={() => setSelectedPayment('card')}
                 >
@@ -239,7 +239,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                 </div>
 
                 {/* Option 2: Transfer */}
-                <div 
+                <div
                   className={`cursor-pointer p-5 rounded-2xl border transition-all flex flex-col justify-between h-40 ${selectedPayment === 'transfer' ? 'bg-teal-50 border-teal-200 shadow-sm' : 'bg-slate-50 border-slate-100 hover:bg-slate-100'}`}
                   onClick={() => setSelectedPayment('transfer')}
                 >
@@ -259,7 +259,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                 </div>
 
                 {/* Option 3: USD */}
-                <div 
+                <div
                   className={`cursor-pointer p-5 rounded-2xl border transition-all flex flex-col justify-between h-40 ${selectedPayment === 'usd' ? 'bg-teal-50 border-teal-200 shadow-sm' : 'bg-slate-50 border-slate-100 hover:bg-slate-100'}`}
                   onClick={() => setSelectedPayment('usd')}
                 >
@@ -279,7 +279,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                 </div>
 
                 {/* Option 4: USSD */}
-                <div 
+                <div
                   className={`cursor-pointer p-5 rounded-2xl border transition-all flex flex-col justify-between h-40 ${selectedPayment === 'ussd' ? 'bg-teal-50 border-teal-200 shadow-sm' : 'bg-slate-50 border-slate-100 hover:bg-slate-100'}`}
                   onClick={() => setSelectedPayment('ussd')}
                 >
@@ -354,13 +354,13 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
           {/* RIGHT COLUMN: Sticky Order Summary & Trust Card (5 Cols) */}
           <aside className="lg:col-span-5 sticky top-28 flex flex-col gap-8">
             <div className="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 flex flex-col gap-6">
-              
+
               {/* Property Mini Hero */}
               <div className="flex gap-4 items-start pb-4 border-b border-slate-100">
                 <div className="w-24 h-24 rounded-xl overflow-hidden shrink-0 shadow-sm relative">
-                  <img 
-                    className="w-full h-full object-cover" 
-                    alt="The Courtyard Residence, Ikoyi Lagos" 
+                  <img
+                    className="w-full h-full object-cover"
+                    alt="The Courtyard Residence, Ikoyi Lagos"
                     src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
                     width={96}
                     height={96}
@@ -399,14 +399,14 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
                   </div>
                   <span className="text-slate-900 font-semibold">₦{escrow.toLocaleString()}</span>
                 </div>
-                
+
                 {addonTotal > 0 && (
                   <div className="flex justify-between items-center text-sm pt-2 border-t border-slate-200 mt-1">
                     <span className="text-orange-600 font-semibold">Selected Add-ons</span>
                     <span className="text-orange-600 font-bold">₦{addonTotal.toLocaleString()}</span>
                   </div>
                 )}
-                
+
                 <div className="pt-4 mt-2 border-t border-slate-200 flex justify-between items-end">
                   <div>
                     <span className="text-base text-slate-900 block font-bold">Total Payable</span>

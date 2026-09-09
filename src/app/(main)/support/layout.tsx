@@ -1,5 +1,10 @@
 import SupportSidebar from "@/components/layout/SupportSidebar";
+import type { Metadata } from 'next';
 
+export const metadata: Metadata = {
+  title: 'Support & Knowledge Base — Stayinn',
+  description: 'Get help with reservations, host partnerships, estate access, and emergency protocols in Nigeria.',
+};
 export default function SupportLayout({
   children,
 }: {

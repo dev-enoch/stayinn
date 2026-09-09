@@ -30,7 +30,7 @@ export default async function Home() {
 
     featuredHotels = hotels.map(hotel => {
       const startingPrice = hotel.roomTypes.length > 0 
-        ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight)) 
+        ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight))) 
         : 0;
       const capacity = hotel.roomTypes.length > 0
         ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
@@ -200,7 +200,7 @@ export default async function Home() {
             { name: "Port Harcourt", sub: "Old GRA", img: "https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80", count: cityCounts["Port Harcourt"] || 0 },
             { name: "Calabar", sub: "Marina Resort", img: "https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80", count: cityCounts["Calabar"] || 0 },
           ].map((city, i) => (
-            <Link key={i} href={city.count > 0 ? `/explore?city=${city.name}` : '#'} className="group relative rounded-3xl overflow-hidden h-96 shadow-md bg-slate-200 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-end p-6">
+            <Link key={i} href={city.count > 0 ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-3xl overflow-hidden h-96 shadow-md bg-slate-200 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-end p-6">
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
                 style={{ backgroundImage: `url('${city.img}')` }}

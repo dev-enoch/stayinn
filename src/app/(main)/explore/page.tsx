@@ -46,7 +46,7 @@ export default async function ExplorePage(
   const limit = 4; // Use 4 so pagination is visible for small DB sizes
 
   const AND: Prisma.HotelWhereInput[] = [{ status: 'APPROVED' }];
-  
+
   if (searchQuery) {
     AND.push({
       OR: [
@@ -67,10 +67,10 @@ export default async function ExplorePage(
     // For now we will just use parking as a proxy or skip it
   }
 
-  const orderBy: Prisma.HotelOrderByWithRelationInput = 
+  const orderBy: Prisma.HotelOrderByWithRelationInput =
     sort === 'price_asc' ? { roomTypes: { _count: 'asc' } } : // Can't easily order by relation min price natively without raw, so we'll sort in memory later if needed, but for now fallback to createdAt
-    sort === 'price_desc' ? { createdAt: 'desc' } : 
-    { createdAt: 'desc' };
+      sort === 'price_desc' ? { createdAt: 'desc' } :
+        { createdAt: 'desc' };
 
   const total = await prisma.hotel.count({ where: { AND } });
 
@@ -89,8 +89,8 @@ export default async function ExplorePage(
   });
 
   const hotels = hotelsData.map(hotel => {
-    const startingPrice = hotel.roomTypes.length > 0 
-      ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight)) 
+    const startingPrice = hotel.roomTypes.length > 0
+      ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight)))
       : 0;
     const capacity = hotel.roomTypes.length > 0
       ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
@@ -116,7 +116,7 @@ export default async function ExplorePage(
   const maxPriceDisplay = allPrices.length > 0 ? Math.max(...allPrices) : 300000;
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
+    <div className="flex flex-col w-full bg-slate-50 min-h-screen">
       {/* Visually-hidden h1 for SEO & screen readers (SI-31) */}
       <h1 className="sr-only">
         {searchQuery
@@ -127,7 +127,7 @@ export default async function ExplorePage(
       {/* Sticky Filter Bar */}
       <section className="sticky top-20 z-30 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
         <div className="max-w-[1440px] mx-auto px-4 md:px-12 py-3 flex flex-col gap-3">
-          
+
           {/* Top Strip */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -153,17 +153,17 @@ export default async function ExplorePage(
 
           {/* Quick Filters */}
           <ExploreFilters minPrice={minPriceDisplay} maxPrice={maxPriceDisplay} />
-          
+
         </div>
       </section>
 
       {/* Split Layout: Grid & Map */}
       <div className="max-w-[1440px] w-full mx-auto px-4 md:px-12 py-8 flex-1">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-          
+
           {/* Left: Listings (7 Cols on XL) */}
           <div className="xl:col-span-7 flex flex-col gap-6">
-            
+
             {/* Header Highlight */}
             <div className="p-4 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -188,8 +188,8 @@ export default async function ExplorePage(
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-slate-900 mb-3">No properties found</h3>
                 <p className="text-sm text-slate-500 mb-8 max-w-md">We couldn't find any stays matching your criteria. Try adjusting your search filters.</p>
-                <Link 
-                  href="/explore" 
+                <Link
+                  href="/explore"
                   className="bg-teal-900 text-white font-bold py-3 px-8 rounded-xl hover:bg-teal-800 transition-colors text-sm shadow-md"
                 >
                   Clear Search
@@ -198,7 +198,7 @@ export default async function ExplorePage(
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {hotels.map((hotel: any) => (
-                  <HotelCard 
+                  <HotelCard
                     key={hotel.id}
                     id={hotel.id}
                     name={hotel.name}
@@ -214,7 +214,7 @@ export default async function ExplorePage(
 
             {/* Pagination */}
             <ExplorePagination totalItems={total} itemsPerPage={limit} />
-            
+
           </div>
 
           {/* Right: Map (5 Cols, Sticky) */}
@@ -223,7 +223,7 @@ export default async function ExplorePage(
               <ExploreMap hotels={hotels} />
             </div>
           </aside>
-          
+
         </div>
       </div>
     </div>

@@ -79,6 +79,9 @@ export default async function HotelDetailPage(
       roomTypes: {
         where: { status: 'ACTIVE' },
         include: { images: true }
+      },
+      manager: {
+        select: { firstName: true, lastName: true }
       }
     }
   });
@@ -255,8 +258,8 @@ export default async function HotelDetailPage(
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-slate-200">
               <div className="flex items-center gap-5">
                 <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-teal-100 text-teal-900 flex items-center justify-center font-bold text-xl shadow-sm ring-4 ring-slate-50">
-                    {hotel.name.charAt(0)}
+                  <div className="w-16 h-16 rounded-full bg-teal-100 text-teal-900 flex items-center justify-center font-bold text-xl shadow-sm ring-4 ring-slate-50 uppercase">
+                    {hotel.manager?.firstName?.charAt(0) || "S"}
                   </div>
                   <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center shadow border-2 border-white">
                     <ShieldCheck size={12} />

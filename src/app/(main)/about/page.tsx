@@ -107,11 +107,11 @@ export default function AboutPage() {
           
           <div className="md:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-12 w-full">
             <div className="space-y-2">
-              <p className="text-6xl font-bold tracking-tighter text-gray-900">5+</p>
+              <p className="text-6xl font-bold tracking-tighter text-gray-900">4+</p>
               <p className="text-gray-500 font-medium">Major Cities</p>
             </div>
             <div className="space-y-2">
-              <p className="text-6xl font-bold tracking-tighter text-gray-900">500+</p>
+              <p className="text-6xl font-bold tracking-tighter text-gray-900">1,200+</p>
               <p className="text-gray-500 font-medium">Verified Stays</p>
             </div>
             <div className="space-y-2">

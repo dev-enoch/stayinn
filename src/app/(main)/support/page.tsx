@@ -139,9 +139,9 @@ export default function SupportPage() {
                 Modifying dates, managing group itineraries, automated check-in codes, and booking extensions.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Self check-in smart lock access</span><ChevronRight size={16} /></a></li>
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Itinerary changes & date extensions</span><ChevronRight size={16} /></a></li>
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Group stays & ID verification</span><ChevronRight size={16} /></a></li>
+                <li><Link href="/support/article/self-check-in" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Self check-in smart lock access</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/extensions" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Itinerary changes & date extensions</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/group-stays" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Group stays & ID verification</span><ChevronRight size={16} /></Link></li>
               </ul>
             </div>
             <div className="mt-8 pt-4 border-t border-slate-100">
@@ -163,9 +163,9 @@ export default function SupportPage() {
                 Seamless payments via NGN Debit Cards, USSD, Bank Transfer, USD Cards, and caution deposit handling.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Refund schedules & timelines</span><ChevronRight size={16} /></a></li>
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Caution deposit holds & release</span><ChevronRight size={16} /></a></li>
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>FIRS compliant tax invoices</span><ChevronRight size={16} /></a></li>
+                <li><Link href="/support/article/refund-schedules" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Refund schedules & timelines</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/caution-deposits" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Caution deposit holds & release</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/tax-invoices" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>FIRS compliant tax invoices</span><ChevronRight size={16} /></Link></li>
               </ul>
             </div>
             <div className="mt-8 pt-4 border-t border-slate-100">
@@ -187,9 +187,9 @@ export default function SupportPage() {
                 Solar and generator backup switch times, Enterprise Starlink & Fiber Wi-Fi, private chefs, and housekeeping.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Guaranteed 24/7 power policies</span><ChevronRight size={16} /></a></li>
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Fibre & satellite broadband resets</span><ChevronRight size={16} /></a></li>
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>In-villa catering & cleaning</span><ChevronRight size={16} /></a></li>
+                <li><Link href="/support/article/power-policies" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Guaranteed 24/7 power policies</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/internet-resets" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Fibre & satellite broadband resets</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/catering" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>In-villa catering & cleaning</span><ChevronRight size={16} /></Link></li>
               </ul>
             </div>
             <div className="mt-8 pt-4 border-t border-slate-100">
@@ -211,9 +211,9 @@ export default function SupportPage() {
                 Gated estate gate-pass generation, guest registrations, noise curfews, and verified host credentials.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Generating estate gate codes</span><ChevronRight size={16} /></a></li>
-                <li><a href="/support#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Visitor limits & party restrictions</span><ChevronRight size={16} /></a></li>
-                <li><a href="#emergency-section" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Armed escort & transit info</span><ChevronRight size={16} /></a></li>
+                <li><Link href="/support/article/gate-codes" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Generating estate gate codes</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/party-restrictions" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Visitor limits & party restrictions</span><ChevronRight size={16} /></Link></li>
+                <li><Link href="/support/article/armed-escort" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Armed escort & transit info</span><ChevronRight size={16} /></Link></li>
               </ul>
             </div>
             <div className="mt-8 pt-4 border-t border-slate-100">
@@ -439,22 +439,22 @@ export default function SupportPage() {
                 Policies & Legal Framework
               </h4>
               <div className="flex flex-col gap-4 text-sm font-semibold">
-                <a href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
+                <Link href="/support/terms" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Guest Terms of Service</span>
                   <ExternalLink size={16} />
-                </a>
+                </Link>
                 <Link href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Privacy Policy & NDPR Compliance</span>
                   <ExternalLink size={16} />
                 </Link>
-                <a href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
+                <Link href="/support/terms#policies" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Party & Photography Strict Policy</span>
                   <ExternalLink size={16} />
-                </a>
-                <a href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
+                </Link>
+                <Link href="/support/terms#policies" className="text-slate-300 hover:text-white transition-colors flex items-center justify-between py-2 border-b border-slate-700/50">
                   <span>Estate By-Laws & Curfews</span>
                   <ExternalLink size={16} />
-                </a>
+                </Link>
               </div>
             </div>
             
