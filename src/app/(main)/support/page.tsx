@@ -184,7 +184,7 @@ export default function SupportPage() {
               <span className="text-xs text-orange-600 font-bold uppercase tracking-wider">03 • Hospitality</span>
               <h3 className="text-xl text-slate-900 font-bold mt-2 mb-3">Stays & On-Site Amenities</h3>
               <p className="text-slate-500 text-sm mb-6 leading-relaxed">
-                Solar and generator backup switch times, high-speed Starlink Wi-Fi, private chefs, and housekeeping.
+                Solar and generator backup switch times, Enterprise Starlink & Fiber Wi-Fi, private chefs, and housekeeping.
               </p>
               <ul className="flex flex-col gap-3 text-sm font-semibold text-slate-700">
                 <li><a href="#faq" className="flex items-center justify-between hover:text-teal-900 transition-colors"><span>Guaranteed 24/7 power policies</span><ChevronRight size={16} /></a></li>

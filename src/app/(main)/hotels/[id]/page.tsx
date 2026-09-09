@@ -111,7 +111,7 @@ export default async function HotelDetailPage(
             <div className="flex items-center gap-1.5 font-bold text-slate-900">
               <Star size={18} className="text-orange-500 fill-orange-500" />
               <span>4.96</span>
-              <span className="font-normal text-slate-500">(128 reviews)</span>
+              <span className="font-normal text-slate-500 ml-1">Verified</span>
             </div>
             <span className="text-slate-300">•</span>
             <span className="font-bold text-teal-900">Premium Estate</span>

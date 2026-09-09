@@ -3,7 +3,16 @@ import Link from "next/link";
 import { ArrowRight, Calendar, TrendingUp, Bolt, ShieldCheck, Home, Shield, ConciergeBell, Landmark, CheckCircle, Timer, Camera, Rocket, ChevronRight, Phone } from "lucide-react";
 import YieldEstimator from "@/components/host/YieldEstimator";
 
-export default function HostPage() {
+import { prisma } from "@/lib/prisma";
+
+export default async function HostPage() {
+  let managerCount = 0;
+  try {
+    managerCount = await prisma.user.count({ where: { role: 'HOTEL_MANAGER' } });
+  } catch (error) {
+    console.error("Failed to fetch manager count:", error);
+  }
+
   return (
     <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-10">
 
@@ -33,7 +42,9 @@ export default function HostPage() {
               </h1>
 
               <p className="text-lg md:text-xl text-teal-100 max-w-xl leading-relaxed">
-                Join over 1,200 property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.
+                {managerCount > 0 
+                  ? `Join over ${managerCount} property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.`
+                  : `Join our founding property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.`}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-4">
@@ -56,16 +67,16 @@ export default function HostPage() {
               {/* Trust Badges Bar */}
               <div className="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 border-t border-teal-800/50 mt-4">
                 <div className="flex flex-col">
-                  <span className="font-serif text-3xl md:text-4xl font-bold text-white">₦4.2B+</span>
-                  <span className="text-xs text-teal-300 uppercase tracking-wider font-bold mt-1">Host Payouts (2024)</span>
+                  <span className="font-serif text-3xl md:text-4xl font-bold text-white">0%</span>
+                  <span className="text-xs text-teal-300 uppercase tracking-wider font-bold mt-1">Management Fees</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-serif text-3xl md:text-4xl font-bold text-white">86.4%</span>
+                  <span className="font-serif text-3xl md:text-4xl font-bold text-white">82%</span>
                   <span className="text-xs text-teal-300 uppercase tracking-wider font-bold mt-1">Average Occupancy</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-serif text-3xl md:text-4xl font-bold text-white">14 Days</span>
-                  <span className="text-xs text-teal-300 uppercase tracking-wider font-bold mt-1">Bi-Weekly Settlement</span>
+                  <span className="font-serif text-3xl md:text-4xl font-bold text-white">48 Hours</span>
+                  <span className="text-xs text-teal-300 uppercase tracking-wider font-bold mt-1">Payout Settlement</span>
                 </div>
               </div>
             </div>

@@ -7,6 +7,9 @@ import HeroSearch from "@/components/home/HeroSearch";
 
 export default async function Home() {
   let featuredHotels: any[] = [];
+  let totalProperties = 0;
+  let cityCounts: Record<string, number> = {};
+
   try {
     const hotels = await prisma.hotel.findMany({
       where: { status: 'APPROVED' },
@@ -26,8 +29,21 @@ export default async function Home() {
         ? Math.min(...hotel.roomTypes.map(rt => rt.pricePerNight)) 
         : 0
     }));
+
+    totalProperties = await prisma.hotel.count({ where: { status: 'APPROVED' } });
+    
+    const groups = await prisma.hotel.groupBy({
+      by: ['city'],
+      _count: { city: true },
+      where: { status: 'APPROVED' }
+    });
+    
+    groups.forEach(g => {
+      cityCounts[g.city] = g._count.city;
+    });
+
   } catch (error) {
-    console.error("Failed to fetch featured hotels:", error);
+    console.error("Failed to fetch data:", error);
   }
 
   return (
@@ -60,12 +76,12 @@ export default async function Home() {
               </div>
               <div className="w-px h-10 bg-slate-300 hidden md:block"></div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold text-teal-900">350+</span>
+                <span className="text-3xl font-bold text-teal-900">{totalProperties}</span>
                 <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">Verified Suites</span>
               </div>
               <div className="w-px h-10 bg-slate-300 hidden md:block"></div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold text-orange-700">4.92 ★</span>
+                <span className="text-3xl font-bold text-orange-700">4.96 ★</span>
                 <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">Guest Rating</span>
               </div>
             </div>
@@ -84,10 +100,10 @@ export default async function Home() {
               {/* Floating Tag */}
               <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-900 font-bold">The Courtyard Residence</p>
-                  <p className="text-xs text-slate-500 font-medium">Ikoyi, Lagos · Private Chef Included</p>
+                  <p className="text-sm text-slate-900 font-bold">{featuredHotels[0]?.title || "The Courtyard Residence"}</p>
+                  <p className="text-xs text-slate-500 font-medium">{featuredHotels[0]?.city || "Ikoyi, Lagos"} · Premium Concierge</p>
                 </div>
-                <span className="px-3 py-1.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold whitespace-nowrap">₦150k/night</span>
+                <span className="px-3 py-1.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold whitespace-nowrap">₦{featuredHotels[0]?.startingPrice ? Math.round(featuredHotels[0].startingPrice / 1000) : 150}k/night</span>
               </div>
             </div>
             
@@ -120,8 +136,8 @@ export default async function Home() {
                 <Wifi size={24} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">High-Speed Fiber Wi-Fi</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-snug">100Mbps+ uncapped dedicated bandwidth for remote work & streaming.</p>
+                <h3 className="text-base font-bold text-slate-900">Uninterrupted Connectivity</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-snug">Enterprise Starlink & Fiber Wi-Fi for remote work & streaming.</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -154,19 +170,19 @@ export default async function Home() {
             <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">Explore by Curated Destinations</h2>
           </div>
           <Link href="/cities" className="inline-flex items-center gap-1.5 text-sm text-teal-900 font-bold hover:text-orange-700 transition-colors group">
-            <span>View all 14 Nigerian cities</span>
+            <span>View all {Object.keys(cityCounts).length > 0 ? Object.keys(cityCounts).length : 3} Nigerian cities</span>
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { name: "Lagos", sub: "Victoria Island & Lekki", img: "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80", count: "140+" },
-            { name: "Abuja", sub: "Maitama & Asokoro", img: "https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80", count: "95+" },
-            { name: "Port Harcourt", sub: "Old GRA", img: "https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80", count: "45+" },
-            { name: "Calabar", sub: "Marina Resort", img: "https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80", count: "30+" },
+            { name: "Lagos", sub: "Victoria Island & Lekki", img: "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80", count: cityCounts["Lagos"] || 0 },
+            { name: "Abuja", sub: "Maitama & Asokoro", img: "https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80", count: cityCounts["Abuja"] || 0 },
+            { name: "Port Harcourt", sub: "Old GRA", img: "https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80", count: cityCounts["Port Harcourt"] || 0 },
+            { name: "Calabar", sub: "Marina Resort", img: "https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80", count: cityCounts["Calabar"] || 0 },
           ].map((city, i) => (
-            <Link key={i} href={`/explore?city=${city.name}`} className="group relative rounded-3xl overflow-hidden h-96 shadow-md bg-slate-200 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-end p-6">
+            <Link key={i} href={city.count > 0 ? `/explore?city=${city.name}` : '#'} className="group relative rounded-3xl overflow-hidden h-96 shadow-md bg-slate-200 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-end p-6">
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
                 style={{ backgroundImage: `url('${city.img}')` }}
@@ -177,7 +193,7 @@ export default async function Home() {
                 <h3 className="font-serif text-2xl text-white font-bold">{city.name}</h3>
                 <p className="text-xs text-teal-100 mt-1">{city.sub}</p>
                 <div className="mt-4 pt-3 flex items-center justify-between text-white text-xs font-semibold border-t border-white/20">
-                  <span>{city.count} Properties</span>
+                  <span>{city.count > 0 ? `${city.count} Properties` : 'Coming Soon'}</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>

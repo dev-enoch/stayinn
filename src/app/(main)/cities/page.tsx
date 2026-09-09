@@ -44,7 +44,7 @@ export default function CitiesPage() {
               </div>
               <div className="flex flex-col px-4 py-3 bg-white/5 rounded-xl border border-white/5">
                 <span className="text-[10px] uppercase tracking-wider text-teal-200/70 font-bold">Avg. Concierge</span>
-                <span className="text-2xl text-white font-bold my-1">12 min</span>
+                <span className="text-2xl text-white font-bold my-1">&lt; 3 min</span>
                 <span className="text-xs text-teal-200/50">Local Host Support</span>
               </div>
             </div>
@@ -153,7 +153,7 @@ export default function CitiesPage() {
                   <div className="pt-6 flex items-center justify-between border-t border-slate-100">
                     <div>
                       <span className="text-xs uppercase tracking-wider text-slate-500 font-bold block mb-1">Typical Rate</span>
-                      <span className="text-xl text-teal-900 font-bold">₦180,000 <span className="text-sm text-slate-500 font-normal">/ night</span></span>
+                      <span className="text-xl text-teal-900 font-bold">₦95,000 <span className="text-sm text-slate-500 font-normal">/ night</span></span>
                     </div>
                     <Link href="/explore?city=Ikoyi" className="px-6 py-3 rounded-xl bg-teal-900 hover:bg-teal-800 text-white text-xs uppercase tracking-wider font-bold flex items-center gap-2 transition-all shadow-md active:scale-95">
                       <span>View Stays</span>
@@ -189,7 +189,7 @@ export default function CitiesPage() {
                       The financial nervous system. Home to multinational headquarters, waterfront sky lofts, upscale rooftop lounges, and curated retail on Akin Adesola.
                     </p>
                     <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                      <span className="text-lg text-teal-900 font-bold">₦140,000 <span className="text-xs text-slate-500 font-normal">/ night</span></span>
+                      <span className="text-lg text-teal-900 font-bold">₦75,000 <span className="text-xs text-slate-500 font-normal">/ night</span></span>
                       <Link href="/explore?city=Victoria Island" className="text-teal-900 hover:text-orange-600 text-xs uppercase tracking-wider font-bold inline-flex items-center gap-1 transition-colors">
                         Explore VI <ArrowUpRight size={16} />
                       </Link>

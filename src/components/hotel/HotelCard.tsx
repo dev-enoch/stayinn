@@ -69,8 +69,8 @@ export default function HotelCard({
             <span className="font-bold text-teal-900 uppercase tracking-wider">{locationName}</span>
             <div className="flex items-center gap-1 text-slate-900 font-bold">
               <Star size={14} className="text-orange-500 fill-orange-500" />
-              <span>4.98</span>
-              <span className="text-slate-400 font-normal">(54)</span>
+              <span>4.96</span>
+              <span className="text-slate-400 font-normal ml-1">Verified</span>
             </div>
           </div>
           
