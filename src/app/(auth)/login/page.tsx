@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { loginAction } from "@/app/actions/auth";
 import Link from "next/link";
-import { ArrowRight, Github, Mail, Key } from "lucide-react";
+import { Mail } from "lucide-react";
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(loginAction, null);
@@ -21,18 +21,6 @@ export default function LoginPage() {
             <Mail size={20} className="text-red-500" />
           </div>
           <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700">Google</span>
-        </button>
-        <button type="button" className="flex flex-col items-center gap-2 group">
-          <div className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center group-hover:bg-slate-50 transition-colors shadow-sm">
-            <Github size={20} className="text-slate-800" />
-          </div>
-          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700">GitHub</span>
-        </button>
-        <button type="button" className="flex flex-col items-center gap-2 group">
-          <div className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center group-hover:bg-slate-50 transition-colors shadow-sm">
-            <Key size={20} className="text-slate-600" />
-          </div>
-          <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700">SSO</span>
         </button>
       </div>
 
