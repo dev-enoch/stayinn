@@ -111,7 +111,7 @@ export default async function PastTrips({ page = 1 }: { page?: number }) {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <Link 
-                        href={`/hotels/${booking.hotelId}`}
+                        href={`/hotels/${booking.hotel?.slug}`}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900 text-white text-xs font-semibold hover:bg-teal-800 transition-all shadow-sm"
                       >
                         <RefreshCw size={14} />

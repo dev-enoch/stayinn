@@ -27,7 +27,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ roomId: str
   };
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 min-h-screen">
+    <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
       <div className="max-w-[1280px] w-full mx-auto px-4 md:px-12 py-12">
 
         {/* Breadcrumb */}

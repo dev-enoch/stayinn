@@ -12,7 +12,7 @@ interface Props {
 export default async function CityHotelsPage({ params, searchParams }: Props) {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
-  
+
   const cityName = decodeURIComponent(resolvedParams.cityname);
   const pageParam = resolvedSearchParams.page;
   const currentPage = typeof pageParam === 'string' ? parseInt(pageParam, 10) : 1;
@@ -42,8 +42,8 @@ export default async function CityHotelsPage({ params, searchParams }: Props) {
   });
 
   const formattedHotels = hotels.map(hotel => {
-    const startingPrice = hotel.roomTypes.length > 0 
-      ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight))) 
+    const startingPrice = hotel.roomTypes.length > 0
+      ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight)))
       : 0;
     const capacity = hotel.roomTypes.length > 0
       ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
@@ -57,7 +57,7 @@ export default async function CityHotelsPage({ params, searchParams }: Props) {
   });
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 min-h-screen">
+    <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
       <section className="relative w-full pt-40 pb-16 overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 bg-gradient-to-b from-teal-950/90 via-teal-950/80 to-slate-900"></div>
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 relative z-10">
@@ -90,9 +90,10 @@ export default async function CityHotelsPage({ params, searchParams }: Props) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {formattedHotels.map(hotel => (
-                <HotelCard 
+                <HotelCard
                   key={hotel.id}
                   id={hotel.id}
+                  slug={hotel.slug}
                   name={hotel.name}
                   locationName={hotel.address.split(',')[0]}
                   coverImage={hotel.coverImage || ""}
@@ -118,7 +119,7 @@ export default async function CityHotelsPage({ params, searchParams }: Props) {
                   Previous
                 </button>
               )}
-              
+
               <span className="text-sm font-bold text-slate-500">
                 Page {currentPage} of {totalPages}
               </span>

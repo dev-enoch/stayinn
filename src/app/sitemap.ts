@@ -20,12 +20,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const hotels = await prisma.hotel.findMany({
       where: { status: "APPROVED" },
-      select: { id: true, updatedAt: true },
+      select: { slug: true, updatedAt: true },
     });
 
     hotelRoutes = hotels.flatMap((hotel) => [
       {
-        url: `${base}/hotels/${hotel.id}`,
+        url: `${base}/hotels/${hotel.slug}`,
         lastModified: hotel.updatedAt,
         changeFrequency: "weekly" as const,
         priority: 0.9,
@@ -35,11 +35,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Room pages
     const rooms = await prisma.roomType.findMany({
       where: { status: "ACTIVE", hotel: { status: "APPROVED" } },
-      select: { id: true, hotelId: true, updatedAt: true },
+      select: { id: true, hotel: { select: { slug: true } }, updatedAt: true },
     });
 
     const roomRoutes: MetadataRoute.Sitemap = rooms.map((room) => ({
-      url: `${base}/hotels/${room.hotelId}/rooms/${room.id}`,
+      url: `${base}/hotels/${room.hotel.slug}/rooms/${room.id}`,
       lastModified: room.updatedAt,
       changeFrequency: "weekly" as const,
       priority: 0.85,

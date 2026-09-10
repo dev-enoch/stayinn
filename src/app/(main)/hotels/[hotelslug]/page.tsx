@@ -26,11 +26,11 @@ const getAmenityLabel = (amenity: Amenity) => {
 };
 
 export async function generateMetadata(
-  props: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ hotelslug: string }> }
 ): Promise<Metadata> {
   const params = await props.params;
   const hotel = await prisma.hotel.findUnique({
-    where: { id: params.id, status: "APPROVED" },
+    where: { slug: params.hotelslug, status: "APPROVED" },
     include: { roomTypes: { where: { status: "ACTIVE" }, select: { pricePerNight: true } } },
   });
 
@@ -53,7 +53,7 @@ export async function generateMetadata(
       title,
       description,
       type: "website",
-      url: `/hotels/${hotel.id}`,
+      url: `/hotels/${hotel.slug}`,
       images: hotel.coverImage
         ? [{ url: hotel.coverImage, width: 1200, height: 800, alt: hotel.name }]
         : undefined,
@@ -68,12 +68,12 @@ export async function generateMetadata(
 }
 
 export default async function HotelDetailPage(
-  props: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ hotelslug: string }> }
 ) {
   const params = await props.params;
 
   const hotel = await prisma.hotel.findUnique({
-    where: { id: params.id, status: 'APPROVED' },
+    where: { slug: params.hotelslug, status: 'APPROVED' },
     include: {
       amenities: { select: { amenity: true } },
       roomTypes: {
@@ -112,7 +112,7 @@ export default async function HotelDetailPage(
     "@type": "LodgingBusiness",
     "name": hotel.name,
     "description": hotel.description ?? undefined,
-    "url": `https://stayinn.ng/hotels/${hotel.id}`,
+    "url": `https://stayinn.ng/hotels/${hotel.slug}`,
     "image": hotel.coverImage ?? undefined,
     "address": {
       "@type": "PostalAddress",
@@ -163,14 +163,18 @@ export default async function HotelDetailPage(
         {/* Property Title & Headline Metadata */}
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-900/10 text-teal-900 text-xs font-bold tracking-wider uppercase border border-teal-900/20">
-              <ShieldCheck size={14} />
-              Verified Premium Stay
-            </span>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-wider uppercase border border-orange-200">
-              <Star size={14} className="fill-orange-800" />
-              Top Rated
-            </span>
+            {hotel.isPremium && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-900/10 text-teal-900 text-xs font-bold tracking-wider uppercase border border-teal-900/20">
+                <ShieldCheck size={14} />
+                Verified Premium Stay
+              </span>
+            )}
+            {hotel.isTopRated && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-wider uppercase border border-orange-200">
+                <Star size={14} className="fill-orange-800" />
+                Top Rated
+              </span>
+            )}
           </div>
 
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-slate-900 font-bold tracking-tight">
@@ -180,11 +184,11 @@ export default async function HotelDetailPage(
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-600 font-medium">
             <div className="flex items-center gap-1.5 font-bold text-slate-900">
               <Star size={18} className="text-orange-500 fill-orange-500" />
-              <span>4.96</span>
-              <span className="font-normal text-slate-500 ml-1">Verified</span>
+              <span>{hotel.rating.toFixed(2)}</span>
+              {hotel.isVerified && <span className="font-normal text-slate-500 ml-1">Verified</span>}
             </div>
             <span className="text-slate-300">•</span>
-            <span className="font-bold text-teal-900">Premium Estate</span>
+            <span className="font-bold text-teal-900">{hotel.propertyType}</span>
             <span className="text-slate-300">•</span>
             <span className="flex items-center gap-1">
               <MapPin size={18} className="text-teal-900" />
@@ -224,12 +228,7 @@ export default async function HotelDetailPage(
 
             {/* Right 2x2 Subgrid (Placeholders for other images) */}
             <div className="md:col-span-2 grid grid-cols-2 gap-2 h-full hidden sm:grid">
-              {[
-                "https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80",
-                "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80",
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80",
-                "https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80"
-              ].map((imgUrl, i) => (
+              {hotel.gallery.slice(0, 4).map((imgUrl, i) => (
                 <div key={i} className="relative group cursor-pointer overflow-hidden bg-slate-200 h-full">
                   <img
                     src={imgUrl}
@@ -267,7 +266,9 @@ export default async function HotelDetailPage(
                 </div>
                 <div className="flex flex-col">
                   <h2 className="text-xl text-slate-900 font-bold">Managed by Stayinn Verified Partners</h2>
-                  <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mt-1">Premium Host • 100% Response rate</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mt-1">
+                    Premium Host • {hotel.hostResponseRate}% Response rate
+                  </p>
                 </div>
               </div>
             </div>
@@ -281,11 +282,15 @@ export default async function HotelDetailPage(
                 </p>
               </div>
 
-              <div className="pt-4 flex flex-wrap gap-2">
-                <span className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Self Check-in (Smart Lock)</span>
-                <span className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Dedicated Workspace</span>
-                <span className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Premium Linens</span>
-              </div>
+              {hotel.highlights.length > 0 && (
+                <div className="pt-4 flex flex-wrap gap-2">
+                  {hotel.highlights.map((highlight, idx) => (
+                    <span key={idx} className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">
+                      {highlight}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Amenities Mosaic */}
@@ -367,7 +372,7 @@ export default async function HotelDetailPage(
 
                           <div className="mt-6 flex justify-end">
                             <Link
-                              href={`/hotels/${hotel.id}/rooms/${room.id}`}
+                              href={`/hotels/${hotel.slug}/rooms/${room.id}`}
                               className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-teal-900 text-white text-sm font-bold shadow-md transition-colors w-full md:w-auto text-center"
                             >
                               View Suite & Book

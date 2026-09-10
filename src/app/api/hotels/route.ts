@@ -39,6 +39,7 @@ export async function GET(req: Request) {
 
       return {
         id: hotel.id,
+        slug: hotel.slug,
         name: hotel.name,
         address: hotel.address,
         latitude: hotel.latitude,
@@ -89,6 +90,7 @@ export async function POST(req: Request) {
     const hotel = await prisma.hotel.create({
       data: {
         managerId: payload.userId,
+        slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
         name,
         description,
         address,

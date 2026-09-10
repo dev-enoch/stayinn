@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { Users, ArrowLeft, Calendar } from "lucide-react";
+import { Users, ArrowLeft } from "lucide-react";
 import RoomGallery from "./RoomGallery";
 import { prisma } from "@/lib/prisma";
 
 export async function generateMetadata(
-  props: { params: Promise<{ id: string; roomId: string }> }
+  props: { params: Promise<{ hotelslug: string; roomId: string }> }
 ): Promise<Metadata> {
   const params = await props.params;
   const room = await prisma.roomType.findUnique({
@@ -32,10 +31,10 @@ export async function generateMetadata(
 }
 
 export default async function RoomDetailPage(
-  props: { params: Promise<{ id: string; roomId: string }> }
+  props: { params: Promise<{ hotelslug: string; roomId: string }> }
 ) {
   const params = await props.params;
-  
+
   const room = await prisma.roomType.findUnique({
     where: { id: params.roomId, status: 'ACTIVE' },
     include: {
@@ -80,7 +79,7 @@ export default async function RoomDetailPage(
       {/* Top navigation */}
       <div className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 h-20 flex items-center">
-          <Link href={`/hotels/${room.hotel.id}`} className="flex items-center text-gray-900 hover:text-green-600 font-semibold transition-colors">
+          <Link href={`/hotels/${room.hotel.slug}`} className="flex items-center text-gray-900 hover:text-green-600 font-semibold transition-colors">
             <ArrowLeft size={24} className="mr-1" />
             Back to {room.hotel.name}
           </Link>
@@ -88,7 +87,7 @@ export default async function RoomDetailPage(
       </div>
 
       <div className="max-w-[800px] mx-auto pt-32 px-4 md:px-0">
-        
+
         {/* Swipeable Gallery */}
         <RoomGallery images={images} />
 
@@ -122,7 +121,7 @@ export default async function RoomDetailPage(
             <span className="block text-2xl md:text-3xl font-bold tracking-tight text-gray-900">{formattedPrice}</span>
             <span className="text-gray-500 font-medium">per night</span>
           </div>
-          <Link 
+          <Link
             href={`/book/${room.id}`}
             className="bg-gray-900 text-white font-semibold py-4 px-8 md:px-12 rounded-full hover:bg-green-600 transition-colors text-lg shadow-lg"
           >

@@ -135,7 +135,7 @@ export default function ExploreMap({ hotels }: ExploreMapProps) {
                 >
                   &times;
                 </button>
-                <Link href={`/hotels/${hotel.id}`} className="block relative h-32 w-full">
+                <Link href={`/hotels/${hotel.slug}`} className="block relative h-32 w-full">
                   <Image
                     src={hotel.coverImage || "https://images.unsplash.com/photo-1577977461421-4f1647413a96"}
                     alt={hotel.name}
@@ -144,7 +144,7 @@ export default function ExploreMap({ hotels }: ExploreMapProps) {
                   />
                 </Link>
                 <div className="p-3">
-                  <Link href={`/hotels/${hotel.id}`} className="hover:underline">
+                  <Link href={`/hotels/${hotel.slug}`} className="hover:underline">
                     <h4 className="font-bold text-slate-900 truncate">{hotel.name}</h4>
                   </Link>
                   <p className="text-xs text-slate-500 mt-1">{hotel.address}</p>

@@ -116,7 +116,7 @@ export default async function ExplorePage(
   const maxPriceDisplay = allPrices.length > 0 ? Math.max(...allPrices) : 300000;
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 min-h-screen">
+    <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
       {/* Visually-hidden h1 for SEO & screen readers (SI-31) */}
       <h1 className="sr-only">
         {searchQuery
@@ -201,6 +201,7 @@ export default async function ExplorePage(
                   <HotelCard
                     key={hotel.id}
                     id={hotel.id}
+                    slug={hotel.slug}
                     name={hotel.name}
                     locationName={hotel.address.split(',')[0]}
                     coverImage={hotel.coverImage || ""}

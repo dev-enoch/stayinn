@@ -45,20 +45,28 @@ enum Role {
 // HOTEL
 // ============================================
 model Hotel {
-  id          String      @id @default(cuid())
-  managerId   String
-  manager     User        @relation(fields: [managerId], references: [id], onDelete: Cascade)
-  name        String
-  description String?     @db.Text
-  address     String
-  latitude    Float
-  longitude   Float
-  coverImage  String?
-  status      HotelStatus @default(PENDING)
-  isVerified  Boolean     @default(false)
-  isSuperhost Boolean     @default(false)
-  createdAt   DateTime    @default(now()) @db.Timestamptz
-  updatedAt   DateTime    @updatedAt @db.Timestamptz
+  id               String      @id @default(cuid())
+  slug             String      @unique
+  managerId        String
+  manager          User        @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  name             String
+  description      String?     @db.Text
+  address          String
+  latitude         Float
+  longitude        Float
+  coverImage       String?
+  gallery          String[]
+  rating           Float       @default(4.96)
+  isPremium        Boolean     @default(false)
+  isTopRated       Boolean     @default(false)
+  propertyType     String      @default("Hotel")
+  hostResponseRate Int         @default(100)
+  highlights       String[]
+  status           HotelStatus @default(PENDING)
+  isVerified       Boolean     @default(false)
+  isSuperhost      Boolean     @default(false)
+  createdAt        DateTime    @default(now()) @db.Timestamptz
+  updatedAt        DateTime    @updatedAt @db.Timestamptz
 
   amenities HotelAmenity[]
   roomTypes RoomType[]

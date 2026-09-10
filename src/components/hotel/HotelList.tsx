@@ -7,6 +7,7 @@ import HotelCard from "./HotelCard";
 
 type HotelData = {
   id: string;
+  slug: string;
   name: string;
   address: string;
   latitude: number;
@@ -105,6 +106,7 @@ export default function HotelList() {
           <HotelCard
             key={hotel.id}
             id={hotel.id}
+            slug={hotel.slug}
             name={hotel.name}
             locationName={hotel.address}
             coverImage={hotel.coverImage}

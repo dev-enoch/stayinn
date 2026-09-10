@@ -30,8 +30,8 @@ export default async function Home() {
     });
 
     featuredHotels = hotels.map(hotel => {
-      const startingPrice = hotel.roomTypes.length > 0 
-        ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight))) 
+      const startingPrice = hotel.roomTypes.length > 0
+        ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight)))
         : 0;
       const capacity = hotel.roomTypes.length > 0
         ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
@@ -45,12 +45,12 @@ export default async function Home() {
     });
 
     totalProperties = await prisma.hotel.count({ where: { status: 'APPROVED' } });
-    
+
     const addressData = await prisma.hotel.findMany({
       select: { address: true },
       where: { status: 'APPROVED' }
     });
-    
+
     citiesData = await prisma.city.findMany({
       where: { isActive: true },
       orderBy: { createdAt: 'asc' }
@@ -71,23 +71,23 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col w-full bg-slate-50 min-h-screen">
-      
+    <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
+
       {/* HERO SECTION */}
       <section className="relative w-full pt-40 pb-24 px-4 md:px-12 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           {/* Left: Text & Search */}
           <div className="lg:col-span-7 flex flex-col z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-100 text-teal-900 w-fit mb-6 shadow-sm">
               <span className="text-xs uppercase tracking-wider font-bold">Boutique Serviced Residences</span>
             </div>
-            
+
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-teal-950 tracking-tight mb-6 leading-[1.1]">
               Find Your Perfect Stay <br />
               <span className="italic font-normal text-orange-700">in Nigeria.</span>
             </h1>
-            
+
             <p className="text-lg md:text-xl text-slate-600 max-w-xl mb-10 leading-relaxed">
               Experience curated architectural spaces, uncompromised comfort, and the warmth of Nigerian hospitality across Lagos, Abuja, Port Harcourt, and Calabar.
             </p>
@@ -123,7 +123,7 @@ export default async function Home() {
                 className="object-cover transition-transform duration-700 hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-teal-900/80 via-transparent to-transparent"></div>
-              
+
               {/* Floating Tag */}
               <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg flex items-center justify-between">
                 <div>
@@ -133,7 +133,7 @@ export default async function Home() {
                 <span className="px-3 py-1.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold whitespace-nowrap">₦{featuredHotels[0]?.startingPrice ? Math.round(featuredHotels[0].startingPrice / 1000) : 150}k/night</span>
               </div>
             </div>
-            
+
             {/* Ambient Glow */}
             <div className="absolute -bottom-10 -right-10 w-72 h-72 rounded-full bg-teal-900/10 blur-3xl -z-10"></div>
           </div>
@@ -212,24 +212,24 @@ export default async function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {citiesData.map((city, i) => (
-            <Link key={i} href={!city.isComingSoon ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-2xl overflow-hidden h-96 shadow-sm bg-slate-200 transition-all duration-500 hover:-translate-y-1 hover:shadow-md flex flex-col justify-end p-6">
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
-                style={{ backgroundImage: `url('${city.imageUrl || "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"}')` }}
-              ></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-teal-950/90 via-teal-950/40 to-transparent"></div>
-              
-              <div className="relative z-10">
-                <h3 className="font-serif text-2xl text-white font-bold">{city.name}</h3>
-                <p className="text-xs text-teal-100 mt-1">{city.description || "Discover premium stays"}</p>
-                <div className="mt-4 pt-3 flex items-center justify-between text-white text-xs font-semibold border-t border-white/20">
-                  <span>{city.isComingSoon ? 'Coming Soon' : `${cityCounts[city.name] || 0} Properties`}</span>
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            {citiesData.map((city, i) => (
+              <Link key={i} href={!city.isComingSoon ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-2xl overflow-hidden h-96 shadow-sm bg-slate-200 transition-all duration-500 hover:-translate-y-1 hover:shadow-md flex flex-col justify-end p-6">
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: `url('${city.imageUrl || "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"}')` }}
+                ></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-teal-950/90 via-teal-950/40 to-transparent"></div>
+
+                <div className="relative z-10">
+                  <h3 className="font-serif text-2xl text-white font-bold">{city.name}</h3>
+                  <p className="text-xs text-teal-100 mt-1">{city.description || "Discover premium stays"}</p>
+                  <div className="mt-4 pt-3 flex items-center justify-between text-white text-xs font-semibold border-t border-white/20">
+                    <span>{city.isComingSoon ? 'Coming Soon' : `${cityCounts[city.name] || 0} Properties`}</span>
+                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
           </div>
         )}
       </section>
@@ -247,7 +247,7 @@ export default async function Home() {
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-          
+
           {featuredHotels.length === 0 ? (
             <div className="w-full bg-white rounded-2xl p-12 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center">
               <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
@@ -258,21 +258,22 @@ export default async function Home() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredHotels.map((hotel: any) => (
-              <HotelCard 
-                key={hotel.id}
-                id={hotel.id}
-                name={hotel.name}
-                locationName={hotel.address.split(',')[0]}
-                coverImage={hotel.coverImage || ""}
-                startingPrice={hotel.startingPrice || 0}
-                capacity={hotel.capacity}
-                amenities={hotel.amenityList}
-                isVerified={hotel.isVerified}
-                isSuperhost={hotel.isSuperhost}
-              />
-            ))}
-            
+              {featuredHotels.map((hotel: any) => (
+                <HotelCard
+                  key={hotel.id}
+                  id={hotel.id}
+                  slug={hotel.slug}
+                  name={hotel.name}
+                  locationName={hotel.address.split(',')[0]}
+                  coverImage={hotel.coverImage || ""}
+                  startingPrice={hotel.startingPrice || 0}
+                  capacity={hotel.capacity}
+                  amenities={hotel.amenityList}
+                  isVerified={hotel.isVerified}
+                  isSuperhost={hotel.isSuperhost}
+                />
+              ))}
+
             </div>
           )}
         </div>
@@ -301,7 +302,7 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            
+
             <div className="hidden lg:block lg:col-span-5">
               <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-xl">
                 <div className="flex items-center justify-between mb-6">
@@ -313,7 +314,7 @@ export default async function Home() {
                   <span className="text-4xl text-teal-950 font-bold">₦1,850,000</span>
                   <span className="text-sm text-slate-500 font-semibold">/ month</span>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
                     <span className="block text-xs font-semibold text-slate-500 mb-1">Guaranteed Payout</span>
@@ -327,7 +328,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          
+
           {/* Decorative */}
           <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
             <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">

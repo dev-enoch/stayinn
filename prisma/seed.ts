@@ -69,15 +69,29 @@ async function main() {
   const allRoomTypes = [];
 
   for (const h of kadunaHotelsData) {
+    const slug = h.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     const hotel = await prisma.hotel.create({
       data: {
         managerId: manager.id,
+        slug: slug,
         name: h.name,
         description: `Experience luxury and comfort at ${h.name}, ideally located in the heart of Kaduna. Perfect for business travelers and vacationers seeking premium hospitality.`,
         address: h.address,
         latitude: h.lat,
         longitude: h.lng,
         coverImage: h.image,
+        gallery: [
+          'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80'
+        ],
+        rating: h.isSuperhost ? 4.96 : (Math.random() * (4.9 - 4.2) + 4.2),
+        isPremium: h.isVerified,
+        isTopRated: h.isSuperhost,
+        propertyType: h.isSuperhost ? 'Premium Estate' : 'Boutique Hotel',
+        hostResponseRate: 100,
+        highlights: ['Self Check-in (Smart Lock)', 'Dedicated Workspace', 'Premium Linens'],
         status: HotelStatus.APPROVED,
         isVerified: h.isVerified,
         isSuperhost: h.isSuperhost,

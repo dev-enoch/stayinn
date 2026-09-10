@@ -6,6 +6,7 @@ import { Heart, Star, Zap, Wifi } from "lucide-react";
 
 interface HotelCardProps {
   id: string;
+  slug: string;
   name: string;
   locationName: string;
   coverImage: string;
@@ -35,6 +36,7 @@ const amenityNameMap: Record<string, string> = {
 
 export default function HotelCard({
   id,
+  slug,
   name,
   locationName,
   coverImage,
@@ -65,7 +67,7 @@ export default function HotelCard({
 
   return (
     <article className="group rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden border border-slate-100 h-full">
-      <Link href={`/hotels/${id}`} className="block relative w-full h-56 overflow-hidden bg-slate-100">
+      <Link href={`/hotels/${slug}`} className="block relative w-full h-56 overflow-hidden bg-slate-100">
         <Image
           src={safeCoverImage || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"}
           alt={name}
@@ -117,7 +119,7 @@ export default function HotelCard({
             )}
           </div>
           
-          <Link href={`/hotels/${id}`}>
+          <Link href={`/hotels/${slug}`}>
             <h3 className="font-serif text-lg font-bold text-slate-900 group-hover:text-teal-900 transition-colors leading-tight line-clamp-1">
               {name}
             </h3>
@@ -150,7 +152,7 @@ export default function HotelCard({
             </div>
           </div>
           <Link 
-            href={`/hotels/${id}`}
+            href={`/hotels/${slug}`}
             className="px-4 py-2 rounded-lg bg-teal-900 hover:bg-teal-800 text-white text-xs font-bold tracking-wide transition-colors shadow-sm"
           >
             Reserve
