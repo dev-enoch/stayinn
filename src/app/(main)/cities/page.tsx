@@ -11,7 +11,7 @@ export default function CitiesPage() {
     <div className="flex flex-col w-full bg-slate-50 min-h-screen">
 
       {/* Atmospheric Hero / Exploration Header */}
-      <section className="relative w-full pt-5 pb-16 overflow-hidden bg-slate-900 text-white">
+      <section className="relative w-full pt-40 pb-16 overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-teal-950/90 via-teal-950/80 to-slate-900"></div>
 

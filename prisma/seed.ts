@@ -1,4 +1,4 @@
-import { PrismaClient, Role, HotelStatus, Amenity, RoomStatus } from '@prisma/client';
+import { PrismaClient, Role, HotelStatus, Amenity, RoomStatus, BookingStatus, PaymentGateway, PaymentStatus, PayoutStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -6,167 +6,225 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
   
-  // Clear existing data (optional, for safety, we might skip clearing to avoid wiping real data)
-  // Let's rely on upsert or just create unique items if they don't exist.
-  
+  // 1. CLEAR DATABASE
+  console.log('Clearing existing data...');
+  await prisma.savedCard.deleteMany({});
+  await prisma.wishlist.deleteMany({});
+  await prisma.payout.deleteMany({});
+  await prisma.payment.deleteMany({});
+  await prisma.booking.deleteMany({});
+  await prisma.roomImage.deleteMany({});
+  await prisma.roomType.deleteMany({});
+  await prisma.hotelAmenity.deleteMany({});
+  await prisma.hotel.deleteMany({});
+  await prisma.user.deleteMany({});
+  await prisma.city.deleteMany({});
+  await prisma.commissionSetting.deleteMany({});
+
+  // 2. SEED SETTINGS & CITIES
+  console.log('Seeding cities & settings...');
+  await prisma.commissionSetting.create({
+    data: { rate: 0.1000, active: true }
+  });
+
+  const cities = [
+    { name: 'Kaduna', isActive: true, isComingSoon: false, description: 'The Crocodile City, cultural & industrial hub of the North.', imageUrl: 'https://images.unsplash.com/photo-1627885440702-8a9d18e578c7?auto=format&fit=crop&q=80' },
+    { name: 'Lagos', isActive: true, isComingSoon: false, description: 'The commercial and creative heart of Nigeria.', imageUrl: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80' },
+    { name: 'Abuja', isActive: true, isComingSoon: false, description: 'Monumental calm and green spaces.', imageUrl: 'https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80' },
+    { name: 'Kano', isActive: true, isComingSoon: true, description: 'The center of commerce.', imageUrl: 'https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80' },
+  ];
+  for (const city of cities) {
+    await prisma.city.create({ data: city });
+  }
+
+  // 3. SEED USERS
+  console.log('Seeding users...');
   const passwordHash = await bcrypt.hash('password123', 10);
-
-  const manager = await prisma.user.upsert({
-    where: { email: 'manager@stayinn.com' },
-    update: {},
-    create: {
-      email: 'manager@stayinn.com',
-      phone: '+2348000000001',
-      passwordHash,
-      fullName: 'Stayinn Manager',
-      role: Role.HOTEL_MANAGER,
-    },
-  });
-
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@stayinn.com' },
-    update: {},
-    create: {
-      email: 'admin@stayinn.com',
-      phone: '+2348000000002',
-      passwordHash,
-      fullName: 'Stayinn Admin',
-      role: Role.ADMIN,
-    },
-  });
-
-  // Hotel 1
-  const hotel1 = await prisma.hotel.upsert({
-    where: { id: 'hotel-1-ikoyi' },
-    update: { latitude: 6.4520, longitude: 3.4350 },
-    create: {
-      id: 'hotel-1-ikoyi',
-      managerId: manager.id,
-      name: 'The Courtyard Residence',
-      description: 'Luxury Boutique Serviced Residence with 24/7 Power',
-      address: 'Ikoyi, Lagos',
-      latitude: 6.4520,
-      longitude: 3.4350,
-      coverImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80',
-      status: HotelStatus.APPROVED,
-    }
-  });
-
-  // Ensure amenities exist
-  // (We're skipping Amenity for now to just create room types)
   
-  await prisma.roomType.upsert({
-    where: { id: 'room-1-hotel-1' },
-    update: {},
-    create: {
-      id: 'room-1-hotel-1',
-      hotelId: hotel1.id,
-      name: 'Executive Suite',
-      description: 'Spacious suite with king-size bed and city views.',
-      pricePerNight: 150000,
-      capacity: 2,
-      quantity: 5,
-      status: RoomStatus.ACTIVE,
-    }
+  const admin = await prisma.user.create({
+    data: { email: 'admin@stayinn.com', phone: '+2348000000001', passwordHash, fullName: 'Stayinn Admin', role: Role.ADMIN }
+  });
+  const manager = await prisma.user.create({
+    data: { email: 'manager@stayinn.com', phone: '+2348000000002', passwordHash, fullName: 'Kaduna Hotel Manager', role: Role.HOTEL_MANAGER }
+  });
+  const booker = await prisma.user.create({
+    data: { email: 'booker@stayinn.com', phone: '+2348000000003', passwordHash, fullName: 'Frequent Traveler', role: Role.BOOKER }
   });
 
-  // Hotel 2
-  const hotel2 = await prisma.hotel.upsert({
-    where: { id: 'hotel-2-lekki' },
-    update: { latitude: 6.4428, longitude: 3.4715 },
-    create: {
-      id: 'hotel-2-lekki',
-      managerId: manager.id,
-      name: 'Lekki Phase 1 Loft',
-      description: 'Creative and Tech Hub Loft with Dedicated Fiber',
-      address: 'Lekki Phase 1, Lagos',
-      latitude: 6.4428,
-      longitude: 3.4715,
-      coverImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
-      status: HotelStatus.APPROVED,
-    }
+  await prisma.savedCard.create({
+    data: { userId: booker.id, authorizationCode: 'AUTH_123456', last4: '4081', expMonth: '12', expYear: '2028', brand: 'visa', bank: 'GTBank', reusable: true }
   });
 
-  await prisma.roomType.upsert({
-    where: { id: 'room-1-hotel-2' },
-    update: {},
-    create: {
-      id: 'room-1-hotel-2',
-      hotelId: hotel2.id,
-      name: 'Studio Loft',
-      description: 'Modern studio with open-concept design and blazing fast internet.',
-      pricePerNight: 95000,
-      capacity: 2,
-      quantity: 10,
-      status: RoomStatus.ACTIVE,
-    }
-  });
+  // 4. SEED HOTELS IN KADUNA
+  console.log('Seeding hotels and room types...');
+  const kadunaHotelsData = [
+    { name: 'The Croft Residence', address: 'Barnawa, Kaduna', lat: 10.4908, lng: 7.4283, image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: true },
+    { name: 'Malali Heights', address: 'Malali GRA, Kaduna', lat: 10.5511, lng: 7.4520, image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: false },
+    { name: 'Isa Kaita Suites', address: 'Isa Kaita Road, Kaduna', lat: 10.5312, lng: 7.4423, image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80', isVerified: false, isSuperhost: false },
+    { name: 'Kaduna Independence Villa', address: 'Independence Way, Kaduna', lat: 10.5122, lng: 7.4331, image: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: true },
+    { name: 'Asa Pyramid Hotel', address: 'Lafia Road, Kaduna', lat: 10.5218, lng: 7.4411, image: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: false },
+    { name: 'Narayi Boutique Hotel', address: 'Narayi High Cost, Kaduna', lat: 10.4633, lng: 7.4519, image: 'https://images.unsplash.com/photo-1551882547-ff40c0d5b5df?auto=format&fit=crop&q=80', isVerified: false, isSuperhost: false },
+  ];
 
-  // Hotel 3
-  const hotel3 = await prisma.hotel.upsert({
-    where: { id: 'hotel-3-maitama' },
-    update: { latitude: 9.0833, longitude: 7.4933 },
-    create: {
-      id: 'hotel-3-maitama',
-      managerId: manager.id,
-      name: 'Maitama Diplomatic Villa',
-      description: 'Exclusive villa in the heart of Abuja\'s diplomatic zone.',
-      address: 'Maitama, Abuja',
-      latitude: 9.0833,
-      longitude: 7.4933,
-      coverImage: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80',
-      status: HotelStatus.APPROVED,
-    }
-  });
+  const amenitiesList = [Amenity.WIFI, Amenity.WATER, Amenity.BACKUP_POWER, Amenity.AIR_CONDITIONING, Amenity.PARKING];
+  const allHotels = [];
+  const allRoomTypes = [];
 
-  await prisma.roomType.upsert({
-    where: { id: 'room-1-hotel-3' },
-    update: {},
-    create: {
-      id: 'room-1-hotel-3',
-      hotelId: hotel3.id,
-      name: 'Presidential Villa',
-      description: 'Entire 5-bedroom villa with private pool.',
-      pricePerNight: 500000,
-      capacity: 10,
-      quantity: 1,
-      status: RoomStatus.ACTIVE,
-    }
-  });
+  for (const h of kadunaHotelsData) {
+    const hotel = await prisma.hotel.create({
+      data: {
+        managerId: manager.id,
+        name: h.name,
+        description: `Experience luxury and comfort at ${h.name}, ideally located in the heart of Kaduna. Perfect for business travelers and vacationers seeking premium hospitality.`,
+        address: h.address,
+        latitude: h.lat,
+        longitude: h.lng,
+        coverImage: h.image,
+        status: HotelStatus.APPROVED,
+        isVerified: h.isVerified,
+        isSuperhost: h.isSuperhost,
+      }
+    });
+    allHotels.push(hotel);
 
-  // Hotel 4
-  const hotel4 = await prisma.hotel.upsert({
-    where: { id: 'hotel-4-vi' },
-    update: { latitude: 6.4281, longitude: 3.4219 },
-    create: {
-      id: 'hotel-4-vi',
-      managerId: manager.id,
-      name: 'Victoria Island Penthouse',
-      description: 'High-rise luxury living in the financial center.',
-      address: 'Victoria Island, Lagos',
-      latitude: 6.4281,
-      longitude: 3.4219,
-      coverImage: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80',
-      status: HotelStatus.APPROVED,
+    // Add amenities
+    for (const am of amenitiesList) {
+      await prisma.hotelAmenity.create({
+        data: { hotelId: hotel.id, amenity: am }
+      });
     }
-  });
+    
+    // Add 2 Room Types per hotel with realistic rates
+    const standardRoom = await prisma.roomType.create({
+      data: {
+        hotelId: hotel.id,
+        name: 'Standard Room',
+        description: 'Cozy and well-equipped standard room for short stays.',
+        pricePerNight: Math.floor(Math.random() * 20000) + 25000, // 25k - 45k
+        capacity: 2,
+        quantity: 10,
+        status: RoomStatus.ACTIVE
+      }
+    });
+    
+    const deluxeRoom = await prisma.roomType.create({
+      data: {
+        hotelId: hotel.id,
+        name: 'Deluxe Suite',
+        description: 'Spacious suite with a seating area and premium finish.',
+        pricePerNight: Math.floor(Math.random() * 30000) + 55000, // 55k - 85k
+        capacity: 3,
+        quantity: 5,
+        status: RoomStatus.ACTIVE
+      }
+    });
 
-  await prisma.roomType.upsert({
-    where: { id: 'room-1-hotel-4' },
-    update: {},
-    create: {
-      id: 'room-1-hotel-4',
-      hotelId: hotel4.id,
-      name: 'Panoramic Penthouse',
-      description: 'Stunning city and ocean views.',
-      pricePerNight: 200000,
-      capacity: 4,
-      quantity: 2,
-      status: RoomStatus.ACTIVE,
+    allRoomTypes.push(standardRoom, deluxeRoom);
+    
+    // Create Room Images
+    await prisma.roomImage.create({ data: { roomTypeId: standardRoom.id, url: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80', sortOrder: 1 } });
+    await prisma.roomImage.create({ data: { roomTypeId: deluxeRoom.id, url: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80', sortOrder: 1 } });
+  }
+
+  // 5. SEED WISHLIST
+  await prisma.wishlist.create({ data: { userId: booker.id, hotelId: allHotels[0].id } });
+  await prisma.wishlist.create({ data: { userId: booker.id, hotelId: allHotels[1].id } });
+
+  // 6. SEED BOOKINGS & PAYMENTS (6 months of data: -3 months to +3 months)
+  console.log('Seeding 6 months of booking data...');
+  const commissionRate = 0.1000;
+  
+  // Date helpers
+  const today = new Date();
+  
+  for (let i = 0; i < 40; i++) {
+    // Pick random room type
+    const room = allRoomTypes[Math.floor(Math.random() * allRoomTypes.length)];
+    const hotel = allHotels.find(h => h.id === room.hotelId)!;
+    
+    // Generate dates: between -90 days and +90 days
+    const offsetDays = Math.floor(Math.random() * 180) - 90;
+    const checkIn = new Date(today);
+    checkIn.setDate(today.getDate() + offsetDays);
+    
+    const duration = Math.floor(Math.random() * 5) + 1; // 1 to 5 nights
+    const checkOut = new Date(checkIn);
+    checkOut.setDate(checkIn.getDate() + duration);
+    
+    // Amounts
+    const amount = room.pricePerNight * duration;
+    const commissionAmount = Math.round(amount * commissionRate);
+    const hotelPayout = amount - commissionAmount;
+
+    // Status logic based on date
+    let status: BookingStatus = BookingStatus.PENDING;
+    let paymentStatus: PaymentStatus = PaymentStatus.INITIATED;
+    let payoutStatus: PayoutStatus = PayoutStatus.PENDING;
+
+    if (checkOut < today) {
+      status = BookingStatus.COMPLETED;
+      paymentStatus = PaymentStatus.SUCCESS;
+      payoutStatus = PayoutStatus.SUCCESS;
+    } else if (checkIn < today && checkOut >= today) {
+      status = BookingStatus.CONFIRMED;
+      paymentStatus = PaymentStatus.SUCCESS;
+      payoutStatus = PayoutStatus.PROCESSING;
+    } else {
+      // Future
+      status = Math.random() > 0.3 ? BookingStatus.CONFIRMED : BookingStatus.PENDING;
+      paymentStatus = status === BookingStatus.CONFIRMED ? PaymentStatus.SUCCESS : PaymentStatus.INITIATED;
     }
-  });
 
-  console.log('Seeding finished.');
+    const booking = await prisma.booking.create({
+      data: {
+        userId: booker.id,
+        hotelId: hotel.id,
+        roomTypeId: room.id,
+        checkInDate: checkIn,
+        checkOutDate: checkOut,
+        numberOfGuests: Math.floor(Math.random() * room.capacity) + 1,
+        numberOfNights: duration,
+        totalAmount: amount,
+        commissionRate: commissionRate,
+        commissionAmount: commissionAmount,
+        hotelPayout: hotelPayout,
+        status: status,
+        confirmedAt: status === BookingStatus.CONFIRMED || status === BookingStatus.COMPLETED ? new Date(checkIn.getTime() - 86400000) : null,
+        createdAt: new Date(checkIn.getTime() - 86400000 * 2), // Booked 2 days before checkin
+      }
+    });
+
+    // Create payment
+    if (paymentStatus === PaymentStatus.SUCCESS) {
+      await prisma.payment.create({
+        data: {
+          bookingId: booking.id,
+          userId: booker.id,
+          amount: amount,
+          gateway: PaymentGateway.PAYSTACK,
+          gatewayReference: `REF_${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+          status: paymentStatus,
+          createdAt: booking.createdAt,
+        }
+      });
+    }
+
+    // Create payout
+    if (payoutStatus === PaymentStatus.SUCCESS || payoutStatus === PayoutStatus.PROCESSING) {
+      await prisma.payout.create({
+        data: {
+          hotelId: hotel.id,
+          bookingId: booking.id,
+          amount: hotelPayout,
+          status: payoutStatus,
+          reference: payoutStatus === PayoutStatus.SUCCESS ? `PO_${Math.random().toString(36).substring(2, 10).toUpperCase()}` : null,
+          processedAt: payoutStatus === PayoutStatus.SUCCESS ? new Date(checkOut.getTime() + 86400000) : null, // Processed 1 day after checkout
+        }
+      });
+    }
+  }
+
+  console.log('Seeding finished successfully.');
 }
 
 main()
