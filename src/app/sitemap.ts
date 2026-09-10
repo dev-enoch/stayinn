@@ -31,21 +31,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.9,
       },
     ]);
-
-    // Room pages
-    const rooms = await prisma.roomType.findMany({
-      where: { status: "ACTIVE", hotel: { status: "APPROVED" } },
-      select: { id: true, hotel: { select: { slug: true } }, updatedAt: true },
-    });
-
-    const roomRoutes: MetadataRoute.Sitemap = rooms.map((room) => ({
-      url: `${base}/hotels/${room.hotel.slug}/rooms/${room.id}`,
-      lastModified: room.updatedAt,
-      changeFrequency: "weekly" as const,
-      priority: 0.85,
-    }));
-
-    hotelRoutes = [...hotelRoutes, ...roomRoutes];
   } catch {
     // DB unavailable at build time — return static routes only
   }

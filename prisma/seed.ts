@@ -28,8 +28,8 @@ async function main() {
   });
 
   const cities = [
-    { name: 'Kaduna', isActive: true, isComingSoon: false, description: 'The Crocodile City, cultural & industrial hub of the North.', imageUrl: 'https://images.unsplash.com/photo-1627885440702-8a9d18e578c7?auto=format&fit=crop&q=80' },
-    { name: 'Kano', isActive: true, isComingSoon: true, description: 'The center of commerce.', imageUrl: 'https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80' },
+    { name: 'Kaduna', isActive: true, isComingSoon: false, description: 'The Crocodile City — cultural and industrial hub of the North. Home to a growing premium hospitality scene.', imageUrl: 'https://images.unsplash.com/photo-1627885440702-8a9d18e578c7?auto=format&fit=crop&q=80' },
+    { name: 'Kano', isActive: true, isComingSoon: true, description: 'The center of commerce in Northern Nigeria.', imageUrl: 'https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80' },
   ];
   for (const city of cities) {
     await prisma.city.create({ data: city });
@@ -55,13 +55,109 @@ async function main() {
 
   // 4. SEED HOTELS IN KADUNA
   console.log('Seeding hotels and room types...');
+
+  const hotelGalleryImages = [
+    'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80',
+  ];
+
+  const standardRoomImages = [
+    'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1560448204-61dc36dc98c8?auto=format&fit=crop&q=80',
+  ];
+
+  const deluxeRoomImages = [
+    'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1560347876-aeef00ee58a1?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80',
+  ];
+
+  const suiteRoomImages = [
+    'https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1467987506553-8f3916508521?auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80',
+  ];
+
   const kadunaHotelsData = [
-    { name: 'The Croft Residence', address: 'Barnawa, Kaduna', lat: 10.4908, lng: 7.4283, image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: true },
-    { name: 'Malali Heights', address: 'Malali GRA, Kaduna', lat: 10.5511, lng: 7.4520, image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: false },
-    { name: 'Isa Kaita Suites', address: 'Isa Kaita Road, Kaduna', lat: 10.5312, lng: 7.4423, image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80', isVerified: false, isSuperhost: false },
-    { name: 'Kaduna Independence Villa', address: 'Independence Way, Kaduna', lat: 10.5122, lng: 7.4331, image: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: true },
-    { name: 'Asa Pyramid Hotel', address: 'Lafia Road, Kaduna', lat: 10.5218, lng: 7.4411, image: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80', isVerified: true, isSuperhost: false },
-    { name: 'Narayi Boutique Hotel', address: 'Narayi High Cost, Kaduna', lat: 10.4633, lng: 7.4519, image: 'https://images.unsplash.com/photo-1551882547-ff40c0d5b5df?auto=format&fit=crop&q=80', isVerified: false, isSuperhost: false },
+    {
+      name: 'The Croft Residence',
+      address: 'Plot 12, Barnawa Estate, Kaduna South',
+      lat: 10.4908, lng: 7.4283,
+      image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80',
+      isVerified: true, isSuperhost: true,
+      phone: '+2348033001122',
+      whatsapp: '+2348033001122',
+      cancellation: 'Free cancellation up to 48 hours before check-in. No refund for cancellations within 48 hours of arrival.',
+      description: 'The Croft Residence is a premium serviced apartment complex nestled in the secure Barnawa Estate. Designed for executives and long-stay travelers, each unit combines modern aesthetics with warm Nigerian hospitality. Enjoy uninterrupted 24/7 power, high-speed fiber Wi-Fi, and dedicated concierge service.',
+    },
+    {
+      name: 'Malali Heights',
+      address: '15 Kings Way, Malali GRA, Kaduna',
+      lat: 10.5511, lng: 7.4520,
+      image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80',
+      isVerified: true, isSuperhost: false,
+      phone: '+2348059887766',
+      whatsapp: '+2348059887766',
+      cancellation: 'Cancellation 3 days before arrival is free. 50% charge applies within 3 days of arrival.',
+      description: 'Malali Heights offers elegant accommodation within the prestigious Malali Government Reserved Area. The property is surrounded by lush greenery and features spacious rooms with en-suite bathrooms, fully equipped kitchenettes, and secure parking. Ideal for both leisure and corporate guests.',
+    },
+    {
+      name: 'Isa Kaita Suites',
+      address: '7 Isa Kaita Road, Kaduna North',
+      lat: 10.5312, lng: 7.4423,
+      image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80',
+      isVerified: false, isSuperhost: false,
+      phone: '+2348076543210',
+      whatsapp: '+2348076543210',
+      cancellation: 'Free cancellation up to 24 hours before check-in. Full charge applies thereafter.',
+      description: 'Strategically located along Isa Kaita Road, these suites provide comfortable and affordable luxury in Kaduna North. Features well-maintained rooms with modern décor, room service, and proximity to major business districts and government offices.',
+    },
+    {
+      name: 'Kaduna Independence Villa',
+      address: 'Independence Way, City Centre, Kaduna',
+      lat: 10.5122, lng: 7.4331,
+      image: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80',
+      isVerified: true, isSuperhost: true,
+      phone: '+2348081488080',
+      whatsapp: '+2348081488080',
+      cancellation: 'Free cancellation up to 72 hours before check-in. 100% charged for cancellations within 72 hours.',
+      description: 'Located at the prestigious Independence Way in central Kaduna, this villa is a landmark property offering unrivalled views and refined luxury. The property features 24/7 security, a swimming pool, business lounge, and concierge services. Perfect for VIP guests and corporate retreats.',
+    },
+    {
+      name: 'Asa Pyramid Hotel',
+      address: '24 Lafia Road, Ungwan Rimi, Kaduna',
+      lat: 10.5218, lng: 7.4411,
+      image: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80',
+      isVerified: true, isSuperhost: false,
+      phone: '+2348144084721',
+      whatsapp: '+2348144084721',
+      cancellation: 'Cancellation 48 hours before arrival is free. 100% will be charged if guests cancel less than 48 hours before arrival.',
+      description: 'Asa Pyramid Hotel stands as a beacon of comfort and reliability on Lafia Road. Popular with business travelers and visiting professionals, the hotel offers clean, well-appointed rooms, a rooftop terrace, and an on-site restaurant serving Nigerian and continental cuisine.',
+    },
+    {
+      name: 'Narayi Boutique Hotel',
+      address: '8 Close 5, Narayi High Cost, Kaduna',
+      lat: 10.4633, lng: 7.4519,
+      image: 'https://images.unsplash.com/photo-1551882547-ff40c0d5b5df?auto=format&fit=crop&q=80',
+      isVerified: false, isSuperhost: false,
+      phone: '+2348098765432',
+      whatsapp: '+2348098765432',
+      cancellation: 'Free cancellation up to 48 hours before check-in.',
+      description: 'Tucked away in the serene Narayi High Cost residential area, this boutique hotel offers an intimate and personalized experience. Featuring artfully decorated rooms, a garden lounge, and home-cooked Nigerian breakfast options, it is a perfect home away from home for weekend travelers.',
+    },
   ];
 
   const amenitiesList = [Amenity.WIFI, Amenity.WATER, Amenity.BACKUP_POWER, Amenity.AIR_CONDITIONING, Amenity.PARKING];
@@ -73,25 +169,25 @@ async function main() {
     const hotel = await prisma.hotel.create({
       data: {
         managerId: manager.id,
-        slug: slug,
+        slug,
         name: h.name,
-        description: `Experience luxury and comfort at ${h.name}, ideally located in the heart of Kaduna. Perfect for business travelers and vacationers seeking premium hospitality.`,
+        description: h.description,
         address: h.address,
         latitude: h.lat,
         longitude: h.lng,
         coverImage: h.image,
-        gallery: [
-          'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80'
-        ],
-        rating: h.isSuperhost ? 4.96 : (Math.random() * (4.9 - 4.2) + 4.2),
+        gallery: hotelGalleryImages.slice(0, Math.floor(Math.random() * 4) + 2), // 2-5 gallery images
+        rating: h.isSuperhost ? 4.96 : parseFloat((Math.random() * (4.9 - 4.2) + 4.2).toFixed(2)),
         isPremium: h.isVerified,
         isTopRated: h.isSuperhost,
         propertyType: h.isSuperhost ? 'Premium Estate' : 'Boutique Hotel',
         hostResponseRate: 100,
-        highlights: ['Self Check-in (Smart Lock)', 'Dedicated Workspace', 'Premium Linens'],
+        highlights: ['Self Check-in (Smart Lock)', 'Dedicated Workspace', 'Premium Linens', '24/7 Security', 'Fiber Wi-Fi'],
+        whatsappNumber: h.whatsapp,
+        phoneNumber: h.phone,
+        checkInTime: '2:00 PM',
+        checkOutTime: '12:00 PM',
+        cancellationPolicy: h.cancellation,
         status: HotelStatus.APPROVED,
         isVerified: h.isVerified,
         isSuperhost: h.isSuperhost,
@@ -101,74 +197,108 @@ async function main() {
 
     // Add amenities
     for (const am of amenitiesList) {
-      await prisma.hotelAmenity.create({
-        data: { hotelId: hotel.id, amenity: am }
-      });
+      await prisma.hotelAmenity.create({ data: { hotelId: hotel.id, amenity: am } });
     }
+    if (h.isSuperhost) {
+      await prisma.hotelAmenity.create({ data: { hotelId: hotel.id, amenity: Amenity.POOL } });
+    }
+    await prisma.hotelAmenity.create({ data: { hotelId: hotel.id, amenity: Amenity.RESTAURANT } });
 
-    // Add 2 Room Types per hotel with realistic rates
+    // ─── ROOM TYPES ───────────────────────────────────────────────────────────
+
+    // Standard Room
     const standardRoom = await prisma.roomType.create({
       data: {
         hotelId: hotel.id,
         name: 'Standard Room',
-        description: 'Cozy and well-equipped standard room for short stays.',
-        pricePerNight: Math.floor(Math.random() * 20000) + 25000, // 25k - 45k
+        description: 'Our standard rooms are fully furnished with a queen-size bed, en-suite bathroom, flat-screen TV, and high-speed Wi-Fi. Perfect for solo travelers or couples seeking comfortable accommodation at great value.',
+        pricePerNight: Math.floor(Math.random() * 15000) + 25000, // 25k–40k
         capacity: 2,
         quantity: 10,
-        status: RoomStatus.ACTIVE
+        status: RoomStatus.ACTIVE,
+        bedType: 'Queen Bed',
+        roomSize: 25,
+        amenities: ['Free Wi-Fi', 'Air Conditioning', '24/7 Power', 'En-Suite Bathroom', 'Flat-Screen TV', 'Mini Fridge', 'Work Desk', 'Daily Housekeeping'],
       }
     });
 
+    // Deluxe Room
     const deluxeRoom = await prisma.roomType.create({
       data: {
         hotelId: hotel.id,
         name: 'Deluxe Suite',
-        description: 'Spacious suite with a seating area and premium finish.',
-        pricePerNight: Math.floor(Math.random() * 30000) + 55000, // 55k - 85k
+        description: 'Spacious suites with a separate seating area, king-size bed, and premium finishing. Features a large bathroom with rainfall shower, a kitchenette with microwave and kettle, and a private balcony with city views.',
+        pricePerNight: Math.floor(Math.random() * 25000) + 55000, // 55k–80k
         capacity: 3,
         quantity: 5,
-        status: RoomStatus.ACTIVE
+        status: RoomStatus.ACTIVE,
+        bedType: 'King Bed',
+        roomSize: 42,
+        amenities: ['Free Wi-Fi', 'Air Conditioning', '24/7 Power (Dual Generator)', 'En-Suite Bathroom (Rainfall Shower)', 'Flat-Screen TV', 'Kitchenette', 'Private Balcony', 'Mini Bar', 'Work Desk', 'Daily Housekeeping', 'Room Service'],
       }
     });
 
-    allRoomTypes.push(standardRoom, deluxeRoom);
+    // Executive Suite (for premium hotels)
+    let executiveSuite = null;
+    if (h.isVerified) {
+      executiveSuite = await prisma.roomType.create({
+        data: {
+          hotelId: hotel.id,
+          name: 'Executive Suite',
+          description: 'The pinnacle of luxury accommodation. A two-room suite with a dedicated living area, master bedroom with a king-size bed, marble-finished bathroom with jacuzzi, full kitchen with dining area, and panoramic city views from a private terrace.',
+          pricePerNight: Math.floor(Math.random() * 40000) + 120000, // 120k–160k
+          capacity: 4,
+          quantity: 2,
+          status: RoomStatus.ACTIVE,
+          bedType: 'King Bed + Sofa Bed',
+          roomSize: 75,
+          amenities: ['Ultra-Fast Wi-Fi', 'Air Conditioning', '24/7 Power (Inverter + Generator)', 'Jacuzzi Bathroom', 'Smart TV (55")', 'Full Kitchen', 'Private Terrace', 'Mini Bar (Stocked)', 'Work Desk + Printer', 'Daily Housekeeping', 'Dedicated Concierge', 'Airport Transfer', 'Complimentary Breakfast'],
+        }
+      });
+    }
 
-    // Create Room Images
-    await prisma.roomImage.create({ data: { roomTypeId: standardRoom.id, url: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80', sortOrder: 1 } });
-    await prisma.roomImage.create({ data: { roomTypeId: deluxeRoom.id, url: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80', sortOrder: 1 } });
+    allRoomTypes.push(standardRoom, deluxeRoom);
+    if (executiveSuite) allRoomTypes.push(executiveSuite);
+
+    // ─── ROOM IMAGES ──────────────────────────────────────────────────────────
+    for (let i = 0; i < standardRoomImages.length; i++) {
+      await prisma.roomImage.create({ data: { roomTypeId: standardRoom.id, url: standardRoomImages[i], sortOrder: i + 1 } });
+    }
+    for (let i = 0; i < deluxeRoomImages.length; i++) {
+      await prisma.roomImage.create({ data: { roomTypeId: deluxeRoom.id, url: deluxeRoomImages[i], sortOrder: i + 1 } });
+    }
+    if (executiveSuite) {
+      for (let i = 0; i < suiteRoomImages.length; i++) {
+        await prisma.roomImage.create({ data: { roomTypeId: executiveSuite.id, url: suiteRoomImages[i], sortOrder: i + 1 } });
+      }
+    }
   }
 
   // 5. SEED WISHLIST
   await prisma.wishlist.create({ data: { userId: booker.id, hotelId: allHotels[0].id } });
-  await prisma.wishlist.create({ data: { userId: booker.id, hotelId: allHotels[1].id } });
+  await prisma.wishlist.create({ data: { userId: booker.id, hotelId: allHotels[3].id } });
 
-  // 6. SEED BOOKINGS & PAYMENTS (6 months of data: -3 months to +3 months)
+  // 6. SEED BOOKINGS & PAYMENTS (6 months of data)
   console.log('Seeding 6 months of booking data...');
   const commissionRate = 0.1000;
-
-  // Date helpers
   const today = new Date();
 
-  for (let i = 0; i < 40; i++) {
-    // Pick random room type
+  for (let i = 0; i < 50; i++) {
     const room = allRoomTypes[Math.floor(Math.random() * allRoomTypes.length)];
     const hotel = allHotels.find(h => h.id === room.hotelId)!;
 
-    // Generate dates: between -90 days and +90 days
     const offsetDays = Math.floor(Math.random() * 180) - 90;
     const checkIn = new Date(today);
     checkIn.setDate(today.getDate() + offsetDays);
 
-    const duration = Math.floor(Math.random() * 5) + 1; // 1 to 5 nights
+    const duration = Math.floor(Math.random() * 5) + 1;
     const checkOut = new Date(checkIn);
     checkOut.setDate(checkIn.getDate() + duration);
 
-    // Amounts
     const amount = room.pricePerNight * duration;
     const commissionAmount = Math.round(amount * commissionRate);
     const hotelPayout = amount - commissionAmount;
 
-    // Status logic based on date
     let status: BookingStatus = BookingStatus.PENDING;
     let paymentStatus: PaymentStatus = PaymentStatus.INITIATED;
     let payoutStatus: PayoutStatus = PayoutStatus.PENDING;
@@ -182,7 +312,6 @@ async function main() {
       paymentStatus = PaymentStatus.SUCCESS;
       payoutStatus = PayoutStatus.PROCESSING;
     } else {
-      // Future
       status = Math.random() > 0.3 ? BookingStatus.CONFIRMED : BookingStatus.PENDING;
       paymentStatus = status === BookingStatus.CONFIRMED ? PaymentStatus.SUCCESS : PaymentStatus.INITIATED;
     }
@@ -197,22 +326,21 @@ async function main() {
         numberOfGuests: Math.floor(Math.random() * room.capacity) + 1,
         numberOfNights: duration,
         totalAmount: amount,
-        commissionRate: commissionRate,
-        commissionAmount: commissionAmount,
-        hotelPayout: hotelPayout,
-        status: status,
+        commissionRate,
+        commissionAmount,
+        hotelPayout,
+        status,
         confirmedAt: status === BookingStatus.CONFIRMED || status === BookingStatus.COMPLETED ? new Date(checkIn.getTime() - 86400000) : null,
-        createdAt: new Date(checkIn.getTime() - 86400000 * 2), // Booked 2 days before checkin
+        createdAt: new Date(checkIn.getTime() - 86400000 * 2),
       }
     });
 
-    // Create payment
     if (paymentStatus === PaymentStatus.SUCCESS) {
       await prisma.payment.create({
         data: {
           bookingId: booking.id,
           userId: booker.id,
-          amount: amount,
+          amount,
           gateway: PaymentGateway.PAYSTACK,
           gatewayReference: `REF_${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
           status: paymentStatus,
@@ -221,8 +349,7 @@ async function main() {
       });
     }
 
-    // Create payout
-    if (payoutStatus === PaymentStatus.SUCCESS || payoutStatus === PayoutStatus.PROCESSING) {
+    if (payoutStatus === PayoutStatus.SUCCESS || payoutStatus === PayoutStatus.PROCESSING) {
       await prisma.payout.create({
         data: {
           hotelId: hotel.id,
@@ -230,7 +357,7 @@ async function main() {
           amount: hotelPayout,
           status: payoutStatus,
           reference: payoutStatus === PayoutStatus.SUCCESS ? `PO_${Math.random().toString(36).substring(2, 10).toUpperCase()}` : null,
-          processedAt: payoutStatus === PayoutStatus.SUCCESS ? new Date(checkOut.getTime() + 86400000) : null, // Processed 1 day after checkout
+          processedAt: payoutStatus === PayoutStatus.SUCCESS ? new Date(checkOut.getTime() + 86400000) : null,
         }
       });
     }
