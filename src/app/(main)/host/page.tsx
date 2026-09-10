@@ -28,7 +28,7 @@ export default async function HostPage() {
   }
 
   return (
-    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-10">
+    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col">
 
       {/* Immersive Editorial Hero */}
       <section className="relative w-full overflow-hidden bg-teal-950 text-white min-h-[90vh] flex items-center">
@@ -56,7 +56,7 @@ export default async function HostPage() {
               </h1>
 
               <p className="text-lg md:text-xl text-teal-100 max-w-xl leading-relaxed">
-                {managerCount > 0 
+                {managerCount > 0
                   ? `Join over 1,200+ property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.`
                   : `Join our founding property owners earning reliable rental income in Naira or USD with fully managed vetting, 24/7 guest concierge, and continuous maintenance.`}
               </p>
