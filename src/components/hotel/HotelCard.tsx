@@ -64,7 +64,7 @@ export default function HotelCard({
   }
 
   return (
-    <article className="group rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden border border-slate-100 h-full">
+    <article className="group rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden border border-slate-100 h-full">
       <Link href={`/hotels/${id}`} className="block relative w-full h-56 overflow-hidden bg-slate-100">
         <Image
           src={safeCoverImage || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"}

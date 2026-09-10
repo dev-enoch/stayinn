@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Zap, Wifi, Shield, ShieldCheck } from "lucide-react";
+import { ArrowRight, Zap, Wifi, Shield, ShieldCheck, MapPin, Star } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import HotelCard from "@/components/hotel/HotelCard";
 import HeroSearch from "@/components/home/HeroSearch";
@@ -193,18 +193,27 @@ export default async function Home() {
       <section className="max-w-[1440px] mx-auto px-4 md:px-12 py-24 w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">Prime Locations</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">Explore by Curated Destinations</h2>
+            <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">Top Cities</span>
+            <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">Popular Destinations</h2>
           </div>
           <Link href="/cities" className="inline-flex items-center gap-1.5 text-sm text-teal-900 font-bold hover:text-orange-700 transition-colors group">
-            <span>View all {Object.keys(cityCounts).length > 0 ? Object.keys(cityCounts).length : 3} Nigerian cities</span>
+            <span>View all cities</span>
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {citiesData.length === 0 ? (
+          <div className="w-full bg-white rounded-2xl p-12 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center">
+            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+              <MapPin className="text-slate-400" size={32} />
+            </div>
+            <h3 className="font-serif text-2xl text-slate-900 font-bold mb-2">No Destinations Found</h3>
+            <p className="text-slate-500 max-w-md mx-auto">We are currently curating the best locations for your stay. Check back soon for exciting new destinations.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {citiesData.map((city, i) => (
-            <Link key={i} href={!city.isComingSoon ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-3xl overflow-hidden h-96 shadow-md bg-slate-200 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-end p-6">
+            <Link key={i} href={!city.isComingSoon ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-2xl overflow-hidden h-96 shadow-sm bg-slate-200 transition-all duration-500 hover:-translate-y-1 hover:shadow-md flex flex-col justify-end p-6">
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
                 style={{ backgroundImage: `url('${city.imageUrl || "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"}')` }}
@@ -221,7 +230,8 @@ export default async function Home() {
               </div>
             </Link>
           ))}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* FEATURED STAYS */}
@@ -229,8 +239,8 @@ export default async function Home() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-12 w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">Handpicked Accommodations</span>
-              <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">Featured Luxury Stays</h2>
+              <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">Featured Stays</span>
+              <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">Top Places to Stay</h2>
             </div>
             <Link href="/explore" className="inline-flex items-center gap-1.5 text-sm text-teal-900 font-bold hover:text-orange-700 transition-colors group">
               <span>View all properties</span>
@@ -238,7 +248,16 @@ export default async function Home() {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredHotels.length === 0 ? (
+            <div className="w-full bg-white rounded-2xl p-12 text-center shadow-sm border border-slate-100 flex flex-col items-center justify-center">
+              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                <Star className="text-slate-400" size={32} />
+              </div>
+              <h3 className="font-serif text-2xl text-slate-900 font-bold mb-2">No Featured Stays Yet</h3>
+              <p className="text-slate-500 max-w-md mx-auto">Our team is handpicking the finest properties. Premium accommodations will be listed here shortly.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredHotels.map((hotel: any) => (
               <HotelCard 
                 key={hotel.id}
@@ -254,13 +273,8 @@ export default async function Home() {
               />
             ))}
             
-            {/* Fallback if no API data yet */}
-            {featuredHotels.length === 0 && (
-              <div className="col-span-full text-center py-12 text-slate-500">
-                No featured hotels available at the moment.
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
