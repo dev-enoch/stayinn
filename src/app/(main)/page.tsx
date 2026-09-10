@@ -13,6 +13,7 @@ export default async function Home() {
   let featuredHotels: any[] = [];
   let totalProperties = 0;
   let cityCounts: Record<string, number> = {};
+  let citiesData: any[] = [];
 
   try {
     const hotels = await prisma.hotel.findMany({
@@ -50,11 +51,19 @@ export default async function Home() {
       where: { status: 'APPROVED' }
     });
     
-    addressData.forEach(h => {
-      if (h.address.includes('Lagos')) cityCounts['Lagos'] = (cityCounts['Lagos'] || 0) + 1;
-      else if (h.address.includes('Abuja')) cityCounts['Abuja'] = (cityCounts['Abuja'] || 0) + 1;
-      else if (h.address.includes('Port Harcourt') || h.address.includes('PH')) cityCounts['Port Harcourt'] = (cityCounts['Port Harcourt'] || 0) + 1;
-      else if (h.address.includes('Calabar')) cityCounts['Calabar'] = (cityCounts['Calabar'] || 0) + 1;
+    citiesData = await prisma.city.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'asc' }
+    });
+
+    citiesData.forEach(city => {
+      let count = 0;
+      addressData.forEach(h => {
+        if (h.address.toLowerCase().includes(city.name.toLowerCase())) {
+          count++;
+        }
+      });
+      cityCounts[city.name] = count;
     });
 
   } catch (error) {
@@ -132,7 +141,7 @@ export default async function Home() {
 
         {/* Floating Search Widget */}
         <div className="relative z-20 mt-12 lg:-mt-8 bg-white rounded-2xl shadow-xl p-4 sm:p-5 border border-slate-100 max-w-5xl mx-auto">
-          <HeroSearch />
+          <HeroSearch cities={citiesData} />
         </div>
       </section>
 
@@ -194,24 +203,19 @@ export default async function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { name: "Lagos", sub: "Victoria Island & Lekki", img: "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80", count: cityCounts["Lagos"] || 0 },
-            { name: "Abuja", sub: "Maitama & Asokoro", img: "https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80", count: cityCounts["Abuja"] || 0 },
-            { name: "Port Harcourt", sub: "Old GRA", img: "https://images.unsplash.com/photo-1626245107068-18e404bf7cba?auto=format&fit=crop&q=80", count: cityCounts["Port Harcourt"] || 0 },
-            { name: "Calabar", sub: "Marina Resort", img: "https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80", count: cityCounts["Calabar"] || 0 },
-          ].map((city, i) => (
-            <Link key={i} href={city.count > 0 ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-3xl overflow-hidden h-96 shadow-md bg-slate-200 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-end p-6">
+          {citiesData.map((city, i) => (
+            <Link key={i} href={!city.isComingSoon ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-3xl overflow-hidden h-96 shadow-md bg-slate-200 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-end p-6">
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
-                style={{ backgroundImage: `url('${city.img}')` }}
+                style={{ backgroundImage: `url('${city.imageUrl || "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"}')` }}
               ></div>
               <div className="absolute inset-0 bg-gradient-to-t from-teal-950/90 via-teal-950/40 to-transparent"></div>
               
               <div className="relative z-10">
                 <h3 className="font-serif text-2xl text-white font-bold">{city.name}</h3>
-                <p className="text-xs text-teal-100 mt-1">{city.sub}</p>
+                <p className="text-xs text-teal-100 mt-1">{city.description || "Discover premium stays"}</p>
                 <div className="mt-4 pt-3 flex items-center justify-between text-white text-xs font-semibold border-t border-white/20">
-                  <span>{city.count > 0 ? `${city.count} Properties` : 'Coming Soon'}</span>
+                  <span>{city.isComingSoon ? 'Coming Soon' : `${cityCounts[city.name] || 0} Properties`}</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -245,6 +249,8 @@ export default async function Home() {
                 startingPrice={hotel.startingPrice || 0}
                 capacity={hotel.capacity}
                 amenities={hotel.amenityList}
+                isVerified={hotel.isVerified}
+                isSuperhost={hotel.isSuperhost}
               />
             ))}
             
@@ -273,16 +279,16 @@ export default async function Home() {
                 Join over 1,200 property owners earning reliable rental yields. We handle guest vetting, continuous concierge, payment settlement in Naira or USD, and damage protection.
               </p>
               <div className="flex flex-wrap items-center gap-4">
-                <Link href="/host" className="px-6 py-4 rounded-xl bg-orange-700 text-white text-sm font-bold hover:bg-orange-600 transition-all shadow-lg active:scale-95">
+                <Link href="/host" className="px-6 py-4 rounded-xl bg-orange-700 text-white text-sm font-bold hover:bg-orange-600 transition-all shadow-lg active:scale-95 whitespace-nowrap">
                   List Your Property
                 </Link>
-                <Link href="/host#calculator" className="px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold backdrop-blur-md transition-all border border-white/20">
+                <Link href="/host#calculator" className="px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold backdrop-blur-md transition-all border border-white/20 whitespace-nowrap">
                   Calculate Your Earnings
                 </Link>
               </div>
             </div>
             
-            <div className="lg:col-span-5">
+            <div className="hidden lg:block lg:col-span-5">
               <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-xl">
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-xs font-bold uppercase tracking-wider text-orange-700">Instant Yield Estimator</span>

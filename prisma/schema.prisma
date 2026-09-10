@@ -12,25 +12,25 @@ datasource db {
 // USER
 // ============================================
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  phone        String    @unique
-  passwordHash String
-  fullName     String
-  role         Role      @default(BOOKER)
-  createdAt          DateTime      @default(now()) @db.Timestamptz
-  updatedAt          DateTime      @updatedAt @db.Timestamptz
-  twoFactorEnabled   Boolean       @default(false)
-  powerRequirement   String?
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  phone               String    @unique
+  passwordHash        String
+  fullName            String
+  role                Role      @default(BOOKER)
+  createdAt           DateTime  @default(now()) @db.Timestamptz
+  updatedAt           DateTime  @updatedAt @db.Timestamptz
+  twoFactorEnabled    Boolean   @default(false)
+  powerRequirement    String?
   internetRequirement String?
-  resetToken         String?
-  resetTokenExpiry   DateTime?
+  resetToken          String?
+  resetTokenExpiry    DateTime?
 
-  hotels             Hotel[]
-  bookings           Booking[]
-  payments           Payment[]
-  wishlists          Wishlist[]
-  savedCards         SavedCard[]
+  hotels     Hotel[]
+  bookings   Booking[]
+  payments   Payment[]
+  wishlists  Wishlist[]
+  savedCards SavedCard[]
 
   @@index([role])
 }
@@ -45,24 +45,26 @@ enum Role {
 // HOTEL
 // ============================================
 model Hotel {
-  id          String         @id @default(cuid())
+  id          String      @id @default(cuid())
   managerId   String
-  manager     User           @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  manager     User        @relation(fields: [managerId], references: [id], onDelete: Cascade)
   name        String
-  description String?        @db.Text
+  description String?     @db.Text
   address     String
   latitude    Float
   longitude   Float
   coverImage  String?
-  status      HotelStatus    @default(PENDING)
-  createdAt   DateTime       @default(now()) @db.Timestamptz
-  updatedAt   DateTime       @updatedAt @db.Timestamptz
+  status      HotelStatus @default(PENDING)
+  isVerified  Boolean     @default(false)
+  isSuperhost Boolean     @default(false)
+  createdAt   DateTime    @default(now()) @db.Timestamptz
+  updatedAt   DateTime    @updatedAt @db.Timestamptz
 
-  amenities   HotelAmenity[]
-  roomTypes   RoomType[]
-  bookings    Booking[]
-  payouts     Payout[]
-  wishlists   Wishlist[]
+  amenities HotelAmenity[]
+  roomTypes RoomType[]
+  bookings  Booking[]
+  payouts   Payout[]
+  wishlists Wishlist[]
 
   @@index([status])
   @@index([latitude, longitude])
@@ -79,10 +81,10 @@ enum HotelStatus {
 // HOTEL AMENITY (many-to-many)
 // ============================================
 model HotelAmenity {
-  id       String  @id @default(cuid())
-  hotelId  String
-  hotel    Hotel   @relation(fields: [hotelId], references: [id], onDelete: Cascade)
-  amenity  Amenity
+  id      String  @id @default(cuid())
+  hotelId String
+  hotel   Hotel   @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  amenity Amenity
 
   @@unique([hotelId, amenity])
   @@index([hotelId])
@@ -103,20 +105,20 @@ enum Amenity {
 // ROOM TYPE
 // ============================================
 model RoomType {
-  id            String       @id @default(cuid())
+  id            String     @id @default(cuid())
   hotelId       String
-  hotel         Hotel        @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  hotel         Hotel      @relation(fields: [hotelId], references: [id], onDelete: Cascade)
   name          String
-  description   String?      @db.Text
+  description   String?    @db.Text
   pricePerNight Int
-  capacity      Int          @default(2)
-  quantity      Int          @default(1)
-  status        RoomStatus   @default(ACTIVE)
-  createdAt     DateTime     @default(now()) @db.Timestamptz
-  updatedAt     DateTime     @updatedAt @db.Timestamptz
+  capacity      Int        @default(2)
+  quantity      Int        @default(1)
+  status        RoomStatus @default(ACTIVE)
+  createdAt     DateTime   @default(now()) @db.Timestamptz
+  updatedAt     DateTime   @updatedAt @db.Timestamptz
 
-  images        RoomImage[]
-  bookings      Booking[]
+  images   RoomImage[]
+  bookings Booking[]
 
   @@index([hotelId])
   @@index([status])
@@ -168,8 +170,8 @@ model Booking {
   createdAt        DateTime      @default(now()) @db.Timestamptz
   updatedAt        DateTime      @updatedAt @db.Timestamptz
 
-  payment          Payment?
-  payout           Payout?
+  payment Payment?
+  payout  Payout?
 
   @@index([hotelId, checkInDate, checkOutDate])
   @@index([userId])
@@ -247,7 +249,7 @@ enum PayoutStatus {
 // ============================================
 model CommissionSetting {
   id        String   @id @default(cuid())
-  rate      Decimal  @db.Decimal(5, 4) @default(0.1000)
+  rate      Decimal  @default(0.1000) @db.Decimal(5, 4)
   active    Boolean  @default(true)
   createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt @db.Timestamptz
@@ -286,4 +288,20 @@ model SavedCard {
   updatedAt         DateTime @updatedAt @db.Timestamptz
 
   @@index([userId])
+}
+
+// ============================================
+// CITY
+// ============================================
+model City {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String?  @db.Text
+  imageUrl     String?
+  isComingSoon Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now()) @db.Timestamptz
+  updatedAt    DateTime @updatedAt @db.Timestamptz
+
+  @@index([isActive])
 }

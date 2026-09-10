@@ -12,6 +12,8 @@ interface HotelCardProps {
   startingPrice: number;
   amenities?: string[];
   capacity?: number;
+  isVerified?: boolean;
+  isSuperhost?: boolean;
 }
 
 const amenityIconMap: Record<string, React.ReactNode> = {
@@ -39,6 +41,8 @@ export default function HotelCard({
   startingPrice,
   amenities = [],
   capacity = 2,
+  isVerified = false,
+  isSuperhost = false,
 }: HotelCardProps) {
   const formattedPrice = new Intl.NumberFormat("en-NG", {
     style: "currency",
@@ -72,12 +76,16 @@ export default function HotelCard({
         
         {/* Top Badges */}
         <div className="absolute top-3 left-3 flex items-center gap-1.5">
-          <span className="px-3 py-1.5 rounded-full bg-teal-900/90 text-white text-xs font-bold backdrop-blur-sm shadow-sm flex items-center gap-1">
-            Verified
-          </span>
-          <span className="px-3 py-1.5 rounded-full bg-orange-700 text-white text-xs font-bold backdrop-blur-sm shadow-sm">
-            Superhost
-          </span>
+          {isVerified && (
+            <span className="px-3 py-1.5 rounded-full bg-teal-900/90 text-white text-xs font-bold backdrop-blur-sm shadow-sm flex items-center gap-1">
+              Verified
+            </span>
+          )}
+          {isSuperhost && (
+            <span className="px-3 py-1.5 rounded-full bg-orange-700 text-white text-xs font-bold backdrop-blur-sm shadow-sm">
+              Superhost
+            </span>
+          )}
         </div>
         
         {/* Wishlist Button (prevent default to avoid navigating) */}
@@ -102,9 +110,11 @@ export default function HotelCard({
         <div>
           <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
             <span className="font-bold text-teal-900 uppercase tracking-wider">{locationName}</span>
-            <div className="flex items-center gap-1 text-slate-900 font-bold">
-              <span className="text-slate-600 font-normal ml-1">Verified</span>
-            </div>
+            {isVerified && (
+              <div className="flex items-center gap-1 text-slate-900 font-bold">
+                <span className="text-slate-600 font-normal ml-1">Verified</span>
+              </div>
+            )}
           </div>
           
           <Link href={`/hotels/${id}`}>
@@ -133,6 +143,7 @@ export default function HotelCard({
         {/* Price & Action */}
         <div className="pt-2 mt-auto border-t border-slate-100 flex items-end justify-between">
           <div>
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-0.5">Starting from</div>
             <div className="flex items-baseline gap-1">
               <span className="font-serif text-lg text-teal-950 font-bold">{formattedPrice}</span>
               <span className="text-xs text-slate-500">/ night</span>
