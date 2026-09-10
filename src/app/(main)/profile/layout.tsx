@@ -13,7 +13,7 @@ export default async function ProfileLayout({
 }) {
   const cookieStore = await cookies();
   const token = cookieStore.get('accessToken')?.value;
-  
+
   if (!token) {
     redirect('/login');
   }
@@ -24,14 +24,14 @@ export default async function ProfileLayout({
   }
 
   return (
-    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-20">
+    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-5">
       <div className="w-full max-w-[1280px] mx-auto px-4 md:px-12 py-10">
-        
+
         {/* Top Account Banner with Quick Stats & Breadcrumb */}
         <div className="relative w-full rounded-2xl bg-gradient-to-r from-teal-950 via-teal-900 to-slate-800 p-8 text-white shadow-xl overflow-hidden mb-12">
           {/* Background Ambient Glow */}
           <div className="absolute -right-12 -bottom-12 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl pointer-events-none"></div>
-          
+
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-xs font-bold tracking-wider uppercase text-teal-200">
@@ -44,7 +44,7 @@ export default async function ProfileLayout({
                 Manage your verified Nigerian stays, estate access passes, and bespoke concierge preferences.
               </p>
             </div>
-            
+
             <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-xl text-white border border-white/10">
               <div className="flex flex-col px-3 py-1 text-center">
                 <span className="text-xs font-bold uppercase tracking-wider text-white/70">Loyalty Tier</span>

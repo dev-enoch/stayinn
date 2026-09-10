@@ -71,7 +71,7 @@ export default async function HotelDetailPage(
   props: { params: Promise<{ id: string }> }
 ) {
   const params = await props.params;
-  
+
   const hotel = await prisma.hotel.findUnique({
     where: { id: params.id, status: 'APPROVED' },
     include: {
@@ -100,7 +100,7 @@ export default async function HotelDetailPage(
   };
 
   const startingPrice = formattedHotel.startingPrice;
-  
+
   const formattedPrice = new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
@@ -128,12 +128,12 @@ export default async function HotelDetailPage(
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-50 pt-20">
+    <div className="w-full min-h-screen bg-slate-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
+
       {/* Breadcrumb & Top Bar */}
       <div className="w-full bg-slate-100/70 py-4 border-b border-slate-200">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex items-center justify-between">
@@ -144,7 +144,7 @@ export default async function HotelDetailPage(
             <ChevronRight size={14} />
             <span className="text-teal-900 truncate max-w-[200px] sm:max-w-none">{hotel.name}</span>
           </nav>
-          
+
           <div className="flex items-center gap-4 shrink-0 pl-4">
             <button className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 transition-all text-slate-700 text-xs font-bold shadow-sm">
               <Share size={14} />
@@ -159,7 +159,7 @@ export default async function HotelDetailPage(
       </div>
 
       <div className="max-w-[1280px] mx-auto px-4 md:px-12 w-full mt-8 flex flex-col gap-10">
-        
+
         {/* Property Title & Headline Metadata */}
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-3">
@@ -172,11 +172,11 @@ export default async function HotelDetailPage(
               Top Rated
             </span>
           </div>
-          
+
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-slate-900 font-bold tracking-tight">
             {hotel.name}
           </h1>
-          
+
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-600 font-medium">
             <div className="flex items-center gap-1.5 font-bold text-slate-900">
               <Star size={18} className="text-orange-500 fill-orange-500" />
@@ -199,7 +199,7 @@ export default async function HotelDetailPage(
             {/* Dominant Hero Left Image */}
             <div className="md:col-span-2 h-full relative group cursor-pointer overflow-hidden bg-slate-200">
               {hotel.coverImage ? (
-                <Image 
+                <Image
                   src={
                     hotel.coverImage
                       .replace('1626245107068-18e404bf7cba', '1600585154340-be6161a56a0c')
@@ -221,7 +221,7 @@ export default async function HotelDetailPage(
                 Exterior & Property View
               </span>
             </div>
-            
+
             {/* Right 2x2 Subgrid (Placeholders for other images) */}
             <div className="md:col-span-2 grid grid-cols-2 gap-2 h-full hidden sm:grid">
               {[
@@ -231,18 +231,18 @@ export default async function HotelDetailPage(
                 "https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80"
               ].map((imgUrl, i) => (
                 <div key={i} className="relative group cursor-pointer overflow-hidden bg-slate-200 h-full">
-                  <img 
-                    src={imgUrl} 
-                    alt="Gallery thumbnail" 
+                  <img
+                    src={imgUrl}
+                    alt="Gallery thumbnail"
                     width={400}
                     height={250}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
                   />
                 </div>
               ))}
             </div>
           </div>
-          
+
           <button className="absolute bottom-6 right-6 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/95 hover:bg-white text-slate-900 shadow-xl backdrop-blur-md text-xs font-bold tracking-wide transition-all transform hover:scale-105 border border-slate-100">
             <span>Show all photos</span>
           </button>
@@ -250,10 +250,10 @@ export default async function HotelDetailPage(
 
         {/* Main Two-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start pb-24">
-          
+
           {/* Left Column: Rich Property Information */}
           <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-10">
-            
+
             {/* Host Header & Space Metrics */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-slate-200">
               <div className="flex items-center gap-5">
@@ -280,7 +280,7 @@ export default async function HotelDetailPage(
                   {hotel.description || "Welcome to your curated stay. Conceived as a tranquil sanctuary away from the vibrant hum of the city, this newly curated property seamlessly blurs indoor comfort with lush outdoor living. The property is designed for guests who desire uncompromised comfort, high-speed connectivity, and absolute security."}
                 </p>
               </div>
-              
+
               <div className="pt-4 flex flex-wrap gap-2">
                 <span className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Self Check-in (Smart Lock)</span>
                 <span className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Dedicated Workspace</span>
@@ -297,7 +297,7 @@ export default async function HotelDetailPage(
                     <h2 className="font-serif text-2xl text-slate-900 font-bold mt-1">What This Place Offers</h2>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-8 gap-x-4 pt-4">
                   {hotel.amenities.map((a: any) => (
                     <div key={a.code} className="flex items-center gap-3">
@@ -317,7 +317,7 @@ export default async function HotelDetailPage(
                 <span className="text-xs uppercase tracking-widest text-teal-900 font-bold">Accommodations</span>
                 <h2 className="font-serif text-2xl text-slate-900 font-bold mt-1">Available Room Types</h2>
               </div>
-              
+
               {hotel.roomTypes.length === 0 ? (
                 <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center text-slate-500">
                   No rooms currently available for this property.
@@ -334,10 +334,10 @@ export default async function HotelDetailPage(
                     return (
                       <div key={room.id} className="border border-slate-200 p-6 rounded-2xl hover:border-teal-900 hover:shadow-lg transition-all duration-300 bg-white flex flex-col md:flex-row gap-6">
                         <div className="w-full md:w-1/3 aspect-[4/3] bg-slate-100 rounded-xl overflow-hidden relative">
-                          <Image 
-                            src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&q=80" 
-                            alt={room.name} 
-                            fill 
+                          <Image
+                            src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&q=80"
+                            alt={room.name}
+                            fill
                             className="object-cover"
                           />
                         </div>
@@ -352,21 +352,21 @@ export default async function HotelDetailPage(
                                 <span className="text-xs text-slate-500 font-semibold">per night</span>
                               </div>
                             </div>
-                            
+
                             <div className="flex items-center gap-4 text-slate-500 text-sm font-semibold mb-4 bg-slate-50 w-fit px-3 py-1.5 rounded-lg border border-slate-100">
                               <div className="flex items-center gap-1.5 text-slate-700">
                                 <Users size={16} />
                                 <span>Sleeps {room.capacity} Guests</span>
                               </div>
                             </div>
-                            
+
                             <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">
                               {room.description || "A beautifully appointed suite designed for absolute relaxation, featuring premium bedding, dedicated workspace, and en-suite facilities."}
                             </p>
                           </div>
-                          
+
                           <div className="mt-6 flex justify-end">
-                            <Link 
+                            <Link
                               href={`/hotels/${hotel.id}/rooms/${room.id}`}
                               className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-teal-900 text-white text-sm font-bold shadow-md transition-colors w-full md:w-auto text-center"
                             >
@@ -380,13 +380,13 @@ export default async function HotelDetailPage(
                 </div>
               )}
             </div>
-            
+
           </div>
 
           {/* Right Column: Sticky Booking Widget */}
           <div className="lg:col-span-5 xl:col-span-4 sticky top-28">
             <div className="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 flex flex-col gap-6">
-              
+
               {/* Pricing Header */}
               <div className="flex items-baseline justify-between pb-4 border-b border-slate-100">
                 {startingPrice > 0 ? (
@@ -434,16 +434,16 @@ export default async function HotelDetailPage(
                   </div>
                 </div>
               </div>
-              
+
             </div>
-            
+
             {/* Neighborhood Preview Mini Map */}
             <div className="mt-6 bg-white p-1 rounded-3xl shadow-md border border-slate-100 cursor-pointer group">
               <div className="relative w-full h-40 rounded-[1.25rem] overflow-hidden bg-slate-200">
-                <Image 
-                  src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-                  alt="Neighborhood Map" 
-                  fill 
+                <Image
+                  src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                  alt="Neighborhood Map"
+                  fill
                   className="object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500"
                 />
                 <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors"></div>
@@ -457,7 +457,7 @@ export default async function HotelDetailPage(
                 </div>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>

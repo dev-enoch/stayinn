@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="w-full bg-slate-50 min-h-screen pt-20 pb-20">
+    <div className="w-full bg-slate-50 min-h-screen pt-5 pb-20">
       <div className="max-w-[800px] mx-auto px-4 md:px-12">
         <div className="mb-12">
           <Link href="/" className="text-teal-900 font-bold hover:underline mb-6 inline-block text-sm">

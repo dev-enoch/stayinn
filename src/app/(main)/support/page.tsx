@@ -24,27 +24,27 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-20">
-      
+    <div className="w-full bg-slate-50 font-sans text-slate-900 min-h-screen flex flex-col pt-5">
+
       {/* Immersive Hero Section */}
       <section className="relative w-full overflow-hidden bg-teal-950 text-white min-h-[60vh] flex flex-col justify-center">
         {/* Atmospheric background photography with tonal teal scrim */}
-        <div className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30" 
-             style={{ backgroundImage: `url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80')` }}>
+        <div className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30"
+          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80')` }}>
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-teal-950/95 via-teal-950/90 to-teal-900"></div>
-        
+
         {/* Decorative subtle ambient glow */}
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-orange-500/15 blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-12 w-80 h-80 rounded-full bg-teal-400/10 blur-2xl pointer-events-none"></div>
-        
+
         <div className="relative z-10 max-w-[1280px] mx-auto px-4 md:px-12 py-20 flex flex-col items-center text-center w-full">
           {/* Tag / Overline */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md mb-6 text-teal-100 border border-white/20">
             <Headset size={16} />
             <span className="text-xs uppercase tracking-wider font-bold">Stayinn Hospitality Assistance Hub</span>
           </div>
-          
+
           {/* Hero Headline */}
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white max-w-3xl tracking-tight mb-6 font-bold">
             How can we help you today?
@@ -52,15 +52,15 @@ export default function SupportPage() {
           <p className="text-lg md:text-xl text-teal-100 max-w-2xl mb-10 leading-relaxed">
             Instant answers to reservation queries, power supply assurances, estate security protocol, and payment procedures across our verified Nigerian stays.
           </p>
-          
+
           {/* Desktop Search Bar */}
           <form onSubmit={handleSearch} className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-2 flex items-center gap-2 transition-all duration-300 focus-within:shadow-2xl focus-within:ring-4 focus-within:ring-teal-500/30">
             <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-teal-900 flex-shrink-0">
               <Search size={24} />
             </div>
-            <input 
-              className="w-full bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none py-2 text-lg" 
-              placeholder="Search topics, policies, booking queries, or safety guidelines..." 
+            <input
+              className="w-full bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none py-2 text-lg"
+              placeholder="Search topics, policies, booking queries, or safety guidelines..."
               type="text"
               required
             />
@@ -68,7 +68,7 @@ export default function SupportPage() {
               Search
             </button>
           </form>
-          
+
           {/* Trending Search Tags */}
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8 text-teal-100 text-sm font-bold">
             <span className="text-white flex items-center gap-1">
@@ -125,7 +125,7 @@ export default function SupportPage() {
             Comprehensive guides covering everything from arrival logistics in gated estates to dual-currency settlement.
           </p>
         </div>
-        
+
         <div id="faq" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1: Bookings */}
           <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:border-teal-100 transition-all flex flex-col justify-between group">
@@ -150,7 +150,7 @@ export default function SupportPage() {
               </span>
             </div>
           </div>
-          
+
           {/* Card 2: Finance */}
           <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:border-teal-100 transition-all flex flex-col justify-between group">
             <div>
@@ -174,7 +174,7 @@ export default function SupportPage() {
               </span>
             </div>
           </div>
-          
+
           {/* Card 3: Hospitality */}
           <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:border-teal-100 transition-all flex flex-col justify-between group">
             <div>
@@ -198,7 +198,7 @@ export default function SupportPage() {
               </span>
             </div>
           </div>
-          
+
           {/* Card 4: Security */}
           <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:border-teal-100 transition-all flex flex-col justify-between group">
             <div>
@@ -234,7 +234,7 @@ export default function SupportPage() {
             <p className="text-slate-600 max-w-xl mb-8 leading-relaxed text-lg">
               Every villa, loft, and penthouse listed undergoes physical verification by our Nigerian operations team. From uninterrupted dual-source power systems in Victoria Island to secure estate access in Abuja's Diplomatic Zone, we ensure standard luxury.
             </p>
-            
+
             {/* Inline Data Visualizer: Resolution Metric Pill */}
             <div className="grid grid-cols-3 gap-4 max-w-md">
               <div className="bg-white p-4 rounded-2xl text-center shadow-sm border border-slate-100">
@@ -251,7 +251,7 @@ export default function SupportPage() {
               </div>
             </div>
           </div>
-          
+
           {/* Feature Visual Graphic */}
           <div className="relative flex-shrink-0 flex items-center justify-center w-full lg:w-96 h-80 bg-teal-900 rounded-[2rem] overflow-hidden p-8 text-white shadow-xl">
             <div className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80')` }}></div>
@@ -271,7 +271,7 @@ export default function SupportPage() {
         <div className="bg-orange-600 text-white rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-orange-600/20 relative overflow-hidden">
           {/* Ambient pattern detail */}
           <div className="absolute -right-16 -bottom-16 w-96 h-96 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
-          
+
           <div className="relative z-10">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-10 border-b border-orange-500/50">
               <div>
@@ -295,7 +295,7 @@ export default function SupportPage() {
                 </a>
               </div>
             </div>
-            
+
             {/* Emergency Protocol Quick Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10">
               <div className="bg-black/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-black/20 transition-colors">
@@ -308,7 +308,7 @@ export default function SupportPage() {
                   Direct connection to State Emergency Management (LASEMA) and Federal Police command centers.
                 </p>
               </div>
-              
+
               <div className="bg-black/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-black/20 transition-colors">
                 <div className="flex items-center gap-2 text-orange-200 mb-3">
                   <Building2 size={24} />
@@ -319,7 +319,7 @@ export default function SupportPage() {
                   Affiliated priority ambulance transport to Reddington, Lagoon, or Nizamiye Hospital Abuja.
                 </p>
               </div>
-              
+
               <div className="bg-black/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-black/20 transition-colors">
                 <div className="flex items-center gap-2 text-orange-200 mb-3">
                   <Building size={24} />
@@ -338,7 +338,7 @@ export default function SupportPage() {
       {/* Host & Traveler Direct Contact & Ticket Submission */}
       <section className="max-w-[1280px] mx-auto w-full px-4 md:px-12 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-          
+
           {/* Left Column: Submit a Request Ticket */}
           <div className="lg:col-span-7 bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
             <div className="mb-8 border-b border-slate-100 pb-8">
@@ -348,7 +348,7 @@ export default function SupportPage() {
                 Our guest operations department will review your reservation file and respond within 15 minutes.
               </p>
             </div>
-            
+
             <form onSubmit={handleTicketSubmit} className="flex flex-col gap-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
@@ -360,7 +360,7 @@ export default function SupportPage() {
                   <input className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all" placeholder="STY-2025-XXXX" type="text" />
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Phone / WhatsApp</label>
@@ -381,20 +381,20 @@ export default function SupportPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex flex-col gap-2">
                 <label className="text-xs uppercase tracking-wider text-slate-500 font-bold">Describe the Situation</label>
                 <textarea className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-900 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all resize-y min-h-[140px]" placeholder="Please provide details such as estate address, unit number, or specific assistance required..." required rows={4}></textarea>
               </div>
-              
+
               <div className="flex flex-col sm:flex-row items-center justify-between pt-4 gap-4">
                 <div className="flex items-center gap-2 text-slate-500 text-sm font-semibold">
                   <Lock size={16} className="text-teal-900" />
                   <span>Encrypted SSL ticket tracking</span>
                 </div>
-                <button 
+                <button
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-teal-900/20 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center" 
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-teal-900 hover:bg-teal-800 text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-teal-900/20 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
                   type="submit"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Ticket"}
@@ -402,10 +402,10 @@ export default function SupportPage() {
               </div>
             </form>
           </div>
-          
+
           {/* Right Column: Host Standards, Quick Guides & Community Links */}
           <div className="lg:col-span-5 flex flex-col gap-6">
-            
+
             {/* Card: Become a Host Support */}
             <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 mb-4">
@@ -431,7 +431,7 @@ export default function SupportPage() {
                 </Link>
               </div>
             </div>
-            
+
             {/* Card: Policy & Legal Direct Links */}
             <div className="bg-slate-900 rounded-3xl p-8 shadow-xl text-white">
               <h4 className="text-lg font-bold mb-6 flex items-center gap-2">
@@ -457,7 +457,7 @@ export default function SupportPage() {
                 </Link>
               </div>
             </div>
-            
+
             {/* Office Locations Detail */}
             <div className="bg-teal-50 border border-teal-100 rounded-2xl p-6 text-slate-700">
               <div className="flex items-center gap-2 text-teal-900 font-bold mb-3">
@@ -465,15 +465,15 @@ export default function SupportPage() {
                 <span className="text-xs uppercase tracking-wider">Stayinn Physical Centers</span>
               </div>
               <p className="text-sm leading-relaxed">
-                <strong className="text-teal-900">Lagos Hub:</strong> Plot 14 Admiralty Way, Lekki Phase 1, Lagos.<br/><br/>
+                <strong className="text-teal-900">Lagos Hub:</strong> Plot 14 Admiralty Way, Lekki Phase 1, Lagos.<br /><br />
                 <strong className="text-teal-900">Abuja Hub:</strong> 5th Floor, Churchgate Towers, Central Business District, Abuja.
               </p>
             </div>
-            
+
           </div>
         </div>
       </section>
-      
+
     </div>
   );
 }
