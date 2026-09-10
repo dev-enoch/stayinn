@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('Seeding database...');
-  
+
   // 1. CLEAR DATABASE
   console.log('Clearing existing data...');
   await prisma.savedCard.deleteMany({});
@@ -38,7 +38,7 @@ async function main() {
   // 3. SEED USERS
   console.log('Seeding users...');
   const passwordHash = await bcrypt.hash('password123', 10);
-  
+
   const admin = await prisma.user.create({
     data: { email: 'admin@stayinn.com', phone: '+2348000000001', passwordHash, fullName: 'Stayinn Admin', role: Role.ADMIN }
   });
@@ -91,7 +91,7 @@ async function main() {
         data: { hotelId: hotel.id, amenity: am }
       });
     }
-    
+
     // Add 2 Room Types per hotel with realistic rates
     const standardRoom = await prisma.roomType.create({
       data: {
@@ -104,7 +104,7 @@ async function main() {
         status: RoomStatus.ACTIVE
       }
     });
-    
+
     const deluxeRoom = await prisma.roomType.create({
       data: {
         hotelId: hotel.id,
@@ -118,7 +118,7 @@ async function main() {
     });
 
     allRoomTypes.push(standardRoom, deluxeRoom);
-    
+
     // Create Room Images
     await prisma.roomImage.create({ data: { roomTypeId: standardRoom.id, url: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80', sortOrder: 1 } });
     await prisma.roomImage.create({ data: { roomTypeId: deluxeRoom.id, url: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&q=80', sortOrder: 1 } });
@@ -131,24 +131,24 @@ async function main() {
   // 6. SEED BOOKINGS & PAYMENTS (6 months of data: -3 months to +3 months)
   console.log('Seeding 6 months of booking data...');
   const commissionRate = 0.1000;
-  
+
   // Date helpers
   const today = new Date();
-  
+
   for (let i = 0; i < 40; i++) {
     // Pick random room type
     const room = allRoomTypes[Math.floor(Math.random() * allRoomTypes.length)];
     const hotel = allHotels.find(h => h.id === room.hotelId)!;
-    
+
     // Generate dates: between -90 days and +90 days
     const offsetDays = Math.floor(Math.random() * 180) - 90;
     const checkIn = new Date(today);
     checkIn.setDate(today.getDate() + offsetDays);
-    
+
     const duration = Math.floor(Math.random() * 5) + 1; // 1 to 5 nights
     const checkOut = new Date(checkIn);
     checkOut.setDate(checkIn.getDate() + duration);
-    
+
     // Amounts
     const amount = room.pricePerNight * duration;
     const commissionAmount = Math.round(amount * commissionRate);

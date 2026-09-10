@@ -2,7 +2,15 @@ import React, { Suspense } from 'react';
 import UpcomingStay, { UpcomingStaySkeleton } from '@/components/profile/UpcomingStay';
 import PastTrips, { PastTripsSkeleton } from '@/components/profile/PastTrips';
 
-export default function ProfileBookingsPage() {
+interface Props {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function ProfileBookingsPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const pageParam = searchParams?.page;
+  const page = typeof pageParam === 'string' ? parseInt(pageParam, 10) : 1;
+
   return (
     <>
       {/* SECTION 1: Upcoming Reservation Highlight */}
@@ -12,7 +20,7 @@ export default function ProfileBookingsPage() {
 
       {/* SECTION 2: Past Trips History */}
       <Suspense fallback={<PastTripsSkeleton />}>
-        <PastTrips />
+        <PastTrips page={page} />
       </Suspense>
     </>
   );
