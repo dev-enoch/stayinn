@@ -300,11 +300,11 @@ export default async function HotelDetailPage(
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-8 gap-x-4 pt-4">
                   {hotel.amenities.map((a: any) => (
-                    <div key={a.code} className="flex items-center gap-3">
+                    <div key={a.amenity} className="flex items-center gap-3">
                       <span className="text-teal-900 p-2 bg-teal-50 rounded-lg">
-                        {getAmenityIcon(a.code)}
+                        {getAmenityIcon(a.amenity)}
                       </span>
-                      <span className="text-sm font-semibold text-slate-700">{getAmenityLabel(a.code)}</span>
+                      <span className="text-sm font-semibold text-slate-700">{getAmenityLabel(a.amenity)}</span>
                     </div>
                   ))}
                 </div>

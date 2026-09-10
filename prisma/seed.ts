@@ -29,8 +29,6 @@ async function main() {
 
   const cities = [
     { name: 'Kaduna', isActive: true, isComingSoon: false, description: 'The Crocodile City, cultural & industrial hub of the North.', imageUrl: 'https://images.unsplash.com/photo-1627885440702-8a9d18e578c7?auto=format&fit=crop&q=80' },
-    { name: 'Lagos', isActive: true, isComingSoon: false, description: 'The commercial and creative heart of Nigeria.', imageUrl: 'https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80' },
-    { name: 'Abuja', isActive: true, isComingSoon: false, description: 'Monumental calm and green spaces.', imageUrl: 'https://images.unsplash.com/photo-1577977461421-4f1647413a96?auto=format&fit=crop&q=80' },
     { name: 'Kano', isActive: true, isComingSoon: true, description: 'The center of commerce.', imageUrl: 'https://images.unsplash.com/photo-1602028682054-0a3a41147814?auto=format&fit=crop&q=80' },
   ];
   for (const city of cities) {
