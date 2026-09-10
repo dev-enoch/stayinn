@@ -7,6 +7,7 @@ import { apiClient } from "@/lib/api-client";
 export async function loginAction(prevState: any, formData: FormData) {
   const identifier = formData.get("identifier") as string;
   const password = formData.get("password") as string;
+  const redirectTo = (formData.get("redirectTo") as string) || "/";
 
   if (!identifier || !password) {
     return { error: "Missing fields" };
@@ -43,7 +44,7 @@ export async function loginAction(prevState: any, formData: FormData) {
     return { error: "Something went wrong. Please try again." };
   }
 
-  redirect("/");
+  redirect(redirectTo);
 }
 
 export async function registerAction(prevState: any, formData: FormData) {
