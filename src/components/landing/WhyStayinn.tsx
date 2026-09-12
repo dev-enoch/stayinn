@@ -1,13 +1,15 @@
 import Image from "next/image";
 import { Compass, CheckCircle2 } from "lucide-react";
 
-export default function WhyStayinn() {
+export default function WhyMonarchStay() {
   return (
     <section className="py-24 px-4 md:px-12 bg-green-50 text-gray-900">
       <div className="max-w-[1280px] mx-auto">
         <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
           <div className="w-full md:w-1/2">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 tracking-tight text-center md:text-left">Why Choose Stayinn?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 tracking-tight text-center md:text-left">
+              Why Choose Monarch Stay?
+            </h2>
 
             <div className="space-y-8">
               <div className="flex gap-4">
@@ -15,9 +17,13 @@ export default function WhyStayinn() {
                   <Compass size={24} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2">Local Expertise</h3>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Local Expertise
+                  </h3>
                   <p className="text-gray-600 leading-relaxed">
-                    We know Nigeria. Our properties are strategically located in safe, vibrant neighborhoods, giving you the best authentic experience.
+                    We know Nigeria. Our properties are strategically located in
+                    safe, vibrant neighborhoods, giving you the best authentic
+                    experience.
                   </p>
                 </div>
               </div>
@@ -29,7 +35,8 @@ export default function WhyStayinn() {
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Curated Spaces</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Every listing is hand-picked and verified to meet our strict standards for design, cleanliness, and premium comfort.
+                    Every listing is hand-picked and verified to meet our strict
+                    standards for design, cleanliness, and premium comfort.
                   </p>
                 </div>
               </div>

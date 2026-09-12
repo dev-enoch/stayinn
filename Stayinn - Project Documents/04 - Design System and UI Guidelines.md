@@ -1,8 +1,8 @@
 # DESIGN SYSTEM AND UI GUIDELINES
 
-## Stayinn — Hotel Booking Marketplace (MVP)
+## Monarch Stay — Hotel Booking Marketplace (MVP)
 
-### Document Reference: STAYINN-DESIGN-001
+### Document Reference: MONARCH_STAY-DESIGN-001
 
 **Version:** 1.0.0 **Date:** August 26, 2026 **Classification:** Internal — Development Use
 
@@ -348,4 +348,4 @@ No animation duration exceeds 400ms. The app should feel snappy, not slow.
 6. Commission Settings
 7. Users List
 
-*End of Document — Stayinn Design System v1.0.0*
+*End of Document — Monarch Stay Design System v1.0.0*

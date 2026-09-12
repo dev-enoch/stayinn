@@ -1,9 +1,9 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 const redisClientSingleton = () => {
-  return new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+  return new Redis(process.env.REDIS_URL || "redis://localhost:6379", {
     maxRetriesPerRequest: null,
-    lazyConnect: true
+    lazyConnect: true,
   });
 };
 
@@ -13,4 +13,4 @@ declare global {
 
 export const redis = globalThis.redisGlobal ?? redisClientSingleton();
 
-if (process.env.NODE_ENV !== 'production') globalThis.redisGlobal = redis;
+if (process.env.NODE_ENV !== "production") globalThis.redisGlobal = redis;

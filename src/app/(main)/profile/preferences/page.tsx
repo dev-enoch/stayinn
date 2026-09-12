@@ -1,22 +1,22 @@
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-import { verifyAccessToken } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import ProfilePreferencesClient from './ProfilePreferencesClient';
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { verifyAccessToken } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import ProfilePreferencesClient from "./ProfilePreferencesClient";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function ProfilePreferencesPage() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('accessToken')?.value;
+  const token = cookieStore.get("accessToken")?.value;
 
   if (!token) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const session = await verifyAccessToken(token);
   if (!session?.userId) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const user = await prisma.user.findUnique({
@@ -24,11 +24,11 @@ export default async function ProfilePreferencesPage() {
     select: {
       powerRequirement: true,
       internetRequirement: true,
-    }
+    },
   });
 
   if (!user) {
-    redirect('/login');
+    redirect("/login");
   }
 
   return (

@@ -20,9 +20,12 @@ export default function Error({
       <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6 text-red-500">
         <AlertCircle size={32} />
       </div>
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 tracking-tight">Something went wrong!</h2>
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 tracking-tight">
+        Something went wrong!
+      </h2>
       <p className="text-gray-500 max-w-md mx-auto mb-8">
-        We hit an unexpected error while trying to load this page. We've noted the issue and are looking into it.
+        We hit an unexpected error while trying to load this page. We've noted
+        the issue and are looking into it.
       </p>
       <button
         onClick={() => reset()}

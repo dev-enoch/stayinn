@@ -1,8 +1,8 @@
 # USER FLOW DOCUMENT
 
-## Stayinn — Hotel Booking Marketplace (MVP)
+## Monarch Stay — Hotel Booking Marketplace (MVP)
 
-### Document Reference: STAYINN-FLOW-001
+### Document Reference: MONARCH_STAY-FLOW-001
 
 **Version:** 1.0.0 **Date:** August 26, 2026 **Classification:** Internal — Development Use
 
@@ -10,7 +10,7 @@
 
 ### 1.1 Browsing (Unauthenticated)
 
-1. User navigates to the application URL (stayinn.ng)
+1. User navigates to the application URL (monarchstay.ng)
 2. Splash/landing screen loads briefly (1 second max)
 3. For You page renders with hotel cards
 4. If location permission is granted, hotels are sorted by proximity
@@ -237,7 +237,7 @@ CORRECTION: The user pays the subtotal (price per night x nights). The service f
 ### 4.3 QR Code Expired
 
 * Scenario: User presents QR code after the check-out date + 1 day
-* Handling: QR scan returns error: "This booking has expired. Please contact Stayinn support."
+* Handling: QR scan returns error: "This booking has expired. Please contact Monarch Stay support."
 
 ### 4.4 Hotel Goes Offline During Booking
 
@@ -254,4 +254,4 @@ CORRECTION: The user pays the subtotal (price per night x nights). The service f
 * Scenario: Someone presents a QR code with a tampered signature
 * Handling: Server-side HMAC-SHA256 verification fails. QR scan returns: "Invalid QR code." No booking is confirmed.
 
-*End of Document — Stayinn User Flow v1.0.0*
+*End of Document — Monarch Stay User Flow v1.0.0*

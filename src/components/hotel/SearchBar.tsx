@@ -39,14 +39,19 @@ export default function SearchBar() {
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit(onSubmit)} 
+    <form
+      onSubmit={handleSubmit(onSubmit)}
       className="bg-white p-4 md:p-6 rounded-xl shadow-xl shadow-green-900/5 border border-gray-100 flex flex-col md:flex-row gap-4 items-end w-full"
     >
       <div className="w-full md:w-2/5">
-        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Location</label>
+        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">
+          Location
+        </label>
         <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <MapPin
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            size={20}
+          />
           <input
             type="text"
             {...register("query")}
@@ -55,11 +60,16 @@ export default function SearchBar() {
           />
         </div>
       </div>
-      
+
       <div className="w-full md:w-2/5">
-        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Dates</label>
+        <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">
+          Dates
+        </label>
         <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <Calendar
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            size={20}
+          />
           <input
             type="text"
             {...register("dates")}
@@ -68,7 +78,7 @@ export default function SearchBar() {
           />
         </div>
       </div>
-      
+
       <div className="w-full md:w-1/5">
         <button
           type="submit"

@@ -1,14 +1,14 @@
 # TECHNICAL ARCHITECTURE DOCUMENT
 
-## Stayinn — Hotel Booking Marketplace (MVP)
+## Monarch Stay — Hotel Booking Marketplace (MVP)
 
-### Document Reference: STAYINN-ARCH-001
+### Document Reference: MONARCH_STAY-ARCH-001
 
 **Version:** 1.0.0 **Date:** August 26, 2026 **Classification:** Internal — Development Use
 
 ## 1. ARCHITECTURE OVERVIEW
 
-Stayinn is a single Next.js 15 full stack application. The frontend and backend are deployed together. There are no separate backend services, no separate mobile apps, and no microservices.
+Monarch Stay is a single Next.js 15 full stack application. The frontend and backend are deployed together. There are no separate backend services, no separate mobile apps, and no microservices.
 
 ┌──────────────────────────────────────────────┐
 
@@ -114,7 +114,7 @@ Stayinn is a single Next.js 15 full stack application. The frontend and backend 
 
 ## 3. PROJECT STRUCTURE
 
-stayinn/
+monarchstay/
 
 ├── prisma/
 
@@ -467,7 +467,7 @@ All API errors return a consistent JSON structure:
 
 # Database
 
-DATABASE\_URL=postgresql://user:password@host:5432/stayinn
+DATABASE\_URL=postgresql://user:password@host:5432/monarchstay
 
 # Redis
 
@@ -497,7 +497,7 @@ AWS\_SECRET\_ACCESS\_KEY=xxx
 
 AWS\_REGION=eu-west-1
 
-S3\_BUCKET\_NAME=stayinn-images
+S3\_BUCKET\_NAME=monarchstay-images
 
 # Google Maps
 
@@ -507,12 +507,12 @@ NEXT\_PUBLIC\_GOOGLE\_MAPS\_API\_KEY=xxx
 
 RESEND\_API\_KEY=xxx
 
-FROM\_EMAIL=noreply@stayinn.ng
+FROM\_EMAIL=noreply@monarchstay.ng
 
 # App
 
-NEXT\_PUBLIC\_APP\_URL=https://stayinn.ng
+NEXT\_PUBLIC\_APP\_URL=https://monarchstay.ng
 
 NODE\_ENV=production
 
-*End of Document — Stayinn Technical Architecture v1.0.0*
+*End of Document — Monarch Stay Technical Architecture v1.0.0*

@@ -21,21 +21,24 @@ export default function RoomGallery({ images }: { images: string[] }) {
     const width = scrollContainerRef.current.offsetWidth;
     scrollContainerRef.current.scrollTo({
       left: width * index,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   };
 
   return (
     <div className="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-3xl overflow-hidden bg-gray-100 group shadow-sm">
-      <div 
+      <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
         className="w-full h-full flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {images.map((src, index) => (
-          <div key={index} className="w-full h-full flex-shrink-0 snap-center relative">
-            <Image 
+          <div
+            key={index}
+            className="w-full h-full flex-shrink-0 snap-center relative"
+          >
+            <Image
               src={src}
               alt={`Room image ${index + 1}`}
               fill
@@ -55,8 +58,8 @@ export default function RoomGallery({ images }: { images: string[] }) {
               key={index}
               onClick={() => scrollTo(index)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                activeIndex === index 
-                  ? "bg-white scale-125 shadow-sm" 
+                activeIndex === index
+                  ? "bg-white scale-125 shadow-sm"
                   : "bg-white/50 hover:bg-white/80"
               }`}
               aria-label={`Go to image ${index + 1}`}

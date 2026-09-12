@@ -15,12 +15,12 @@ export async function createBookingAndPay(data: {
   if (!session) return { error: "You must be logged in to book" };
 
   try {
-    const response = await apiClient.post('/api/bookings', {
+    const response = await apiClient.post("/api/bookings", {
       hotelId: data.hotelId,
       roomTypeId: data.roomId,
       checkInDate: data.checkIn,
       checkOutDate: data.checkOut,
-      numberOfGuests: data.guests
+      numberOfGuests: data.guests,
     });
 
     if (!response.success) {

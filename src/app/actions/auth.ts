@@ -14,7 +14,10 @@ export async function loginAction(prevState: any, formData: FormData) {
   }
 
   try {
-    const response = await apiClient.post('/api/auth/login', { identifier, password });
+    const response = await apiClient.post("/api/auth/login", {
+      identifier,
+      password,
+    });
 
     if (!response.success) {
       return { error: response.error?.message || "Invalid credentials" };
@@ -28,7 +31,7 @@ export async function loginAction(prevState: any, formData: FormData) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 15 * 60
+      maxAge: 15 * 60,
     });
 
     cookieStore.set("refreshToken", refreshToken, {
@@ -36,9 +39,8 @@ export async function loginAction(prevState: any, formData: FormData) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 7 * 24 * 60 * 60
+      maxAge: 7 * 24 * 60 * 60,
     });
-
   } catch (error) {
     console.error("Login error:", error);
     return { error: "Something went wrong. Please try again." };
@@ -61,8 +63,12 @@ export async function registerAction(prevState: any, formData: FormData) {
   const role = roleValue === "HOTEL_MANAGER" ? "HOTEL_MANAGER" : "BOOKER";
 
   try {
-    const response = await apiClient.post('/api/auth/register', {
-      fullName, email, phone, password, role
+    const response = await apiClient.post("/api/auth/register", {
+      fullName,
+      email,
+      phone,
+      password,
+      role,
     });
 
     if (!response.success) {
@@ -77,7 +83,7 @@ export async function registerAction(prevState: any, formData: FormData) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 15 * 60
+      maxAge: 15 * 60,
     });
 
     cookieStore.set("refreshToken", refreshToken, {
@@ -85,9 +91,8 @@ export async function registerAction(prevState: any, formData: FormData) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 7 * 24 * 60 * 60
+      maxAge: 7 * 24 * 60 * 60,
     });
-
   } catch (error) {
     console.error("Register error:", error);
     return { error: "Failed to create account. Please try again." };

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/dashboard/", "/api/", "/profile/", "/bookings/", "/book/"],
       },
     ],
-    sitemap: "https://stayinn.ng/sitemap.xml",
+    sitemap: "https://monarchstay.ng/sitemap.xml",
   };
 }

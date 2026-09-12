@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: stayinn
+      POSTGRES_DB: monarchstay
     ports:
       - "5432:5432"
     volumes:
@@ -30,7 +30,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/stayinn?schema=public
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/monarchstay?schema=public
       - REDIS_URL=redis://redis:6379
     volumes:
       - .:/app
@@ -42,7 +42,7 @@ services:
 
   localtunnel:
     image: node:20
-    command: npx -y localtunnel --port 3000 --local-host web --subdomain stayinn-paystack-dev
+    command: npx -y localtunnel --port 3000 --local-host web --subdomain monarchstay-paystack-dev
     depends_on:
       - web
     restart: unless-stopped

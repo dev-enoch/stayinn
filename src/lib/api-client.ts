@@ -12,22 +12,24 @@ const getBaseUrl = () => {
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  
+
   // Fallback for local development if NEXT_PUBLIC_APP_URL is not set
-  return process.env.NODE_ENV === "development" ? "http://localhost:3000" : "http://localhost:3000";
+  return process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "http://localhost:3000";
 };
 
 const getHeaders = async (initHeaders?: HeadersInit) => {
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
-  
+
   const headers = new Headers(initHeaders);
   headers.set("Content-Type", "application/json");
-  
+
   if (token && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${token}`);
   }
-  
+
   return headers;
 };
 
@@ -72,5 +74,5 @@ export const apiClient = {
       headers,
     });
     return res.json();
-  }
+  },
 };

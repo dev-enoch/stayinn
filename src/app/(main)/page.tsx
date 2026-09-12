@@ -1,7 +1,15 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Zap, Wifi, Shield, ShieldCheck, MapPin, Star } from "lucide-react";
+import {
+  ArrowRight,
+  Zap,
+  Wifi,
+  Shield,
+  ShieldCheck,
+  MapPin,
+  Star,
+} from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import HotelCard from "@/components/hotel/HotelCard";
 import HeroSearch from "@/components/home/HeroSearch";
@@ -12,101 +20,118 @@ export const revalidate = 3600;
 export default async function Home() {
   let featuredHotels: any[] = [];
   let totalProperties = 0;
-  let cityCounts: Record<string, number> = {};
+  const cityCounts: Record<string, number> = {};
   let citiesData: any[] = [];
 
   try {
     const hotels = await prisma.hotel.findMany({
-      where: { status: 'APPROVED' },
+      where: { status: "APPROVED" },
       take: 3,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       include: {
         amenities: true,
         roomTypes: {
-          where: { status: 'ACTIVE' },
-          select: { pricePerNight: true, capacity: true }
-        }
-      }
+          where: { status: "ACTIVE" },
+          select: { pricePerNight: true, capacity: true },
+        },
+      },
     });
 
-    featuredHotels = hotels.map(hotel => {
-      const startingPrice = hotel.roomTypes.length > 0
-        ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight)))
-        : 0;
-      const capacity = hotel.roomTypes.length > 0
-        ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
-        : 2;
+    featuredHotels = hotels.map((hotel) => {
+      const startingPrice =
+        hotel.roomTypes.length > 0
+          ? Math.min(...hotel.roomTypes.map((rt) => Number(rt.pricePerNight)))
+          : 0;
+      const capacity =
+        hotel.roomTypes.length > 0
+          ? Math.max(...hotel.roomTypes.map((rt) => rt.capacity))
+          : 2;
       return {
         ...hotel,
         startingPrice,
         capacity,
-        amenityList: hotel.amenities.map(a => a.amenity),
+        amenityList: hotel.amenities.map((a) => a.amenity),
       };
     });
 
-    totalProperties = await prisma.hotel.count({ where: { status: 'APPROVED' } });
+    totalProperties = await prisma.hotel.count({
+      where: { status: "APPROVED" },
+    });
 
     const addressData = await prisma.hotel.findMany({
       select: { address: true },
-      where: { status: 'APPROVED' }
+      where: { status: "APPROVED" },
     });
 
     citiesData = await prisma.city.findMany({
       where: { isActive: true },
-      orderBy: { createdAt: 'asc' }
+      orderBy: { createdAt: "asc" },
     });
 
-    citiesData.forEach(city => {
+    citiesData.forEach((city) => {
       let count = 0;
-      addressData.forEach(h => {
+      addressData.forEach((h) => {
         if (h.address.toLowerCase().includes(city.name.toLowerCase())) {
           count++;
         }
       });
       cityCounts[city.name] = count;
     });
-
   } catch (error) {
     console.error("Failed to fetch data:", error);
   }
 
   return (
     <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
-
       {/* HERO SECTION */}
       <section className="relative w-full pt-40 pb-24 px-4 md:px-12 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-
           {/* Left: Text & Search */}
           <div className="lg:col-span-7 flex flex-col z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-100 text-teal-900 w-fit mb-6 shadow-sm">
-              <span className="text-xs uppercase tracking-wider font-bold">Boutique Serviced Residences</span>
+              <span className="text-xs uppercase tracking-wider font-bold">
+                Boutique Serviced Residences
+              </span>
             </div>
 
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-teal-950 tracking-tight mb-6 leading-[1.1]">
               Find Your Perfect Stay <br />
-              <span className="italic font-normal text-orange-700">in Nigeria.</span>
+              <span className="italic font-normal text-orange-700">
+                in Nigeria.
+              </span>
             </h1>
 
             <p className="text-lg md:text-xl text-slate-600 max-w-xl mb-10 leading-relaxed">
-              Experience curated architectural spaces, uncompromised comfort, and the warmth of Nigerian hospitality across Lagos, Abuja, Port Harcourt, and Calabar.
+              Experience curated architectural spaces, uncompromised comfort,
+              and the warmth of Nigerian hospitality across Lagos, Abuja, Port
+              Harcourt, and Calabar.
             </p>
 
             {/* Stats */}
             <div className="flex flex-wrap items-center gap-6 md:gap-10 pt-2">
               <div className="flex flex-col">
                 <span className="text-3xl font-bold text-teal-900">100%</span>
-                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">24/7 Power</span>
+                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">
+                  24/7 Power
+                </span>
               </div>
               <div className="w-px h-10 bg-slate-300 hidden md:block"></div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold text-teal-900">{totalProperties}</span>
-                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">Verified Suites</span>
+                <span className="text-3xl font-bold text-teal-900">
+                  {totalProperties}
+                </span>
+                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">
+                  Verified Suites
+                </span>
               </div>
               <div className="w-px h-10 bg-slate-300 hidden md:block"></div>
               <div className="flex flex-col">
-                <span className="text-3xl font-bold text-orange-700">4.96 ★</span>
-                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">Guest Rating</span>
+                <span className="text-3xl font-bold text-orange-700">
+                  4.96 ★
+                </span>
+                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold mt-1">
+                  Guest Rating
+                </span>
               </div>
             </div>
           </div>
@@ -127,10 +152,21 @@ export default async function Home() {
               {/* Floating Tag */}
               <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-900 font-bold">{featuredHotels[0]?.title || "The Courtyard Residence"}</p>
-                  <p className="text-xs text-slate-500 font-medium">{featuredHotels[0]?.city || "Ikoyi, Lagos"} · Premium Concierge</p>
+                  <p className="text-sm text-slate-900 font-bold">
+                    {featuredHotels[0]?.title || "The Courtyard Residence"}
+                  </p>
+                  <p className="text-xs text-slate-500 font-medium">
+                    {featuredHotels[0]?.city || "Ikoyi, Lagos"} · Premium
+                    Concierge
+                  </p>
                 </div>
-                <span className="px-3 py-1.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold whitespace-nowrap">₦{featuredHotels[0]?.startingPrice ? Math.round(featuredHotels[0].startingPrice / 1000) : 150}k/night</span>
+                <span className="px-3 py-1.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold whitespace-nowrap">
+                  ₦
+                  {featuredHotels[0]?.startingPrice
+                    ? Math.round(featuredHotels[0].startingPrice / 1000)
+                    : 150}
+                  k/night
+                </span>
               </div>
             </div>
 
@@ -154,8 +190,13 @@ export default async function Home() {
                 <Zap size={24} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Guaranteed 24/7 Power</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-snug">Dual industrial generators and solar battery inverters at every property.</p>
+                <h3 className="text-base font-bold text-slate-900">
+                  Guaranteed 24/7 Power
+                </h3>
+                <p className="text-sm text-slate-500 mt-1 leading-snug">
+                  Dual industrial generators and solar battery inverters at
+                  every property.
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -163,8 +204,12 @@ export default async function Home() {
                 <Wifi size={24} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Uninterrupted Connectivity</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-snug">Enterprise Starlink & Fiber Wi-Fi for remote work & streaming.</p>
+                <h3 className="text-base font-bold text-slate-900">
+                  Uninterrupted Connectivity
+                </h3>
+                <p className="text-sm text-slate-500 mt-1 leading-snug">
+                  Enterprise Starlink & Fiber Wi-Fi for remote work & streaming.
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -172,8 +217,13 @@ export default async function Home() {
                 <Shield size={24} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Vetted Gated Security</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-snug">Access-controlled private estates, CCTV, and 24-hour trained personnel.</p>
+                <h3 className="text-base font-bold text-slate-900">
+                  Vetted Gated Security
+                </h3>
+                <p className="text-sm text-slate-500 mt-1 leading-snug">
+                  Access-controlled private estates, CCTV, and 24-hour trained
+                  personnel.
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -181,8 +231,13 @@ export default async function Home() {
                 <ShieldCheck size={24} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Curated Nigerian Hosts</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-snug">Personally verified spaces inspected for pristine hygiene & hospitality.</p>
+                <h3 className="text-base font-bold text-slate-900">
+                  Curated Nigerian Hosts
+                </h3>
+                <p className="text-sm text-slate-500 mt-1 leading-snug">
+                  Personally verified spaces inspected for pristine hygiene &
+                  hospitality.
+                </p>
               </div>
             </div>
           </div>
@@ -193,12 +248,22 @@ export default async function Home() {
       <section className="max-w-[1440px] mx-auto px-4 md:px-12 py-24 w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">Top Cities</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">Popular Destinations</h2>
+            <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">
+              Top Cities
+            </span>
+            <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">
+              Popular Destinations
+            </h2>
           </div>
-          <Link href="/cities" className="inline-flex items-center gap-1.5 text-sm text-teal-900 font-bold hover:text-orange-700 transition-colors group">
+          <Link
+            href="/cities"
+            className="inline-flex items-center gap-1.5 text-sm text-teal-900 font-bold hover:text-orange-700 transition-colors group"
+          >
             <span>View all cities</span>
-            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            <ArrowRight
+              size={18}
+              className="group-hover:translate-x-1 transition-transform"
+            />
           </Link>
         </div>
 
@@ -207,25 +272,51 @@ export default async function Home() {
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
               <MapPin className="text-slate-400" size={32} />
             </div>
-            <h3 className="font-serif text-2xl text-slate-900 font-bold mb-2">No Destinations Found</h3>
-            <p className="text-slate-500 max-w-md mx-auto">We are currently curating the best locations for your stay. Check back soon for exciting new destinations.</p>
+            <h3 className="font-serif text-2xl text-slate-900 font-bold mb-2">
+              No Destinations Found
+            </h3>
+            <p className="text-slate-500 max-w-md mx-auto">
+              We are currently curating the best locations for your stay. Check
+              back soon for exciting new destinations.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {citiesData.map((city, i) => (
-              <Link key={i} href={!city.isComingSoon ? `/explore?city=${encodeURIComponent(city.name)}` : '#'} className="group relative rounded-2xl overflow-hidden h-96 shadow-sm bg-slate-200 transition-all duration-500 hover:-translate-y-1 hover:shadow-md flex flex-col justify-end p-6">
+              <Link
+                key={i}
+                href={
+                  !city.isComingSoon
+                    ? `/explore?city=${encodeURIComponent(city.name)}`
+                    : "#"
+                }
+                className="group relative rounded-2xl overflow-hidden h-96 shadow-sm bg-slate-200 transition-all duration-500 hover:-translate-y-1 hover:shadow-md flex flex-col justify-end p-6"
+              >
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url('${city.imageUrl || "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"}')` }}
+                  style={{
+                    backgroundImage: `url('${city.imageUrl || "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"}')`,
+                  }}
                 ></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-teal-950/90 via-teal-950/40 to-transparent"></div>
 
                 <div className="relative z-10">
-                  <h3 className="font-serif text-2xl text-white font-bold">{city.name}</h3>
-                  <p className="text-xs text-teal-100 mt-1">{city.description || "Discover premium stays"}</p>
+                  <h3 className="font-serif text-2xl text-white font-bold">
+                    {city.name}
+                  </h3>
+                  <p className="text-xs text-teal-100 mt-1">
+                    {city.description || "Discover premium stays"}
+                  </p>
                   <div className="mt-4 pt-3 flex items-center justify-between text-white text-xs font-semibold border-t border-white/20">
-                    <span>{city.isComingSoon ? 'Coming Soon' : `${cityCounts[city.name] || 0} Properties`}</span>
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    <span>
+                      {city.isComingSoon
+                        ? "Coming Soon"
+                        : `${cityCounts[city.name] || 0} Properties`}
+                    </span>
+                    <ArrowRight
+                      size={16}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
                   </div>
                 </div>
               </Link>
@@ -239,12 +330,22 @@ export default async function Home() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-12 w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">Featured Stays</span>
-              <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">Top Places to Stay</h2>
+              <span className="text-xs uppercase tracking-wider text-orange-700 font-bold">
+                Featured Stays
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-teal-950 mt-2 font-bold tracking-tight">
+                Top Places to Stay
+              </h2>
             </div>
-            <Link href="/explore" className="inline-flex items-center gap-1.5 text-sm text-teal-900 font-bold hover:text-orange-700 transition-colors group">
+            <Link
+              href="/explore"
+              className="inline-flex items-center gap-1.5 text-sm text-teal-900 font-bold hover:text-orange-700 transition-colors group"
+            >
               <span>View all properties</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight
+                size={18}
+                className="group-hover:translate-x-1 transition-transform"
+              />
             </Link>
           </div>
 
@@ -253,8 +354,13 @@ export default async function Home() {
               <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
                 <Star className="text-slate-400" size={32} />
               </div>
-              <h3 className="font-serif text-2xl text-slate-900 font-bold mb-2">No Featured Stays Yet</h3>
-              <p className="text-slate-500 max-w-md mx-auto">Our team is handpicking the finest properties. Premium accommodations will be listed here shortly.</p>
+              <h3 className="font-serif text-2xl text-slate-900 font-bold mb-2">
+                No Featured Stays Yet
+              </h3>
+              <p className="text-slate-500 max-w-md mx-auto">
+                Our team is handpicking the finest properties. Premium
+                accommodations will be listed here shortly.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -264,7 +370,7 @@ export default async function Home() {
                   id={hotel.id}
                   slug={hotel.slug}
                   name={hotel.name}
-                  locationName={hotel.address.split(',')[0]}
+                  locationName={hotel.address.split(",")[0]}
                   coverImage={hotel.coverImage || ""}
                   startingPrice={hotel.startingPrice || 0}
                   capacity={hotel.capacity}
@@ -273,7 +379,6 @@ export default async function Home() {
                   isSuperhost={hotel.isSuperhost}
                 />
               ))}
-
             </div>
           )}
         </div>
@@ -291,13 +396,21 @@ export default async function Home() {
                 Earn with Your Premium Space in Nigeria.
               </h2>
               <p className="text-lg text-teal-100 max-w-xl mb-10 leading-relaxed">
-                Join over 1,200 property owners earning reliable rental yields. We handle guest vetting, continuous concierge, payment settlement in Naira or USD, and damage protection.
+                Join over 1,200 property owners earning reliable rental yields.
+                We handle guest vetting, continuous concierge, payment
+                settlement in Naira or USD, and damage protection.
               </p>
               <div className="flex flex-wrap items-center gap-4">
-                <Link href="/host" className="px-6 py-4 rounded-xl bg-orange-700 text-white text-sm font-bold hover:bg-orange-600 transition-all shadow-lg active:scale-95 whitespace-nowrap">
+                <Link
+                  href="/host"
+                  className="px-6 py-4 rounded-xl bg-orange-700 text-white text-sm font-bold hover:bg-orange-600 transition-all shadow-lg active:scale-95 whitespace-nowrap"
+                >
                   List Your Property
                 </Link>
-                <Link href="/host#calculator" className="px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold backdrop-blur-md transition-all border border-white/20 whitespace-nowrap">
+                <Link
+                  href="/host#calculator"
+                  className="px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold backdrop-blur-md transition-all border border-white/20 whitespace-nowrap"
+                >
                   Calculate Your Earnings
                 </Link>
               </div>
@@ -306,23 +419,41 @@ export default async function Home() {
             <div className="hidden lg:block lg:col-span-5">
               <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-xl">
                 <div className="flex items-center justify-between mb-6">
-                  <span className="text-xs font-bold uppercase tracking-wider text-orange-700">Instant Yield Estimator</span>
-                  <span className="px-2.5 py-1 rounded bg-teal-50 text-xs font-bold text-teal-900">Lekki Phase 1</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-orange-700">
+                    Instant Yield Estimator
+                  </span>
+                  <span className="px-2.5 py-1 rounded bg-teal-50 text-xs font-bold text-teal-900">
+                    Lekki Phase 1
+                  </span>
                 </div>
-                <p className="text-sm text-slate-500 mb-2">Average host earnings for 3-Bedroom Villa</p>
+                <p className="text-sm text-slate-500 mb-2">
+                  Average host earnings for 3-Bedroom Villa
+                </p>
                 <div className="flex items-baseline gap-2 mb-8">
-                  <span className="text-4xl text-teal-950 font-bold">₦1,850,000</span>
-                  <span className="text-sm text-slate-500 font-semibold">/ month</span>
+                  <span className="text-4xl text-teal-950 font-bold">
+                    ₦1,850,000
+                  </span>
+                  <span className="text-sm text-slate-500 font-semibold">
+                    / month
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <span className="block text-xs font-semibold text-slate-500 mb-1">Guaranteed Payout</span>
-                    <span className="text-sm font-bold text-teal-900">Every 48 Hours</span>
+                    <span className="block text-xs font-semibold text-slate-500 mb-1">
+                      Guaranteed Payout
+                    </span>
+                    <span className="text-sm font-bold text-teal-900">
+                      Every 48 Hours
+                    </span>
                   </div>
                   <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <span className="block text-xs font-semibold text-slate-500 mb-1">Host Protection</span>
-                    <span className="text-sm font-bold text-teal-900">₦25M Insurance</span>
+                    <span className="block text-xs font-semibold text-slate-500 mb-1">
+                      Host Protection
+                    </span>
+                    <span className="text-sm font-bold text-teal-900">
+                      ₦25M Insurance
+                    </span>
                   </div>
                 </div>
               </div>
@@ -331,13 +462,21 @@ export default async function Home() {
 
           {/* Decorative */}
           <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
-            <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-              <path d="M0,0 L100,100 M0,50 L50,100 M50,0 L100,50" fill="none" stroke="currentColor" strokeWidth="2"></path>
+            <svg
+              className="w-full h-full"
+              preserveAspectRatio="none"
+              viewBox="0 0 100 100"
+            >
+              <path
+                d="M0,0 L100,100 M0,50 L50,100 M50,0 L100,50"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              ></path>
             </svg>
           </div>
         </div>
       </section>
-
     </div>
   );
 }

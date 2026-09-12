@@ -5,26 +5,26 @@
   --color-foreground: #111827;
 
   /* Primary Colors */
-  --color-green-50: #ECFDF5;
-  --color-green-500: #10B981;
-  --color-green-600: #0A7B5E;
-  --color-green-700: #065F46;
+  --color-green-50: #ecfdf5;
+  --color-green-500: #10b981;
+  --color-green-600: #0a7b5e;
+  --color-green-700: #065f46;
 
   /* Accent Colors */
-  --color-yellow-50: #FEF3C7;
-  --color-yellow-500: #F5B400;
+  --color-yellow-50: #fef3c7;
+  --color-yellow-500: #f5b400;
 
   /* Neutral Colors */
-  --color-gray-50: #FAFAFA;
-  --color-gray-100: #F3F4F6;
-  --color-gray-400: #9CA3AF;
-  --color-gray-600: #4B5563;
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f3f4f6;
+  --color-gray-400: #9ca3af;
+  --color-gray-600: #4b5563;
   --color-gray-900: #111827;
 
   /* Semantic Colors */
-  --color-red-50: #FEF2F2;
-  --color-red-500: #EF4444;
-  --color-blue-500: #3B82F6;
+  --color-red-50: #fef2f2;
+  --color-red-500: #ef4444;
+  --color-blue-500: #3b82f6;
 
   /* Typography */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -44,7 +44,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   /* Global Focus Ring (SI-29) */
   *:focus-visible {
     outline: 2px solid var(--color-green-600);

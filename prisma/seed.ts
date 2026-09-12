@@ -40,13 +40,13 @@ async function main() {
   const passwordHash = await bcrypt.hash('password123', 10);
 
   const admin = await prisma.user.create({
-    data: { email: 'admin@stayinn.com', phone: '+2348000000001', passwordHash, fullName: 'Stayinn Admin', role: Role.ADMIN }
+    data: { email: 'admin@monarchstay.com', phone: '+2348000000001', passwordHash, fullName: 'Monarch Stay Admin', role: Role.ADMIN }
   });
   const manager = await prisma.user.create({
-    data: { email: 'manager@stayinn.com', phone: '+2348000000002', passwordHash, fullName: 'Kaduna Hotel Manager', role: Role.HOTEL_MANAGER }
+    data: { email: 'manager@monarchstay.com', phone: '+2348000000002', passwordHash, fullName: 'Kaduna Hotel Manager', role: Role.HOTEL_MANAGER }
   });
   const booker = await prisma.user.create({
-    data: { email: 'booker@stayinn.com', phone: '+2348000000003', passwordHash, fullName: 'Frequent Traveler', role: Role.BOOKER }
+    data: { email: 'booker@monarchstay.com', phone: '+2348000000003', passwordHash, fullName: 'Frequent Traveler', role: Role.BOOKER }
   });
 
   await prisma.savedCard.create({

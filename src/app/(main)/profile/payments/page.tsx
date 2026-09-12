@@ -1,21 +1,21 @@
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-import { verifyAccessToken } from '@/lib/auth';
-import ProfilePaymentsClient from './ProfilePaymentsClient';
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { verifyAccessToken } from "@/lib/auth";
+import ProfilePaymentsClient from "./ProfilePaymentsClient";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function ProfilePaymentsPage() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('accessToken')?.value;
+  const token = cookieStore.get("accessToken")?.value;
 
   if (!token) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const session = await verifyAccessToken(token);
   if (!session?.userId) {
-    redirect('/login');
+    redirect("/login");
   }
 
   return (

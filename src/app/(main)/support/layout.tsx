@@ -1,9 +1,10 @@
 import SupportSidebar from "@/components/layout/SupportSidebar";
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Support & Knowledge Base — Stayinn',
-  description: 'Get help with reservations, host partnerships, estate access, and emergency protocols in Nigeria.',
+  title: "Support & Knowledge Base — Monarch Stay",
+  description:
+    "Get help with reservations, host partnerships, estate access, and emergency protocols in Nigeria.",
 };
 export default function SupportLayout({
   children,
@@ -15,9 +16,7 @@ export default function SupportLayout({
       <SupportSidebar />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-3xl">
-        {children}
-      </main>
+      <main className="flex-1 max-w-3xl">{children}</main>
     </div>
   );
 }

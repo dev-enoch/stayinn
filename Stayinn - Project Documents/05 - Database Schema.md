@@ -1,8 +1,8 @@
 # DATABASE SCHEMA
 
-## Stayinn — Hotel Booking Marketplace (MVP)
+## Monarch Stay — Hotel Booking Marketplace (MVP)
 
-### Document Reference: STAYINN-DB-001
+### Document Reference: MONARCH_STAY-DB-001
 
 **Version:** 1.0.0 **Date:** August 26, 2026 **Classification:** Internal — Development Use
 
@@ -528,4 +528,4 @@ On deployment, the following records must be created:
 1. Admin user: email set via environment variable (ADMIN\_EMAIL), password set via environment variable (ADMIN\_PASSWORD), hashed with bcrypt. Role: ADMIN.
 2. Commission setting: rate 0.1000 (10%), active: true.
 
-*End of Document — Stayinn Database Schema v1.0.0*
+*End of Document — Monarch Stay Database Schema v1.0.0*

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function POST() {
   // Since the refresh token is stored in the body in this API implementation
@@ -6,6 +6,6 @@ export async function POST() {
   // we just return success. If using cookies, we would clear the cookie here.
   return NextResponse.json({
     success: true,
-    message: 'Logged out successfully'
+    message: "Logged out successfully",
   });
 }

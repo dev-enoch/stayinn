@@ -1,6 +1,10 @@
-import { redis } from './redis';
+import { redis } from "./redis";
 
-export async function rateLimit(identifier: string, limit: number, windowSeconds: number): Promise<{ success: boolean, remaining: number, reset: number }> {
+export async function rateLimit(
+  identifier: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<{ success: boolean; remaining: number; reset: number }> {
   const current = Math.floor(Date.now() / 1000);
   const windowStart = current - (current % windowSeconds);
   const key = `ratelimit:${identifier}:${windowStart}`;
@@ -13,6 +17,6 @@ export async function rateLimit(identifier: string, limit: number, windowSeconds
   return {
     success: count <= limit,
     remaining: Math.max(0, limit - count),
-    reset: windowStart + windowSeconds
+    reset: windowStart + windowSeconds,
   };
 }

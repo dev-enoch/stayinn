@@ -1,8 +1,10 @@
-import { SignJWT, jwtVerify, JWTPayload } from 'jose';
-import bcrypt from 'bcryptjs';
+import { SignJWT, jwtVerify, JWTPayload } from "jose";
+import bcrypt from "bcryptjs";
 
-const getAccessSecret = () => new TextEncoder().encode(process.env.JWT_ACCESS_SECRET);
-const getRefreshSecret = () => new TextEncoder().encode(process.env.JWT_REFRESH_SECRET);
+const getAccessSecret = () =>
+  new TextEncoder().encode(process.env.JWT_ACCESS_SECRET);
+const getRefreshSecret = () =>
+  new TextEncoder().encode(process.env.JWT_REFRESH_SECRET);
 
 export interface SessionPayload {
   userId: string;
@@ -12,17 +14,17 @@ export interface SessionPayload {
 
 export async function signAccessToken(payload: SessionPayload) {
   return new SignJWT(payload as unknown as JWTPayload)
-    .setProtectedHeader({ alg: 'HS256' })
+    .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime('15m')
+    .setExpirationTime("15m")
     .sign(getAccessSecret());
 }
 
 export async function signRefreshToken(payload: { userId: string }) {
   return new SignJWT(payload as unknown as JWTPayload)
-    .setProtectedHeader({ alg: 'HS256' })
+    .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime('7d')
+    .setExpirationTime("7d")
     .sign(getRefreshSecret());
 }
 
@@ -48,16 +50,19 @@ export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);
 }
 
-export async function comparePassword(password: string, hash: string): Promise<boolean> {
+export async function comparePassword(
+  password: string,
+  hash: string,
+): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
 
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
 
 export async function getSession() {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value;
+    const token = cookieStore.get("accessToken")?.value;
     if (!token) return null;
     return verifyAccessToken(token);
   } catch (error) {

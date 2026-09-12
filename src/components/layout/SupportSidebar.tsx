@@ -38,17 +38,19 @@ export default function SupportSidebar() {
   return (
     <nav className="hidden md:flex flex-col p-4 bg-gray-50 border border-gray-100 rounded-xl h-fit w-72 sticky top-28 shrink-0">
       <div className="mb-6 px-4">
-        <h2 className="text-xl font-bold text-gray-900 tracking-tight">Help & Support</h2>
+        <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+          Help & Support
+        </h2>
       </div>
-      
+
       <ul className="flex flex-col gap-1">
         {links.map((link) => (
           <li key={link.href}>
-            <Link 
-              href={link.href} 
+            <Link
+              href={link.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
-                link.isActive 
-                  ? "bg-green-50 text-green-700 font-semibold" 
+                link.isActive
+                  ? "bg-green-50 text-green-700 font-semibold"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >

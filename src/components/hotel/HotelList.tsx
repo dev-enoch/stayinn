@@ -35,27 +35,24 @@ export default function HotelList() {
   const search = searchParams.get("search") || "";
   const observerRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery<HotelsResponse>({
-    queryKey: ["hotels", { search }],
-    queryFn: async ({ pageParam = 1 }) => {
-      const res = await fetch(`/api/hotels?page=${pageParam}&limit=10&search=${encodeURIComponent(search)}`);
-      if (!res.ok) throw new Error("Network response was not ok");
-      return res.json();
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
-      if (lastPage.data?.pagination.hasMore) {
-        return lastPage.data.pagination.page + 1;
-      }
-      return undefined;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+    useInfiniteQuery<HotelsResponse>({
+      queryKey: ["hotels", { search }],
+      queryFn: async ({ pageParam = 1 }) => {
+        const res = await fetch(
+          `/api/hotels?page=${pageParam}&limit=10&search=${encodeURIComponent(search)}`,
+        );
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      },
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.data?.pagination.hasMore) {
+          return lastPage.data.pagination.page + 1;
+        }
+        return undefined;
+      },
+    });
 
   // Intersection Observer for Infinite Scroll
   useEffect(() => {
@@ -65,7 +62,7 @@ export default function HotelList() {
           fetchNextPage();
         }
       },
-      { rootMargin: "100px" }
+      { rootMargin: "100px" },
     );
 
     if (observerRef.current) {
@@ -76,11 +73,15 @@ export default function HotelList() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (status === "pending") {
-    return <div className="text-center py-10 text-gray-400">Loading hotels...</div>;
+    return (
+      <div className="text-center py-10 text-gray-400">Loading hotels...</div>
+    );
   }
 
   if (status === "error") {
-    return <div className="text-center py-10 text-red-500">Error loading hotels</div>;
+    return (
+      <div className="text-center py-10 text-red-500">Error loading hotels</div>
+    );
   }
 
   const allHotels = data?.pages.flatMap((page) => page.data?.items || []) || [];
@@ -91,7 +92,9 @@ export default function HotelList() {
         <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
           <span className="text-2xl">🏨</span>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No hotels found</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          No hotels found
+        </h3>
         <p className="text-gray-400 text-sm max-w-[250px]">
           We couldn't find any hotels matching your criteria.
         </p>
@@ -114,7 +117,7 @@ export default function HotelList() {
           />
         ))}
       </div>
-      
+
       {/* Infinite Scroll trigger element */}
       <div ref={observerRef} className="h-10 flex items-center justify-center">
         {isFetchingNextPage && (

@@ -1,8 +1,8 @@
 # API SPECIFICATION
 
-## Stayinn — Hotel Booking Marketplace (MVP)
+## Monarch Stay — Hotel Booking Marketplace (MVP)
 
-### Document Reference: STAYINN-API-001
+### Document Reference: MONARCH_STAY-API-001
 
 **Version:** 1.0.0 **Date:** August 26, 2026 **Classification:** Internal — Development Use
 
@@ -10,7 +10,7 @@
 
 ### 1.1 Base URL
 
-https://stayinn.ng/api
+https://monarchstay.ng/api
 
 ### 1.2 Content Type
 
@@ -267,7 +267,7 @@ Response (200):
 
 "longitude": 13.1519,
 
-"coverImage": "https://cdn.stayinn.ng/hotels/cm\_hot\_abc/cover.jpg",
+"coverImage": "https://cdn.monarchstay.ng/hotels/cm\_hot\_abc/cover.jpg",
 
 "amenities": ["WIFI", "WATER", "BACKUP\_POWER"],
 
@@ -323,7 +323,7 @@ Response (200):
 
 "longitude": 13.1519,
 
-"coverImage": "https://cdn.stayinn.ng/hotels/cm\_hot\_abc/cover.jpg",
+"coverImage": "https://cdn.monarchstay.ng/hotels/cm\_hot\_abc/cover.jpg",
 
 "amenities": [
 
@@ -395,7 +395,7 @@ Request:
 
 "longitude": 13.1519,
 
-"coverImage": "https://cdn.stayinn.ng/uploads/abc.jpg",
+"coverImage": "https://cdn.monarchstay.ng/uploads/abc.jpg",
 
 "amenities": ["WIFI", "WATER", "BACKUP\_POWER"]
 
@@ -457,7 +457,7 @@ Request:
 
 "quantity": 5,
 
-"images": ["https://cdn.stayinn.ng/uploads/room1.jpg", "https://cdn.stayinn.ng/uploads/room2.jpg"]
+"images": ["https://cdn.monarchstay.ng/uploads/room1.jpg", "https://cdn.monarchstay.ng/uploads/room2.jpg"]
 
 }
 
@@ -526,9 +526,9 @@ Response (200):
 
 "images": [
 
-{ "url": "https://cdn.stayinn.ng/rooms/rm\_1/img1.jpg", "sortOrder": 0 },
+{ "url": "https://cdn.monarchstay.ng/rooms/rm\_1/img1.jpg", "sortOrder": 0 },
 
-{ "url": "https://cdn.stayinn.ng/rooms/rm\_1/img2.jpg", "sortOrder": 1 }
+{ "url": "https://cdn.monarchstay.ng/rooms/rm\_1/img2.jpg", "sortOrder": 1 }
 
 ]
 
@@ -737,7 +737,7 @@ Server-side:
 1. Find booking. Verify ownership (booking.userId === authenticated user ID).
 2. Verify booking.status is PENDING.
 3. Verify booking has not expired (createdAt + 30 minutes > now).
-4. Generate unique payment reference: STAYINN\_${bookingId}\_${timestamp}.
+4. Generate unique payment reference: MONARCH_STAY\_${bookingId}\_${timestamp}.
 5. Call Paystack Transaction Initialize API:
    * email: user's email
    * amount: booking.totalAmount (in kobo)
@@ -755,7 +755,7 @@ Response (200):
 
 "authorizationUrl": "https://checkout.paystack.com/abc123xyz",
 
-"reference": "STAYINN\_cm\_bk\_1\_1693051200"
+"reference": "MONARCH_STAY\_cm\_bk\_1\_1693051200"
 
 }
 
@@ -998,7 +998,7 @@ Response (201):
 
 "data": {
 
-"url": "https://cdn.stayinn.ng/uploads/abc123.jpg"
+"url": "https://cdn.monarchstay.ng/uploads/abc123.jpg"
 
 }
 
@@ -1006,4 +1006,4 @@ Response (201):
 
 Errors: | Code | Status | Description | |------|--------|-------------| | VALIDATION\_ERROR | 422 | File too large or wrong format | | UPLOAD\_FAILED | 500 | S3 upload failed |
 
-*End of Document — Stayinn API Specification v1.0.0*
+*End of Document — Monarch Stay API Specification v1.0.0*

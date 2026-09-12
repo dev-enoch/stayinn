@@ -1,7 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Building2, CheckCircle, Clock, Settings, BarChart3, Users, CalendarCheck } from "lucide-react";
+import {
+  Building2,
+  CheckCircle,
+  Clock,
+  Settings,
+  BarChart3,
+  Users,
+  CalendarCheck,
+} from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminDashboardPage() {
@@ -10,31 +18,26 @@ export default async function AdminDashboardPage() {
     redirect("/login");
   }
 
-  const [
-    totalUsers,
-    totalHotels,
-    totalBookings,
-    revenueResult,
-    hotels
-  ] = await Promise.all([
-    prisma.user.count(),
-    prisma.hotel.count(),
-    prisma.booking.count(),
-    prisma.booking.aggregate({
-      _sum: {
-        commissionAmount: true
-      },
-      where: {
-        status: { in: ['PAID', 'CONFIRMED', 'COMPLETED'] }
-      }
-    }),
-    prisma.hotel.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { manager: { select: { fullName: true } } }
-    })
-  ]);
+  const [totalUsers, totalHotels, totalBookings, revenueResult, hotels] =
+    await Promise.all([
+      prisma.user.count(),
+      prisma.hotel.count(),
+      prisma.booking.count(),
+      prisma.booking.aggregate({
+        _sum: {
+          commissionAmount: true,
+        },
+        where: {
+          status: { in: ["PAID", "CONFIRMED", "COMPLETED"] },
+        },
+      }),
+      prisma.hotel.findMany({
+        orderBy: { createdAt: "desc" },
+        include: { manager: { select: { fullName: true } } },
+      }),
+    ]);
 
-  const totalRevenue = (revenueResult._sum.commissionAmount || 0);
+  const totalRevenue = revenueResult._sum.commissionAmount || 0;
   const totalCommission = totalRevenue;
 
   const formatPrice = (amount: number) => {
@@ -53,8 +56,12 @@ export default async function AdminDashboardPage() {
       <div className="max-w-[1280px] mx-auto px-4 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Platform Admin</h1>
-            <p className="text-gray-500 mt-1">Manage hotels and view global analytics</p>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              Platform Admin
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Manage hotels and view global analytics
+            </p>
           </div>
           <button className="bg-gray-100 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-200 transition-colors flex items-center gap-2">
             <Settings size={20} />
@@ -68,29 +75,45 @@ export default async function AdminDashboardPage() {
             <div className="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-4">
               <BarChart3 size={20} />
             </div>
-            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total Revenue</p>
-            <p className="text-2xl font-bold text-gray-900">{formatPrice(totalRevenue)}</p>
+            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">
+              Total Revenue
+            </p>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatPrice(totalRevenue)}
+            </p>
           </div>
           <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
             <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mb-4">
               <Building2 size={20} />
             </div>
-            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Platform Commission</p>
-            <p className="text-2xl font-bold text-gray-900">{formatPrice(totalCommission)}</p>
+            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">
+              Platform Commission
+            </p>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatPrice(totalCommission)}
+            </p>
           </div>
           <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
             <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4">
               <CheckCircle size={20} />
             </div>
-            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Live Hotels</p>
-            <p className="text-2xl font-bold text-gray-900">{approvedHotels.length}</p>
+            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">
+              Live Hotels
+            </p>
+            <p className="text-2xl font-bold text-gray-900">
+              {approvedHotels.length}
+            </p>
           </div>
           <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
             <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-4">
               <Clock size={20} />
             </div>
-            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Pending Approval</p>
-            <p className="text-2xl font-bold text-gray-900">{pendingHotels.length}</p>
+            <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">
+              Pending Approval
+            </p>
+            <p className="text-2xl font-bold text-gray-900">
+              {pendingHotels.length}
+            </p>
           </div>
         </div>
 
@@ -103,37 +126,64 @@ export default async function AdminDashboardPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">Hotel Name</th>
-                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">Manager</th>
-                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">Location</th>
-                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">Status</th>
-                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">Actions</th>
+                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">
+                    Hotel Name
+                  </th>
+                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">
+                    Manager
+                  </th>
+                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">
+                    Location
+                  </th>
+                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">
+                    Status
+                  </th>
+                  <th className="p-4 font-bold text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {hotels.map((hotel: any) => (
-                  <tr key={hotel.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="p-4 font-medium text-gray-900">{hotel.name}</td>
-                    <td className="p-4 text-gray-600">{hotel.manager?.fullName}</td>
+                  <tr
+                    key={hotel.id}
+                    className="hover:bg-gray-50/50 transition-colors"
+                  >
+                    <td className="p-4 font-medium text-gray-900">
+                      {hotel.name}
+                    </td>
+                    <td className="p-4 text-gray-600">
+                      {hotel.manager?.fullName}
+                    </td>
                     <td className="p-4 text-gray-600">{hotel.address}</td>
                     <td className="p-4">
-                      <span className={`px-3 py-1 text-xs font-bold rounded-full ${
-                        hotel.status === 'APPROVED' ? 'bg-green-100 text-green-700' :
-                        hotel.status === 'PENDING' ? 'bg-orange-100 text-orange-700' :
-                        'bg-red-100 text-red-700'
-                      }`}>
+                      <span
+                        className={`px-3 py-1 text-xs font-bold rounded-full ${
+                          hotel.status === "APPROVED"
+                            ? "bg-green-100 text-green-700"
+                            : hotel.status === "PENDING"
+                              ? "bg-orange-100 text-orange-700"
+                              : "bg-red-100 text-red-700"
+                        }`}
+                      >
                         {hotel.status}
                       </span>
                     </td>
                     <td className="p-4">
-                      {hotel.status === 'PENDING' && (
+                      {hotel.status === "PENDING" && (
                         <div className="flex gap-2">
-                          <button className="px-3 py-1 bg-green-50 text-green-600 font-bold text-xs rounded-full hover:bg-green-100">Approve</button>
-                          <button className="px-3 py-1 bg-red-50 text-red-600 font-bold text-xs rounded-full hover:bg-red-100">Reject</button>
+                          <button className="px-3 py-1 bg-green-50 text-green-600 font-bold text-xs rounded-full hover:bg-green-100">
+                            Approve
+                          </button>
+                          <button className="px-3 py-1 bg-red-50 text-red-600 font-bold text-xs rounded-full hover:bg-red-100">
+                            Reject
+                          </button>
                         </div>
                       )}
-                      {hotel.status === 'APPROVED' && (
-                        <button className="px-3 py-1 bg-red-50 text-red-600 font-bold text-xs rounded-full hover:bg-red-100">Suspend</button>
+                      {hotel.status === "APPROVED" && (
+                        <button className="px-3 py-1 bg-red-50 text-red-600 font-bold text-xs rounded-full hover:bg-red-100">
+                          Suspend
+                        </button>
                       )}
                     </td>
                   </tr>

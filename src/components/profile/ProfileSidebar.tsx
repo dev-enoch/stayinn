@@ -1,28 +1,50 @@
-import React from 'react';
-import { Verified, Shield, Luggage, Star, Calendar, Heart, BadgeCheck, Wallet, Bolt, Settings, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { cookies } from 'next/headers';
-import { verifyAccessToken } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import React from "react";
+import {
+  Verified,
+  Shield,
+  Luggage,
+  Star,
+  Calendar,
+  Heart,
+  BadgeCheck,
+  Wallet,
+  Bolt,
+  Settings,
+  ArrowRight,
+} from "lucide-react";
+import Link from "next/link";
+import { cookies } from "next/headers";
+import { verifyAccessToken } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 export default async function ProfileSidebar() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('accessToken')?.value;
+  const token = cookieStore.get("accessToken")?.value;
   let user = null;
-  
+
   if (token) {
     const session = await verifyAccessToken(token);
     if (session?.userId) {
       user = await prisma.user.findUnique({
         where: { id: session.userId },
-        select: { fullName: true, createdAt: true, role: true }
+        select: { fullName: true, createdAt: true, role: true },
       });
     }
   }
 
-  const joinDate = user ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'March 2023';
-  const name = user?.fullName || 'Amina Adebayo';
-  const initials = name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase();
+  const joinDate = user
+    ? new Date(user.createdAt).toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      })
+    : "March 2023";
+  const name = user?.fullName || "Amina Adebayo";
+  const initials = name
+    .split(" ")
+    .map((n: string) => n[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
 
   return (
     <aside className="lg:col-span-4 flex flex-col gap-6">
@@ -33,7 +55,10 @@ export default async function ProfileSidebar() {
             <div className="w-24 h-24 rounded-full shadow-md border-4 border-white bg-teal-100 flex items-center justify-center text-teal-900 text-3xl font-bold uppercase">
               {initials}
             </div>
-            <span className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-teal-900 text-white flex items-center justify-center shadow-sm" title="Verified Identity">
+            <span
+              className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-teal-900 text-white flex items-center justify-center shadow-sm"
+              title="Verified Identity"
+            >
               <Verified size={16} />
             </span>
           </div>
@@ -46,7 +71,7 @@ export default async function ProfileSidebar() {
           </span>
           <p className="text-xs text-slate-500">Member since {joinDate}</p>
         </div>
-        
+
         {/* Trust Badges Strip */}
         <div className="grid grid-cols-3 gap-2 bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
           <div className="flex flex-col items-center justify-center py-1">
@@ -69,42 +94,66 @@ export default async function ProfileSidebar() {
 
       {/* Navigation Menu */}
       <nav className="bg-white rounded-xl p-3 shadow-sm border border-slate-100 flex flex-col gap-1">
-        <Link href="/profile" className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm">
+        <Link
+          href="/profile"
+          className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm"
+        >
           <div className="flex items-center gap-3">
             <Calendar size={20} />
             <span className="font-semibold text-sm">Bookings & Trips</span>
           </div>
-          <span className="px-2 py-0.5 rounded-full bg-orange-500 text-white text-xs font-bold">1 upcoming</span>
+          <span className="px-2 py-0.5 rounded-full bg-orange-500 text-white text-xs font-bold">
+            1 upcoming
+          </span>
         </Link>
-        <Link href="/profile/wishlists" className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+        <Link
+          href="/profile/wishlists"
+          className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all"
+        >
           <div className="flex items-center gap-3">
             <Heart size={20} />
             <span className="font-medium text-sm">Saved Stays & Wishlists</span>
           </div>
-          <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs">3 lists</span>
+          <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs">
+            3 lists
+          </span>
         </Link>
-        <Link href="/profile/info" className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+        <Link
+          href="/profile/info"
+          className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all"
+        >
           <div className="flex items-center gap-3">
             <BadgeCheck size={20} />
-            <span className="font-medium text-sm">Personal Info & Verification</span>
+            <span className="font-medium text-sm">
+              Personal Info & Verification
+            </span>
           </div>
           <Verified size={18} className="text-teal-600" />
         </Link>
-        <Link href="/profile/payments" className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+        <Link
+          href="/profile/payments"
+          className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all"
+        >
           <div className="flex items-center gap-3">
             <Wallet size={20} />
             <span className="font-medium text-sm">Payment & Dom Payouts</span>
           </div>
           <span className="text-xs text-slate-500">NGN / USD</span>
         </Link>
-        <Link href="/profile/preferences" className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+        <Link
+          href="/profile/preferences"
+          className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all"
+        >
           <div className="flex items-center gap-3">
             <Bolt size={20} />
             <span className="font-medium text-sm">Power & Amenity Specs</span>
           </div>
           <span className="w-2 h-2 rounded-full bg-orange-500"></span>
         </Link>
-        <Link href="/profile/security" className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+        <Link
+          href="/profile/security"
+          className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all"
+        >
           <div className="flex items-center gap-3">
             <Settings size={20} />
             <span className="font-medium text-sm">Security & 2FA</span>
@@ -120,12 +169,17 @@ export default async function ProfileSidebar() {
           <span>Host Earnings Program</span>
         </div>
         <h3 className="text-lg text-slate-900 font-bold leading-snug">
-          Earn up to <span className="text-teal-900 font-bold">₦3.2M/mo</span> hosting your luxury home
+          Earn up to <span className="text-teal-900 font-bold">₦3.2M/mo</span>{" "}
+          hosting your luxury home
         </h3>
         <p className="text-sm text-slate-600">
-          Full hospitality management, insured estate protection, and verified corporate guests in Lagos & Abuja.
+          Full hospitality management, insured estate protection, and verified
+          corporate guests in Lagos & Abuja.
         </p>
-        <Link href="/host" className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-orange-600 text-white text-sm font-semibold hover:bg-orange-700 transition-all shadow-sm">
+        <Link
+          href="/host"
+          className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-orange-600 text-white text-sm font-semibold hover:bg-orange-700 transition-all shadow-sm"
+        >
           <span>Become a Host</span>
           <ArrowRight size={18} />
         </Link>

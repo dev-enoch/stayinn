@@ -1,14 +1,14 @@
 # PROJECT ROADMAP AND MILESTONES
 
-## Stayinn — Hotel Booking Marketplace (MVP)
+## Monarch Stay — Hotel Booking Marketplace (MVP)
 
-### Document Reference: STAYINN-ROADMAP-001
+### Document Reference: MONARCH_STAY-ROADMAP-001
 
 **Version:** 1.0.0 **Date:** August 26, 2026 **Classification:** Internal — Development Use
 
 ## 1. OVERVIEW
 
-The Stayinn MVP is built as a single Next.js 15 full stack application. The development timeline is 8 weeks from PRD approval to production deployment. The build is divided into 6 phases, each with clearly defined exit criteria.
+The Monarch Stay MVP is built as a single Next.js 15 full stack application. The development timeline is 8 weeks from PRD approval to production deployment. The build is divided into 6 phases, each with clearly defined exit criteria.
 
 ## 2. PHASE 1: PROJECT SETUP AND DATABASE (Week 1)
 
@@ -21,7 +21,7 @@ Initialize the Next.js project, configure the database, set up infrastructure, a
 1. Initialize Next.js 15 project with TypeScript, App Router, and Tailwind CSS 4
 2. Configure pnpm, ESLint, Prettier, and TypeScript strict mode
 3. Set up Prisma with PostgreSQL (Supabase or Neon for development)
-4. Write the complete Prisma schema (as specified in STAYINN-DB-001)
+4. Write the complete Prisma schema (as specified in MONARCH_STAY-DB-001)
 5. Run initial migration
 6. Seed database with: admin user, commission setting (10%)
 7. Set up Redis (Upstash for development)
@@ -224,7 +224,7 @@ End-to-end testing, bug fixing, performance optimization, and production deploym
 8. SEO basics: meta tags, Open Graph, sitemap.xml, robots.txt
 9. Error monitoring: set up Sentry (or similar)
 10. Deploy to production (Vercel or AWS)
-11. Configure custom domain (stayinn.ng)
+11. Configure custom domain (monarchstay.ng)
 12. Configure Paystack production keys
 13. Smoke test in production
 14. Write README.md with setup instructions, deployment guide, and API documentation link
@@ -235,7 +235,7 @@ End-to-end testing, bug fixing, performance optimization, and production deploym
 * All end-to-end tests pass
 * All edge cases handled without crashes
 * Lighthouse performance score 90+ on mobile
-* Application deployed and accessible at stayinn.ng
+* Application deployed and accessible at monarchstay.ng
 * Paystack production payments working
 * Full booking flow tested in production with a real test hotel
 * README and documentation delivered
@@ -258,8 +258,8 @@ End-to-end testing, bug fixing, performance optimization, and production deploym
 At the end of the project, the following shall be delivered:
 
 1. Source code (GitHub repository, main branch)
-2. Production deployment (stayinn.ng)
-3. Staging deployment (staging.stayinn.ng, optional)
+2. Production deployment (monarchstay.ng)
+3. Staging deployment (staging.monarchstay.ng, optional)
 4. Database schema and migrations
 5. Environment variables documentation (.env.example with all variables listed)
 6. README.md with: a. Project overview b. Local development setup instructions c. Database setup instructions d. Deployment instructions e. Paystack configuration instructions f. Google Maps API setup instructions g. S3 bucket setup instructions
@@ -278,4 +278,4 @@ At the end of the project, the following shall be delivered:
 | Paystack webhook not received | Medium | High | Webhook has 72-hour retry from Paystack. Also verify payment on callback redirect. |
 | Database connection pool exhaustion | Low | High | Use connection pooling (PgBouncer or Prisma's connection pool). Monitor active connections. |
 
-*End of Document — Stayinn Project Roadmap v1.0.0*
+*End of Document — Monarch Stay Project Roadmap v1.0.0*

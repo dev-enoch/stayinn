@@ -11,10 +11,12 @@ import { Prisma } from "@prisma/client";
 
 export const metadata: Metadata = {
   title: "Explore Serviced Apartments in Nigeria",
-  description: "Browse premium shortlet apartments in Lagos, Abuja, Port Harcourt and beyond. Filter by amenities, price, and location.",
+  description:
+    "Browse premium shortlet apartments in Lagos, Abuja, Port Harcourt and beyond. Filter by amenities, price, and location.",
   openGraph: {
-    title: "Explore Serviced Apartments in Nigeria — Stayinn",
-    description: "Browse premium shortlet apartments in Lagos, Abuja, Port Harcourt and beyond.",
+    title: "Explore Serviced Apartments in Nigeria — Monarch Stay",
+    description:
+      "Browse premium shortlet apartments in Lagos, Abuja, Port Harcourt and beyond.",
     type: "website",
     url: "/explore",
   },
@@ -23,147 +25,173 @@ export const metadata: Metadata = {
 // Revalidate every 5 min — respects searchParams freshness (SI-27)
 export const revalidate = 300;
 
-export default async function ExplorePage(
-  props: {
-    searchParams: Promise<{
-      q?: string;
-      city?: string;
-      dates?: string;
-      guests?: string;
-      power?: string;
-      wifi?: string;
-      security?: string;
-      sort?: string;
-      page?: string;
-    }>
-  }
-) {
+export default async function ExplorePage(props: {
+  searchParams: Promise<{
+    q?: string;
+    city?: string;
+    dates?: string;
+    guests?: string;
+    power?: string;
+    wifi?: string;
+    security?: string;
+    sort?: string;
+    page?: string;
+  }>;
+}) {
   const searchParams = await props.searchParams;
-  const { q, city, dates, guests, power, wifi, security, sort, page: pageStr } = searchParams;
+  const {
+    q,
+    city,
+    dates,
+    guests,
+    power,
+    wifi,
+    security,
+    sort,
+    page: pageStr,
+  } = searchParams;
 
   const searchQuery = city || q;
   const page = parseInt(pageStr || "1", 10) || 1;
   const limit = 4; // Use 4 so pagination is visible for small DB sizes
 
-  const AND: Prisma.HotelWhereInput[] = [{ status: 'APPROVED' }];
+  const AND: Prisma.HotelWhereInput[] = [{ status: "APPROVED" }];
 
   if (searchQuery) {
     AND.push({
       OR: [
-        { name: { contains: searchQuery, mode: 'insensitive' } },
-        { address: { contains: searchQuery, mode: 'insensitive' } },
-      ]
+        { name: { contains: searchQuery, mode: "insensitive" } },
+        { address: { contains: searchQuery, mode: "insensitive" } },
+      ],
     });
   }
 
-  if (power === 'true') {
-    AND.push({ amenities: { some: { amenity: 'BACKUP_POWER' } } });
+  if (power === "true") {
+    AND.push({ amenities: { some: { amenity: "BACKUP_POWER" } } });
   }
-  if (wifi === 'true') {
-    AND.push({ amenities: { some: { amenity: 'WIFI' } } });
+  if (wifi === "true") {
+    AND.push({ amenities: { some: { amenity: "WIFI" } } });
   }
-  if (security === 'true') {
+  if (security === "true") {
     // There is no security amenity enum right now, so we will filter by something else or just skip it
     // For now we will just use parking as a proxy or skip it
   }
 
   const orderBy: Prisma.HotelOrderByWithRelationInput =
-    sort === 'price_asc' ? { roomTypes: { _count: 'asc' } } : // Can't easily order by relation min price natively without raw, so we'll sort in memory later if needed, but for now fallback to createdAt
-      sort === 'price_desc' ? { createdAt: 'desc' } :
-        { createdAt: 'desc' };
+    sort === "price_asc"
+      ? { roomTypes: { _count: "asc" } } // Can't easily order by relation min price natively without raw, so we'll sort in memory later if needed, but for now fallback to createdAt
+      : sort === "price_desc"
+        ? { createdAt: "desc" }
+        : { createdAt: "desc" };
 
   const total = await prisma.hotel.count({ where: { AND } });
 
-  let hotelsData = await prisma.hotel.findMany({
+  const hotelsData = await prisma.hotel.findMany({
     where: { AND },
     skip: (page - 1) * limit,
     take: limit,
-    orderBy: { createdAt: 'desc' }, // Base sorting
+    orderBy: { createdAt: "desc" }, // Base sorting
     include: {
       amenities: true,
       roomTypes: {
-        where: { status: 'ACTIVE' },
-        select: { pricePerNight: true, capacity: true }
-      }
-    }
+        where: { status: "ACTIVE" },
+        select: { pricePerNight: true, capacity: true },
+      },
+    },
   });
 
-  const hotels = hotelsData.map(hotel => {
-    const startingPrice = hotel.roomTypes.length > 0
-      ? Math.min(...hotel.roomTypes.map(rt => Number(rt.pricePerNight)))
-      : 0;
-    const capacity = hotel.roomTypes.length > 0
-      ? Math.max(...hotel.roomTypes.map(rt => rt.capacity))
-      : 2;
+  const hotels = hotelsData.map((hotel) => {
+    const startingPrice =
+      hotel.roomTypes.length > 0
+        ? Math.min(...hotel.roomTypes.map((rt) => Number(rt.pricePerNight)))
+        : 0;
+    const capacity =
+      hotel.roomTypes.length > 0
+        ? Math.max(...hotel.roomTypes.map((rt) => rt.capacity))
+        : 2;
     return {
       ...hotel,
       startingPrice,
       capacity,
-      amenityList: hotel.amenities.map(a => a.amenity),
+      amenityList: hotel.amenities.map((a) => a.amenity),
     };
   });
 
   // In-memory price sort
-  if (sort === 'price_asc') {
+  if (sort === "price_asc") {
     hotels.sort((a, b) => a.startingPrice - b.startingPrice);
-  } else if (sort === 'price_desc') {
+  } else if (sort === "price_desc") {
     hotels.sort((a, b) => b.startingPrice - a.startingPrice);
   }
 
   // Calculate dynamic min/max price for the UI filter button
-  const allPrices = hotels.map(h => h.startingPrice);
+  const allPrices = hotels.map((h) => h.startingPrice);
   const minPriceDisplay = allPrices.length > 0 ? Math.min(...allPrices) : 50000;
-  const maxPriceDisplay = allPrices.length > 0 ? Math.max(...allPrices) : 300000;
+  const maxPriceDisplay =
+    allPrices.length > 0 ? Math.max(...allPrices) : 300000;
 
   return (
     <div className="flex flex-col w-full bg-slate-50 min-h-screen pt-20">
       {/* Visually-hidden h1 for SEO & screen readers (SI-31) */}
       <h1 className="sr-only">
         {searchQuery
-          ? `Serviced apartments in ${searchQuery} — Stayinn`
-          : "Explore Verified Serviced Apartments in Nigeria — Stayinn"}
+          ? `Serviced apartments in ${searchQuery} — Monarch Stay`
+          : "Explore Verified Serviced Apartments in Nigeria — Monarch Stay"}
       </h1>
 
       {/* Sticky Filter Bar */}
       <section className="sticky top-20 z-30 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
         <div className="max-w-[1440px] mx-auto px-4 md:px-12 py-3 flex flex-col gap-3">
-
           {/* Top Strip */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 text-slate-900 border border-slate-200">
                 <MapPin size={16} className="text-teal-900" />
-                <span className="text-sm font-bold">{city || q || 'Nigeria'}</span>
+                <span className="text-sm font-bold">
+                  {city || q || "Nigeria"}
+                </span>
                 <span className="text-slate-400">•</span>
-                <span className="text-sm text-slate-600 font-semibold">{dates || 'Any dates'}</span>
+                <span className="text-sm text-slate-600 font-semibold">
+                  {dates || "Any dates"}
+                </span>
                 <span className="text-slate-400">•</span>
-                <span className="text-sm text-slate-600 font-semibold">{guests || 'Guests'}</span>
+                <span className="text-sm text-slate-600 font-semibold">
+                  {guests || "Guests"}
+                </span>
               </div>
-              <Link href="/" className="text-teal-900 hover:text-teal-700 text-xs uppercase tracking-wider font-bold transition-colors">
+              <Link
+                href="/"
+                className="text-teal-900 hover:text-teal-700 text-xs uppercase tracking-wider font-bold transition-colors"
+              >
                 Modify Search
               </Link>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-sm text-slate-600">Showing <strong className="text-slate-900">{total} verified stays</strong></span>
+              <span className="text-sm text-slate-600">
+                Showing{" "}
+                <strong className="text-slate-900">
+                  {total} verified stays
+                </strong>
+              </span>
               <div className="h-4 w-px bg-slate-400"></div>
               {/* Note: Sort moved into ExploreFilters */}
             </div>
           </div>
 
           {/* Quick Filters */}
-          <ExploreFilters minPrice={minPriceDisplay} maxPrice={maxPriceDisplay} />
-
+          <ExploreFilters
+            minPrice={minPriceDisplay}
+            maxPrice={maxPriceDisplay}
+          />
         </div>
       </section>
 
       {/* Split Layout: Grid & Map */}
       <div className="max-w-[1440px] w-full mx-auto px-4 md:px-12 py-8 flex-1">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-
           {/* Left: Listings (7 Cols on XL) */}
           <div className="xl:col-span-7 flex flex-col gap-6">
-
             {/* Header Highlight */}
             <div className="p-4 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -171,8 +199,12 @@ export default async function ExplorePage(
                   <Shield size={24} />
                 </span>
                 <div>
-                  <p className="font-serif text-lg font-bold text-teal-950">The Stayinn Verified Collection</p>
-                  <p className="text-sm text-teal-900/70 font-semibold">Continuous power & security verified on all listings.</p>
+                  <p className="font-serif text-lg font-bold text-teal-950">
+                    The Monarch Stay Verified Collection
+                  </p>
+                  <p className="text-sm text-teal-900/70 font-semibold">
+                    Continuous power & security verified on all listings.
+                  </p>
                 </div>
               </div>
               <span className="hidden sm:inline-block px-3 py-1.5 rounded-full bg-white text-teal-900 text-xs font-bold uppercase tracking-wider shadow-sm border border-teal-100">
@@ -186,8 +218,13 @@ export default async function ExplorePage(
                 <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 mb-6 border border-slate-100">
                   <Search size={32} />
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-slate-900 mb-3">No properties found</h3>
-                <p className="text-sm text-slate-500 mb-8 max-w-md">We couldn't find any stays matching your criteria. Try adjusting your search filters.</p>
+                <h3 className="font-serif text-2xl font-bold text-slate-900 mb-3">
+                  No properties found
+                </h3>
+                <p className="text-sm text-slate-500 mb-8 max-w-md">
+                  We couldn't find any stays matching your criteria. Try
+                  adjusting your search filters.
+                </p>
                 <Link
                   href="/explore"
                   className="bg-teal-900 text-white font-bold py-3 px-8 rounded-xl hover:bg-teal-800 transition-colors text-sm shadow-md"
@@ -203,7 +240,7 @@ export default async function ExplorePage(
                     id={hotel.id}
                     slug={hotel.slug}
                     name={hotel.name}
-                    locationName={hotel.address.split(',')[0]}
+                    locationName={hotel.address.split(",")[0]}
                     coverImage={hotel.coverImage || ""}
                     startingPrice={hotel.startingPrice || 0}
                     capacity={hotel.capacity}
@@ -215,7 +252,6 @@ export default async function ExplorePage(
 
             {/* Pagination */}
             <ExplorePagination totalItems={total} itemsPerPage={limit} />
-
           </div>
 
           {/* Right: Map (5 Cols, Sticky) */}
@@ -224,7 +260,6 @@ export default async function ExplorePage(
               <ExploreMap hotels={hotels} />
             </div>
           </aside>
-
         </div>
       </div>
     </div>

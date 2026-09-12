@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Bolt, Wifi, Loader2, CheckCircle2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { Bolt, Wifi, Loader2, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function PreferencesClient({ user }: { user: any }) {
   const router = useRouter();
@@ -10,8 +10,8 @@ export default function PreferencesClient({ user }: { user: any }) {
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    powerRequirement: user.powerRequirement || 'NONE',
-    internetRequirement: user.internetRequirement || 'NONE',
+    powerRequirement: user.powerRequirement || "NONE",
+    internetRequirement: user.internetRequirement || "NONE",
   });
 
   const handleSave = async (e: React.FormEvent) => {
@@ -19,9 +19,9 @@ export default function PreferencesClient({ user }: { user: any }) {
     setIsSaving(true);
 
     try {
-      const res = await fetch('/api/users/preferences', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/users/preferences", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
@@ -45,8 +45,12 @@ export default function PreferencesClient({ user }: { user: any }) {
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 animate-in fade-in duration-500 slide-in-from-bottom-4">
       <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-100">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Power & Amenity Specs</h2>
-          <p className="text-slate-500 mt-1">Set your requirements for power, internet, and estate amenities</p>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Power & Amenity Specs
+          </h2>
+          <p className="text-slate-500 mt-1">
+            Set your requirements for power, internet, and estate amenities
+          </p>
         </div>
       </div>
 
@@ -54,13 +58,20 @@ export default function PreferencesClient({ user }: { user: any }) {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <Bolt className="text-orange-500" size={24} />
-            <h3 className="font-bold text-lg text-slate-900">Power Uptime Guarantee</h3>
+            <h3 className="font-bold text-lg text-slate-900">
+              Power Uptime Guarantee
+            </h3>
           </div>
-          <p className="text-sm text-slate-500">Filter your search results to only show properties that meet your specific power requirements.</p>
+          <p className="text-sm text-slate-500">
+            Filter your search results to only show properties that meet your
+            specific power requirements.
+          </p>
 
           <select
             value={formData.powerRequirement}
-            onChange={(e) => setFormData({ ...formData, powerRequirement: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, powerRequirement: e.target.value })
+            }
             className="w-full md:w-1/2 p-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:ring-1 focus:ring-teal-900 focus:border-teal-900 text-slate-900 font-medium"
           >
             <option value="NONE">No specific requirement</option>
@@ -73,17 +84,26 @@ export default function PreferencesClient({ user }: { user: any }) {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <Wifi className="text-blue-500" size={24} />
-            <h3 className="font-bold text-lg text-slate-900">Internet Connectivity</h3>
+            <h3 className="font-bold text-lg text-slate-900">
+              Internet Connectivity
+            </h3>
           </div>
-          <p className="text-sm text-slate-500">Select the minimum internet speed and reliability you need for work or streaming.</p>
+          <p className="text-sm text-slate-500">
+            Select the minimum internet speed and reliability you need for work
+            or streaming.
+          </p>
 
           <select
             value={formData.internetRequirement}
-            onChange={(e) => setFormData({ ...formData, internetRequirement: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, internetRequirement: e.target.value })
+            }
             className="w-full md:w-1/2 p-3 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:ring-1 focus:ring-teal-900 focus:border-teal-900 text-slate-900 font-medium"
           >
             <option value="NONE">No specific requirement</option>
-            <option value="FIBER_OPTIC">High-Speed Fiber Optic (`{'>'}`50Mbps)</option>
+            <option value="FIBER_OPTIC">
+              High-Speed Fiber Optic (`{">"}`50Mbps)
+            </option>
             <option value="STARLINK">Starlink Satellite</option>
             <option value="ANY_WIFI">Any Wi-Fi Connection</option>
           </select>
@@ -93,7 +113,7 @@ export default function PreferencesClient({ user }: { user: any }) {
           <button
             type="submit"
             disabled={isSaving || success}
-            className={`min-w-[160px] px-6 py-3 rounded-lg font-bold text-white transition-all shadow-sm flex items-center justify-center gap-2 ${success ? 'bg-green-600' : 'bg-teal-900 hover:bg-teal-800 disabled:opacity-70'}`}
+            className={`min-w-[160px] px-6 py-3 rounded-lg font-bold text-white transition-all shadow-sm flex items-center justify-center gap-2 ${success ? "bg-green-600" : "bg-teal-900 hover:bg-teal-800 disabled:opacity-70"}`}
           >
             {success ? (
               <>
@@ -106,7 +126,7 @@ export default function PreferencesClient({ user }: { user: any }) {
                 Saving...
               </>
             ) : (
-              'Save Preferences'
+              "Save Preferences"
             )}
           </button>
         </div>

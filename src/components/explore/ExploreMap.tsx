@@ -33,18 +33,22 @@ export default function ExploreMap({ hotels }: ExploreMapProps) {
   const onLoad = useCallback(
     function callback(map: google.maps.Map) {
       const bounds = new window.google.maps.LatLngBounds();
-      
+
       if (hotels.length > 0) {
         hotels.forEach((hotel) => {
           bounds.extend({ lat: hotel.latitude, lng: hotel.longitude });
         });
         map.fitBounds(bounds);
-        
+
         // Don't zoom in too close if there's only one property or they are close
-        const listener = window.google.maps.event.addListener(map, "idle", function() {
-          if (map.getZoom()! > 14) map.setZoom(14);
-          window.google.maps.event.removeListener(listener);
-        });
+        const listener = window.google.maps.event.addListener(
+          map,
+          "idle",
+          function () {
+            if (map.getZoom()! > 14) map.setZoom(14);
+            window.google.maps.event.removeListener(listener);
+          },
+        );
       } else {
         map.setCenter(defaultCenter);
         map.setZoom(11);
@@ -52,7 +56,7 @@ export default function ExploreMap({ hotels }: ExploreMapProps) {
 
       setMap(map);
     },
-    [hotels]
+    [hotels],
   );
 
   const onUnmount = useCallback(function callback(map: google.maps.Map) {
@@ -72,9 +76,15 @@ export default function ExploreMap({ hotels }: ExploreMapProps) {
     return (
       <div className="w-full h-full bg-slate-100 flex flex-col items-center justify-center p-8 text-center border-l border-slate-200">
         <MapPin size={48} className="text-slate-300 mb-4" />
-        <h3 className="text-lg font-bold text-slate-700 mb-2">Map Unavailable</h3>
+        <h3 className="text-lg font-bold text-slate-700 mb-2">
+          Map Unavailable
+        </h3>
         <p className="text-sm text-slate-500 max-w-sm">
-          Please add <code className="bg-slate-200 px-1 rounded">NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> to your environment variables to enable the interactive map.
+          Please add{" "}
+          <code className="bg-slate-200 px-1 rounded">
+            NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+          </code>{" "}
+          to your environment variables to enable the interactive map.
         </p>
       </div>
     );
@@ -126,7 +136,7 @@ export default function ExploreMap({ hotels }: ExploreMapProps) {
             {/* Tooltip Card */}
             {activeHotel === hotel.id && (
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white rounded-2xl shadow-2xl overflow-hidden z-30">
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setActiveHotel(null);
@@ -135,17 +145,28 @@ export default function ExploreMap({ hotels }: ExploreMapProps) {
                 >
                   &times;
                 </button>
-                <Link href={`/hotels/${hotel.slug}`} className="block relative h-32 w-full">
+                <Link
+                  href={`/hotels/${hotel.slug}`}
+                  className="block relative h-32 w-full"
+                >
                   <Image
-                    src={hotel.coverImage || "https://images.unsplash.com/photo-1577977461421-4f1647413a96"}
+                    src={
+                      hotel.coverImage ||
+                      "https://images.unsplash.com/photo-1577977461421-4f1647413a96"
+                    }
                     alt={hotel.name}
                     fill
                     className="object-cover"
                   />
                 </Link>
                 <div className="p-3">
-                  <Link href={`/hotels/${hotel.slug}`} className="hover:underline">
-                    <h4 className="font-bold text-slate-900 truncate">{hotel.name}</h4>
+                  <Link
+                    href={`/hotels/${hotel.slug}`}
+                    className="hover:underline"
+                  >
+                    <h4 className="font-bold text-slate-900 truncate">
+                      {hotel.name}
+                    </h4>
                   </Link>
                   <p className="text-xs text-slate-500 mt-1">{hotel.address}</p>
                 </div>

@@ -12,7 +12,9 @@ function ResetPasswordForm() {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -53,7 +55,7 @@ function ResetPasswordForm() {
       if (!res.ok) {
         throw new Error(data.error || "Failed to reset password");
       }
-      
+
       setStatus("success");
       // Redirect after a few seconds
       setTimeout(() => {
@@ -70,8 +72,13 @@ function ResetPasswordForm() {
       <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md bg-white py-8 px-4 shadow-xl sm:rounded-2xl border border-slate-100 text-center">
           <h2 className="text-xl font-bold text-slate-900">Invalid Link</h2>
-          <p className="mt-2 text-sm text-slate-600 mb-6">This password reset link is missing or invalid.</p>
-          <Link href="/forgot-password" className="text-teal-900 font-bold hover:underline">
+          <p className="mt-2 text-sm text-slate-600 mb-6">
+            This password reset link is missing or invalid.
+          </p>
+          <Link
+            href="/forgot-password"
+            className="text-teal-900 font-bold hover:underline"
+          >
             Request a new link
           </Link>
         </div>
@@ -97,15 +104,17 @@ function ResetPasswordForm() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-xl shadow-slate-200/50 sm:rounded-2xl sm:px-10 border border-slate-100">
-          
           {status === "success" ? (
             <div className="text-center flex flex-col items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-2">
                 <CheckCircle size={32} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900">Password Reset Complete</h3>
+              <h3 className="text-xl font-bold text-slate-900">
+                Password Reset Complete
+              </h3>
               <p className="text-sm text-slate-600 mb-6">
-                Your password has been successfully reset. Redirecting to login...
+                Your password has been successfully reset. Redirecting to
+                login...
               </p>
             </div>
           ) : (
@@ -115,9 +124,12 @@ function ResetPasswordForm() {
                   {errorMessage}
                 </div>
               )}
-              
+
               <div>
-                <label htmlFor="password" className="block text-sm font-bold text-slate-700">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-bold text-slate-700"
+                >
                   New Password
                 </label>
                 <div className="mt-2 relative">
@@ -138,7 +150,10 @@ function ResetPasswordForm() {
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-bold text-slate-700">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-bold text-slate-700"
+                >
                   Confirm Password
                 </label>
                 <div className="mt-2 relative">
@@ -161,7 +176,9 @@ function ResetPasswordForm() {
               <div>
                 <button
                   type="submit"
-                  disabled={status === "loading" || !password || !confirmPassword}
+                  disabled={
+                    status === "loading" || !password || !confirmPassword
+                  }
                   className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-teal-900 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {status === "loading" ? "Resetting..." : "Reset password"}
@@ -177,14 +194,16 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <React.Suspense fallback={
-      <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 items-center">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 bg-slate-200 rounded-full mb-4"></div>
-          <div className="h-4 bg-slate-200 rounded w-32"></div>
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 items-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="w-12 h-12 bg-slate-200 rounded-full mb-4"></div>
+            <div className="h-4 bg-slate-200 rounded w-32"></div>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <ResetPasswordForm />
     </React.Suspense>
   );

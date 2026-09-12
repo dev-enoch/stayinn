@@ -1,10 +1,15 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Create Account — Stayinn',
-  description: 'Join Stayinn to book verified luxury serviced apartments in Nigeria, or list your own property.',
+  title: "Create Account — Monarch Stay",
+  description:
+    "Join Monarch Stay to book verified luxury serviced apartments in Nigeria, or list your own property.",
 };
 
-export default function RegisterLayout({ children }: { children: React.ReactNode }) {
+export default function RegisterLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }

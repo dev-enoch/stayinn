@@ -1,14 +1,14 @@
 # PRODUCT REQUIREMENTS DOCUMENT (PRD)
 
-## Stayinn — Hotel Booking Marketplace (MVP)
+## Monarch Stay — Hotel Booking Marketplace (MVP)
 
-### Document Reference: STAYINN-PRD-001
+### Document Reference: MONARCH_STAY-PRD-001
 
 **Version:** 1.0.0 **Date:** August 26, 2026 **Classification:** Internal — Development Use **Prepared by:** Contractor (Solas) **Client:** Enoch Philip Dibal
 
 ## 1. EXECUTIVE SUMMARY
 
-Stayinn is a mobile-first web application built with Next.js that enables users to discover hotels, view room types with photos, book rooms through a step-by-step flow, pay through Paystack, and present a QR code at the hotel for check-in. Hotel managers list their properties, manage rooms, scan QR codes to confirm guest arrivals, and receive payouts. A platform admin approves hotels and manages commission rates.
+Monarch Stay is a mobile-first web application built with Next.js that enables users to discover hotels, view room types with photos, book rooms through a step-by-step flow, pay through Paystack, and present a QR code at the hotel for check-in. Hotel managers list their properties, manage rooms, scan QR codes to confirm guest arrivals, and receive payouts. A platform admin approves hotels and manages commission rates.
 
 This MVP is built as a single Next.js full stack application. There are no separate mobile apps or backend services. The application serves three user roles (Booker, Hotel Manager, Admin) through role-based routing and access control within one codebase.
 
@@ -125,4 +125,4 @@ The user sees the total they will pay. The user taps "Pay Now" to proceed.
 
 **AS-001:** Paystack is available and operational in Nigeria. **AS-002:** Google Maps API is available with a valid API key. **AS-003:** AWS S3 is available for image storage. **AS-004:** The application is deployed on Vercel or AWS. **AS-005:** The MVP targets the Nigerian market only. Internationalization is out of scope. **AS-006:** The MVP supports English language only. **AS-007:** Email notifications are sent via a third-party email service (Resend, SendGrid, or Amazon SES).
 
-*End of Document — Stayinn PRD v1.0.0*
+*End of Document — Monarch Stay PRD v1.0.0*

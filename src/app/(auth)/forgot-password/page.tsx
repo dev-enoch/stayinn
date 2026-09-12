@@ -6,7 +6,9 @@ import { ArrowLeft, KeyRound, Mail, CheckCircle } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +28,7 @@ export default function ForgotPasswordPage() {
       if (!res.ok) {
         throw new Error("Failed to request reset");
       }
-      
+
       // We simulate success even if the email wasn't found to prevent email enumeration
       setStatus("success");
     } catch (err: any) {
@@ -47,24 +49,28 @@ export default function ForgotPasswordPage() {
           Reset your password
         </h2>
         <p className="mt-2 text-center text-sm text-slate-600">
-          Enter your email address and we'll send you a link to reset your password.
+          Enter your email address and we'll send you a link to reset your
+          password.
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-xl shadow-slate-200/50 sm:rounded-2xl sm:px-10 border border-slate-100">
-          
           {status === "success" ? (
             <div className="text-center flex flex-col items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-2">
                 <CheckCircle size={32} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900">Check your inbox</h3>
+              <h3 className="text-xl font-bold text-slate-900">
+                Check your inbox
+              </h3>
               <p className="text-sm text-slate-600 mb-6">
-                If an account exists with <strong>{email}</strong>, we've sent a password reset link to it. Please check your spam folder if you don't see it.
+                If an account exists with <strong>{email}</strong>, we've sent a
+                password reset link to it. Please check your spam folder if you
+                don't see it.
               </p>
-              <Link 
-                href="/login" 
+              <Link
+                href="/login"
                 className="w-full flex justify-center py-3 px-4 border border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 transition-colors"
               >
                 Return to sign in
@@ -77,9 +83,12 @@ export default function ForgotPasswordPage() {
                   {errorMessage}
                 </div>
               )}
-              
+
               <div>
-                <label htmlFor="email" className="block text-sm font-bold text-slate-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-bold text-slate-700"
+                >
                   Email address
                 </label>
                 <div className="mt-2 relative">
@@ -114,7 +123,10 @@ export default function ForgotPasswordPage() {
 
           {status !== "success" && (
             <div className="mt-6 text-center">
-              <Link href="/login" className="inline-flex items-center gap-1.5 text-sm font-bold text-teal-900 hover:text-teal-700 transition-colors">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-teal-900 hover:text-teal-700 transition-colors"
+              >
                 <ArrowLeft size={16} />
                 Back to sign in
               </Link>

@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 
 export default async function CitiesPage() {
   const cities = await prisma.city.findMany({
-    orderBy: { createdAt: 'asc' }
+    orderBy: { createdAt: "asc" },
   });
 
   return (
@@ -21,32 +21,55 @@ export default async function CitiesPage() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-900/50 backdrop-blur-md shadow-sm mb-6 border border-teal-800">
                 <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-                <span className="text-xs text-teal-100 uppercase tracking-widest font-bold">Curated Neighborhood Intelligence</span>
+                <span className="text-xs text-teal-100 uppercase tracking-widest font-bold">
+                  Curated Neighborhood Intelligence
+                </span>
               </div>
               <h1 className="font-serif text-4xl md:text-5xl text-white tracking-tight font-bold mb-4">
                 Explore Nigerian Neighborhoods with Confidence
               </h1>
               <p className="text-lg text-teal-100/80 leading-relaxed max-w-xl">
-                Make decisions rooted in ground reality. Every district is verified for uninterrupted 24/7 power systems, high-protocol gate access, fiber connectivity, and immediate access to fine dining and lifestyle hubs.
+                Make decisions rooted in ground reality. Every district is
+                verified for uninterrupted 24/7 power systems, high-protocol
+                gate access, fiber connectivity, and immediate access to fine
+                dining and lifestyle hubs.
               </p>
             </div>
 
             {/* Metric badges showcasing reliability */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 w-full lg:w-auto">
               <div className="flex flex-col px-4 py-3 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] uppercase tracking-wider text-teal-200/70 font-bold">Power Uptime</span>
-                <span className="text-2xl text-white font-bold my-1">99.8%</span>
-                <span className="text-xs text-teal-200/50">Dual-Grid & Solar</span>
+                <span className="text-[10px] uppercase tracking-wider text-teal-200/70 font-bold">
+                  Power Uptime
+                </span>
+                <span className="text-2xl text-white font-bold my-1">
+                  99.8%
+                </span>
+                <span className="text-xs text-teal-200/50">
+                  Dual-Grid & Solar
+                </span>
               </div>
               <div className="flex flex-col px-4 py-3 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] uppercase tracking-wider text-teal-200/70 font-bold">Security Protocol</span>
-                <span className="text-2xl text-white font-bold my-1">Tier-1</span>
-                <span className="text-xs text-teal-200/50">Manned Gates & Pass</span>
+                <span className="text-[10px] uppercase tracking-wider text-teal-200/70 font-bold">
+                  Security Protocol
+                </span>
+                <span className="text-2xl text-white font-bold my-1">
+                  Tier-1
+                </span>
+                <span className="text-xs text-teal-200/50">
+                  Manned Gates & Pass
+                </span>
               </div>
               <div className="flex flex-col px-4 py-3 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] uppercase tracking-wider text-teal-200/70 font-bold">Avg. Concierge</span>
-                <span className="text-2xl text-white font-bold my-1">&lt; 3 min</span>
-                <span className="text-xs text-teal-200/50">Local Host Support</span>
+                <span className="text-[10px] uppercase tracking-wider text-teal-200/70 font-bold">
+                  Avg. Concierge
+                </span>
+                <span className="text-2xl text-white font-bold my-1">
+                  &lt; 3 min
+                </span>
+                <span className="text-xs text-teal-200/50">
+                  Local Host Support
+                </span>
               </div>
             </div>
           </div>
@@ -70,7 +93,10 @@ export default async function CitiesPage() {
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {cities.map((city) => (
-              <article key={city.id} className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group border border-slate-200 hover:shadow-xl transition-all relative">
+              <article
+                key={city.id}
+                className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group border border-slate-200 hover:shadow-xl transition-all relative"
+              >
                 {city.isComingSoon && (
                   <div className="absolute top-5 right-5 z-20">
                     <span className="px-3 py-1.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-sm">
@@ -82,7 +108,10 @@ export default async function CitiesPage() {
                   <Image
                     className={`w-full h-full object-cover transition-transform duration-700 ${!city.isComingSoon ? "group-hover:scale-105" : ""}`}
                     alt={`${city.name} — Serviced Apartments`}
-                    src={city.imageUrl || "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"}
+                    src={
+                      city.imageUrl ||
+                      "https://images.unsplash.com/photo-1590483736622-398bb2c45980?auto=format&fit=crop&q=80"
+                    }
                     fill
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent"></div>
@@ -92,21 +121,32 @@ export default async function CitiesPage() {
                     </span>
                   </div>
                   <div className="absolute bottom-5 left-5 text-white">
-                    <span className="text-xs text-teal-300 uppercase tracking-wider font-bold block mb-1">State Profile</span>
-                    <h3 className="font-serif text-3xl font-bold">{city.name}</h3>
+                    <span className="text-xs text-teal-300 uppercase tracking-wider font-bold block mb-1">
+                      State Profile
+                    </span>
+                    <h3 className="font-serif text-3xl font-bold">
+                      {city.name}
+                    </h3>
                   </div>
                 </div>
                 <div className="p-8 flex flex-col flex-1">
                   <p className="text-slate-600 mb-6 leading-relaxed flex-1">
-                    {city.description || `Explore luxury serviced apartments and premium properties in ${city.name}. Managed by elite hosts.`}
+                    {city.description ||
+                      `Explore luxury serviced apartments and premium properties in ${city.name}. Managed by elite hosts.`}
                   </p>
                   <div className="flex items-center justify-end pt-6 border-t border-slate-100">
                     {!city.isComingSoon ? (
-                      <Link href={`/cities/${city.name.toLowerCase()}`} className="px-6 py-3 rounded-xl bg-teal-900 hover:bg-teal-800 text-white text-xs uppercase tracking-wider font-bold transition-all shadow-md active:scale-95 flex items-center gap-2">
+                      <Link
+                        href={`/cities/${city.name.toLowerCase()}`}
+                        className="px-6 py-3 rounded-xl bg-teal-900 hover:bg-teal-800 text-white text-xs uppercase tracking-wider font-bold transition-all shadow-md active:scale-95 flex items-center gap-2"
+                      >
                         Browse {city.name} <ArrowRight size={16} />
                       </Link>
                     ) : (
-                      <button disabled className="px-6 py-3 rounded-xl bg-slate-100 text-slate-400 text-xs uppercase tracking-wider font-bold shadow-sm cursor-not-allowed">
+                      <button
+                        disabled
+                        className="px-6 py-3 rounded-xl bg-slate-100 text-slate-400 text-xs uppercase tracking-wider font-bold shadow-sm cursor-not-allowed"
+                      >
                         Launching Soon
                       </button>
                     )}
@@ -117,7 +157,6 @@ export default async function CitiesPage() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import crypto from 'crypto';
-import QRCode from 'qrcode';
+import crypto from "crypto";
+import QRCode from "qrcode";
 
 const QR_SIGNING_KEY = process.env.QR_SIGNING_KEY as string;
 
@@ -18,18 +18,27 @@ export interface BookingQRPayload {
  */
 export function generateQRSignature(payloadString: string): string {
   if (!QR_SIGNING_KEY) {
-    throw new Error('QR_SIGNING_KEY is not defined in environment variables');
+    throw new Error("QR_SIGNING_KEY is not defined in environment variables");
   }
-  return crypto.createHmac('sha256', QR_SIGNING_KEY).update(payloadString).digest('hex');
+  return crypto
+    .createHmac("sha256", QR_SIGNING_KEY)
+    .update(payloadString)
+    .digest("hex");
 }
 
 /**
  * Validates a given payload against its signature.
  */
-export function verifyQRSignature(payloadString: string, signature: string): boolean {
+export function verifyQRSignature(
+  payloadString: string,
+  signature: string,
+): boolean {
   if (!QR_SIGNING_KEY) return false;
   const expectedSignature = generateQRSignature(payloadString);
-  return crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(signature));
+  return crypto.timingSafeEqual(
+    Buffer.from(expectedSignature),
+    Buffer.from(signature),
+  );
 }
 
 /**
@@ -47,7 +56,7 @@ export async function generateBookingQR(payload: BookingQRPayload) {
   });
 
   const base64Image = await QRCode.toDataURL(qrContent, {
-    errorCorrectionLevel: 'M',
+    errorCorrectionLevel: "M",
     margin: 2,
     width: 300,
   });
