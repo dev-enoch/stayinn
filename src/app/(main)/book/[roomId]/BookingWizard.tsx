@@ -17,8 +17,8 @@ export default function BookingWizard({
   room,
   user,
 }: {
-  room: any;
-  user: any;
+  room: { id: string; hotelId: string; capacity: number; pricePerNight: number; coverImage: string; name: string; hotelName: string; };
+  user: unknown;
 }) {
   const [step, setStep] = useState(1);
   const [guests, setGuests] = useState(2);

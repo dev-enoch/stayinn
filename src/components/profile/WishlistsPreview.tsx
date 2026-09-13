@@ -6,12 +6,21 @@ import { getSession } from "@/lib/auth";
 export default async function WishlistsPreview() {
   const session = await getSession();
 
-  let wishlists: any[] = [];
+  type WishlistType = {
+    id: string;
+    hotel: {
+      name: string;
+      coverImage?: string | null;
+      address: string;
+    };
+  };
+  let wishlists: WishlistType[] = [];
   if (session) {
     try {
       wishlists = await prisma.wishlist.findMany({
         where: { userId: session.userId },
         orderBy: { createdAt: "desc" },
+        include: { hotel: true },
       });
     } catch (error) {
       console.error("Failed to fetch wishlists", error);
@@ -68,7 +77,7 @@ export default async function WishlistsPreview() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {wishlists.map((list: any, i: number) => (
+        {wishlists.map((list: WishlistType, i: number) => (
           <div
             key={i}
             className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer border border-slate-100"
@@ -76,22 +85,22 @@ export default async function WishlistsPreview() {
             <div className="relative h-40 overflow-hidden bg-slate-100">
               <img
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                alt={list.name}
+                alt={list.hotel.name}
                 src={
-                  list.image ||
+                  list.hotel.coverImage ||
                   "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&q=80"
                 }
               />
               <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-slate-900/75 text-white text-xs font-semibold backdrop-blur-sm">
-                {list.itemCount || 0} stays
+                Saved
               </span>
             </div>
             <div className="p-4 flex flex-col">
               <h3 className="text-base text-slate-900 font-bold">
-                {list.name || "Wishlist"}
+                {list.hotel.name}
               </h3>
               <p className="text-xs text-slate-500">
-                {list.description || "Saved places"}
+                {list.hotel.address}
               </p>
             </div>
           </div>

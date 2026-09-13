@@ -15,7 +15,17 @@ import { getSession } from "@/lib/auth";
 export default async function UpcomingStay() {
   const session = await getSession();
 
-  let booking: any = null;
+  type UpcomingBookingType = {
+    id: string;
+    checkIn?: Date | string | null;
+    checkOut?: Date | string | null;
+    hotel?: {
+      name: string;
+      address: string;
+      image?: string | null;
+    } | null;
+  };
+  let booking: UpcomingBookingType | null = null;
   if (session) {
     try {
       booking = await prisma.booking.findFirst({

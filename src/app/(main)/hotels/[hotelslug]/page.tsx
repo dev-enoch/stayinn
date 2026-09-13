@@ -314,7 +314,7 @@ export default async function HotelDetailPage(props: {
             checkInTime: hotel.checkInTime,
             checkOutTime: hotel.checkOutTime,
             cancellationPolicy: hotel.cancellationPolicy,
-            amenities: hotel.amenities.map((a: any) => a.amenity as Amenity),
+            amenities: hotel.amenities.map((a: { amenity: string }) => a.amenity as Amenity),
             galleryImages: allImages,
             latitude: hotel.latitude,
             longitude: hotel.longitude,

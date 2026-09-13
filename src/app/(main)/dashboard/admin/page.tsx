@@ -48,8 +48,8 @@ export default async function AdminDashboardPage() {
     }).format(amount);
   };
 
-  const pendingHotels = hotels.filter((h: any) => h.status === "PENDING");
-  const approvedHotels = hotels.filter((h: any) => h.status === "APPROVED");
+  const pendingHotels = hotels.filter((h: { status: string }) => h.status === "PENDING");
+  const approvedHotels = hotels.filter((h: { status: string }) => h.status === "APPROVED");
 
   return (
     <div className="min-h-screen bg-gray-50 pt-28 pb-32">
@@ -144,7 +144,7 @@ export default async function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {hotels.map((hotel: any) => (
+                {hotels.map((hotel: { id: string; name: string; manager?: { fullName: string | null } | null; address: string; status: string; }) => (
                   <tr
                     key={hotel.id}
                     className="hover:bg-gray-50/50 transition-colors"

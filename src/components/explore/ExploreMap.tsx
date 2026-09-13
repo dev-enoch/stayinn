@@ -17,8 +17,19 @@ const defaultCenter = {
   lng: 3.3792,
 };
 
+type MapHotel = {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  startingPrice: number;
+  slug: string;
+  coverImage?: string | null;
+  address: string;
+};
+
 interface ExploreMapProps {
-  hotels: any[];
+  hotels: MapHotel[];
 }
 
 export default function ExploreMap({ hotels }: ExploreMapProps) {

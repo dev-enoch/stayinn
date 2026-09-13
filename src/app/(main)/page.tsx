@@ -18,10 +18,31 @@ import HeroSearch from "@/components/home/HeroSearch";
 export const revalidate = 3600;
 
 export default async function Home() {
-  let featuredHotels: any[] = [];
+  type FeaturedHotel = {
+    id: string;
+    slug: string;
+    title?: string;
+    city?: string;
+    name: string;
+    address: string;
+    coverImage?: string | null;
+    startingPrice?: number;
+    capacity?: number;
+    amenityList?: string[];
+    isVerified?: boolean;
+    isSuperhost?: boolean;
+  };
+  let featuredHotels: FeaturedHotel[] = [];
   let totalProperties = 0;
   const cityCounts: Record<string, number> = {};
-  let citiesData: any[] = [];
+  
+  type CityData = {
+    name: string;
+    isComingSoon?: boolean;
+    imageUrl?: string | null;
+    description?: string | null;
+  };
+  let citiesData: CityData[] = [];
 
   try {
     const hotels = await prisma.hotel.findMany({
@@ -282,7 +303,7 @@ export default async function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {citiesData.map((city, i) => (
+            {citiesData.map((city: CityData, i: number) => (
               <Link
                 key={i}
                 href={
@@ -364,7 +385,7 @@ export default async function Home() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredHotels.map((hotel: any) => (
+              {featuredHotels.map((hotel: FeaturedHotel) => (
                 <HotelCard
                   key={hotel.id}
                   id={hotel.id}

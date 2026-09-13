@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { logoutAction } from "@/app/actions/auth";
 
-export default function Header({ session }: { session: any }) {
+export default function Header({ session }: { session: { user?: { name?: string | null }; role?: string } | null }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

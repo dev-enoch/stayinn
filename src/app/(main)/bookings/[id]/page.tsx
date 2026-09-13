@@ -182,7 +182,7 @@ export default async function BookingDetailPage(props: {
               Payment Failed
             </h1>
             <p className="text-gray-500 mb-8 max-w-md mx-auto">
-              We couldn't process your payment. Don't worry, no charges were
+              We couldn't process your payment. Don't wo&apos;ry, no charges were
               made.
             </p>
             <Link

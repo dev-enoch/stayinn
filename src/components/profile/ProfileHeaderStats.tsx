@@ -7,7 +7,16 @@ import { getSession } from "@/lib/auth";
 export default async function ProfileHeaderStats() {
   const session = await getSession();
 
-  let user: any = null;
+  type UserStats = {
+    id: string;
+    staysCount?: number;
+    reviewsCount?: number;
+    rating?: number;
+    fullName?: string | null;
+    createdAt?: Date | string;
+    avatarUrl?: string | null;
+  };
+  let user: UserStats | null = null;
   if (session) {
     try {
       user = await prisma.user.findUnique({

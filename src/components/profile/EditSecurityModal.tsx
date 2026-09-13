@@ -118,7 +118,7 @@ export default function EditSecurityModal({
               Send Password Reset Link
             </button>
             <p className="text-[10px] text-slate-400 mt-1">
-              We'll send a secure link to your registered email
+              We&apos;ll send a secure link to your registered email
             </p>
           </div>
 

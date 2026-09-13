@@ -234,7 +234,7 @@ export default async function ExplorePage(props: {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {hotels.map((hotel: any) => (
+                {hotels.map((hotel: { id: string; slug: string; name: string; address: string; coverImage: string | null; startingPrice: number; capacity: number; amenityList: string[] }) => (
                   <HotelCard
                     key={hotel.id}
                     id={hotel.id}

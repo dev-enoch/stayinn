@@ -8,10 +8,10 @@ export default function NotFound() {
         <Compass size={40} strokeWidth={1.5} />
       </div>
       <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-        Looks like you're lost
+        Looks like you&apos;re lost
       </h1>
       <p className="text-lg text-gray-500 max-w-md mx-auto mb-8">
-        We can't seem to find the page you're looking for. The good news is,
+        We can&apos;t seem to find the page you&apos;re looking for. The good news is,
         there are plenty of incredible stays waiting for you back home.
       </p>
       <Link

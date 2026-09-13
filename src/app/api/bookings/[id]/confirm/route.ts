@@ -138,7 +138,7 @@ export async function POST(
     }
 
     // Process confirmation in transaction
-    await prisma.$transaction(async (tx: any) => {
+    await prisma.$transaction(async (tx: unknown) => {
       const db = tx as typeof prisma;
 
       await db.booking.update({

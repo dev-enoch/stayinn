@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Settings, ShieldCheck, Loader2, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function SecurityClient({ user }: { user: any }) {
+export default function SecurityClient({ user }: { user: { twoFactorEnabled: boolean } }) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [success, setSuccess] = useState(false);

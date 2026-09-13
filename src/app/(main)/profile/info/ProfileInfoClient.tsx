@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { Mail, Phone, BadgeCheck, PencilLine } from "lucide-react";
 import EditProfileModal from "@/components/profile/EditProfileModal";
 
-export default function ProfileInfoClient({ user }: { user: any }) {
+type UserInfo = { fullName: string; email: string; phone: string | null; role?: string; };
+export default function ProfileInfoClient({ user }: { user: UserInfo }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

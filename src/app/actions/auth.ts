@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 
-export async function loginAction(prevState: any, formData: FormData) {
+export async function loginAction(prevState: unknown, formData: FormData) {
   const identifier = formData.get("identifier") as string;
   const password = formData.get("password") as string;
   const redirectTo = (formData.get("redirectTo") as string) || "/";
@@ -49,7 +49,7 @@ export async function loginAction(prevState: any, formData: FormData) {
   redirect(redirectTo);
 }
 
-export async function registerAction(prevState: any, formData: FormData) {
+export async function registerAction(prevState: unknown, formData: FormData) {
   const fullName = formData.get("fullName") as string;
   const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;

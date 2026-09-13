@@ -77,7 +77,7 @@ export default async function RoomDetailPage(props: {
   // Default image if none exist
   const images =
     room.images.length > 0
-      ? room.images.map((img: any) => sanitizeUrl(img.url))
+      ? room.images.map((img: { url: string }) => sanitizeUrl(img.url))
       : [
           "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
         ];

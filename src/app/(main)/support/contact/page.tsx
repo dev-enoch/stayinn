@@ -10,7 +10,7 @@ export default function ContactPage() {
             </h1>
             <p className="text-gray-600 text-lg leading-relaxed">
               Whether you're looking to host your space, need help with a
-              booking, or just want to say hello, we're always here.
+              booking, or just want to say hello, we&apos;re always here.
             </p>
           </div>
 

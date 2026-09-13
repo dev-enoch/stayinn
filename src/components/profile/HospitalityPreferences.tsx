@@ -6,7 +6,8 @@ import { getSession } from "@/lib/auth";
 export default async function HospitalityPreferences() {
   const session = await getSession();
 
-  let preferences: any = null;
+  type PrefType = { title: string; desc: string };
+  let preferences: { billing: PrefType; estate: PrefType; chef: PrefType } | null = null;
   if (session) {
     try {
       const user = await prisma.user.findUnique({

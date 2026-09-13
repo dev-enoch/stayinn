@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { Bolt, Wifi, Loader2, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function PreferencesClient({ user }: { user: any }) {
+type UserPrefs = { powerRequirement?: string | null; internetRequirement?: string | null; };
+export default function PreferencesClient({ user }: { user: UserPrefs }) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [success, setSuccess] = useState(false);

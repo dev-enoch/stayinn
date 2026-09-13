@@ -31,9 +31,9 @@ export default function ForgotPasswordPage() {
 
       // We simulate success even if the email wasn't found to prevent email enumeration
       setStatus("success");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus("error");
-      setErrorMessage(err.message || "An error occurred");
+      setErrorMessage(err instanceof Error ? err.message : "An error occurred");
     }
   };
 
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
               <p className="text-sm text-slate-600 mb-6">
                 If an account exists with <strong>{email}</strong>, we've sent a
                 password reset link to it. Please check your spam folder if you
-                don't see it.
+                don&apos;t see it.
               </p>
               <Link
                 href="/login"

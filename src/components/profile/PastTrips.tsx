@@ -8,7 +8,19 @@ import Image from "next/image";
 export default async function PastTrips({ page = 1 }: { page?: number }) {
   const session = await getSession();
 
-  let pastBookings: any[] = [];
+  type BookingWithHotel = {
+    id: string;
+    totalAmount: number;
+    checkInDate: Date | string;
+    numberOfNights: number;
+    hotel?: {
+      name: string;
+      coverImage?: string | null;
+      address?: string;
+      slug: string;
+    } | null;
+  };
+  let pastBookings: BookingWithHotel[] = [];
   let totalBookings = 0;
   const ITEMS_PER_PAGE = 5;
   const skip = (page - 1) * ITEMS_PER_PAGE;
@@ -75,7 +87,7 @@ export default async function PastTrips({ page = 1 }: { page?: number }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
-              {pastBookings.map((booking: any) => {
+              {pastBookings.map((booking: BookingWithHotel) => {
                 const amountFormatted = new Intl.NumberFormat("en-NG", {
                   style: "currency",
                   currency: "NGN",

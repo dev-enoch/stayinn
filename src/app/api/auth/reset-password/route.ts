@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Password reset error:", error);
     return NextResponse.json(
       { error: "Internal server error" },

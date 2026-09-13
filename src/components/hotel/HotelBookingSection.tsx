@@ -183,7 +183,7 @@ export default function HotelBookingSection({
   >("paystack");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [bookingResult, setBookingResult] = useState<any>(null);
+  const [bookingResult, setBookingResult] = useState<{ bookingId: string; amount: number } | null>(null);
 
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId) ?? rooms[0];
 
@@ -262,8 +262,8 @@ export default function HotelBookingSection({
         setBookingResult({ bookingId: data.data.id, amount: totalPrice });
         setStep("confirmation");
       }
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -552,7 +552,7 @@ export default function HotelBookingSection({
                   )}
                 </button>
                 <p className="text-center text-[10px] text-slate-400 mt-2">
-                  Your card won't be charged until you confirm on Paystack.
+                  Your card won&apos;t be charged until you confirm on Paystack.
                 </p>
               </div>
             )}
@@ -595,7 +595,7 @@ export function BookingWidget({
   >("paystack");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [bookingResult, setBookingResult] = useState<any>(null);
+  const [bookingResult, setBookingResult] = useState<{ bookingId: string; amount: number } | null>(null);
 
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId) ?? rooms[0];
   const totalPrice = selectedRoom ? selectedRoom.pricePerNight * nights : 0;
@@ -669,8 +669,8 @@ export function BookingWidget({
         setBookingResult({ bookingId: data.data.id, amount: totalPrice });
         setStep("confirmation");
       }
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "An error occurred");
     } finally {
       setLoading(false);
     }

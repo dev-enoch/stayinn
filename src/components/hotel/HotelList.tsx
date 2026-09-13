@@ -96,7 +96,7 @@ export default function HotelList() {
           No hotels found
         </h3>
         <p className="text-gray-400 text-sm max-w-[250px]">
-          We couldn't find any hotels matching your criteria.
+          We couldn&apos;t find any hotels matching your criteria.
         </p>
       </div>
     );

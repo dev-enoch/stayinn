@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { PencilLine, ShieldCheck, KeyRound } from "lucide-react";
 import EditSecurityModal from "@/components/profile/EditSecurityModal";
 
-export default function ProfileSecurityClient({ user }: { user: any }) {
+type UserSecurity = { twoFactorEnabled: boolean; };
+export default function ProfileSecurityClient({ user }: { user: UserSecurity }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

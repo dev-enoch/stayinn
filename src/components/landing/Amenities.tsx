@@ -32,7 +32,7 @@ export default function Amenities() {
             Everything You Need
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            We've thought of every detail to ensure your stay is seamless,
+            We&apos;ve thought of every detail to ensure your stay is seamless,
             comfortable, and exactly what you expect from a premium hospitality
             experience.
           </p>

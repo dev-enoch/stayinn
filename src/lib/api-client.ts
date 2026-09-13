@@ -44,7 +44,7 @@ export const apiClient = {
     return res.json();
   },
 
-  async post(path: string, body?: any, options?: RequestInit) {
+  async post(path: string, body?: unknown, options?: RequestInit) {
     const headers = await getHeaders(options?.headers);
     const res = await fetch(`${getBaseUrl()}${path}`, {
       ...options,
@@ -55,7 +55,7 @@ export const apiClient = {
     return res.json();
   },
 
-  async put(path: string, body?: any, options?: RequestInit) {
+  async put(path: string, body?: unknown, options?: RequestInit) {
     const headers = await getHeaders(options?.headers);
     const res = await fetch(`${getBaseUrl()}${path}`, {
       ...options,

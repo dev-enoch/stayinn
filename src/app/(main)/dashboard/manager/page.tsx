@@ -65,7 +65,7 @@ export default async function ManagerDashboardPage() {
             Welcome to your Dashboard
           </h1>
           <p className="text-gray-500 mb-8">
-            You haven't registered a hotel yet. Let's get your property listed
+            You haven't registered a hotel yet. Let's ge&apos; your property listed
             on Monarch Stay.
           </p>
           <Link
@@ -178,7 +178,7 @@ export default async function ManagerDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {hotel.bookings.map((booking: any) => (
+                {hotel.bookings.map((booking: { id: string; guestName: string; roomName: string; checkInDate: Date; checkOutDate: Date; payoutAmount: number; status: string }) => (
                   <tr
                     key={booking.id}
                     className="hover:bg-gray-50/50 transition-colors"

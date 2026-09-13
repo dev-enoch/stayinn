@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { PencilLine, Zap, Wifi } from "lucide-react";
 import EditPreferencesModal from "@/components/profile/EditPreferencesModal";
 
-export default function ProfilePreferencesClient({ user }: { user: any }) {
+type UserPrefs = { powerRequirement: string | null; internetRequirement: string | null; };
+export default function ProfilePreferencesClient({ user }: { user: UserPrefs }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

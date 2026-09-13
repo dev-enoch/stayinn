@@ -33,7 +33,7 @@ export async function PUT(req: Request) {
 
     const { password, twoFactorEnabled } = validatedData.data;
 
-    const dataToUpdate: any = {};
+    const dataToUpdate: { passwordHash?: string; twoFactorEnabled?: boolean } = {};
     if (password) {
       dataToUpdate.passwordHash = await hashPassword(password);
     }

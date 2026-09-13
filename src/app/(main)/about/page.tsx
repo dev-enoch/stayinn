@@ -81,7 +81,7 @@ export default function AboutPage() {
               </h3>
               <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
                 We personally vet our listings. If we wouldn't stay there
-                ourselves, it won't be on Monarch Stay. Every detail matters,
+                ourselves, it won&apos;t be on Monarch Stay. Every detail matters,
                 from the thread count of the sheets to the speed of the wifi.
               </p>
             </div>
