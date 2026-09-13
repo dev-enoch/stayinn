@@ -97,7 +97,7 @@ export default function HotelClientSection({
   isLoggedIn: boolean;
   hotelMeta: HotelMeta;
 }) {
-  const [selectedRoomId, setSelectedRoomId] = useState(rooms[0]?.id ?? "");
+  const [selectedRooms, setSelectedRooms] = useState<Record<string, number>>({});
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -237,8 +237,9 @@ export default function HotelClientSection({
               <RoomCard
                 key={room.id}
                 room={room}
-                selected={selectedRoomId === room.id}
-                onSelect={setSelectedRoomId}
+                quantity={selectedRooms[room.id] || 0}
+                onIncrease={() => setSelectedRooms(prev => ({ ...prev, [room.id]: (prev[room.id] || 0) + 1 }))}
+                onDecrease={() => setSelectedRooms(prev => ({ ...prev, [room.id]: Math.max(0, (prev[room.id] || 0) - 1) }))}
               />
             ))
           )}
@@ -251,8 +252,8 @@ export default function HotelClientSection({
           hotel={hotel}
           rooms={rooms}
           isLoggedIn={isLoggedIn}
-          selectedRoomId={selectedRoomId}
-          onSelectRoom={setSelectedRoomId}
+          selectedRooms={selectedRooms}
+          setSelectedRooms={setSelectedRooms}
         />
 
         {/* Map */}

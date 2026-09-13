@@ -35,7 +35,7 @@ export async function GET(req: Request) {
         bookings: {
           where: { status: { in: ["PAID", "CONFIRMED", "COMPLETED"] } },
           orderBy: { createdAt: "desc" },
-          include: { roomType: true, user: true },
+          include: { rooms: { include: { roomType: true } }, user: true },
         },
       },
     });
@@ -64,7 +64,7 @@ export async function GET(req: Request) {
         bookings: hotel.bookings.map((booking) => ({
           id: booking.id,
           guestName: booking.user.fullName,
-          roomName: booking.roomType.name,
+          roomName: booking.rooms.map((r: any) => r.roomType.name).join(", "),
           checkInDate: booking.checkInDate,
           checkOutDate: booking.checkOutDate,
           status: booking.status,

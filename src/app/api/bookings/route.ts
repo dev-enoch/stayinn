@@ -38,8 +38,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { hotelId, roomTypeId, checkInDate, checkOutDate, numberOfGuests } =
-      result.data;
+    const { hotelId, rooms, checkInDate, checkOutDate, numberOfGuests } = result.data;
 
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
@@ -63,37 +62,58 @@ export async function POST(req: Request) {
 
     return await prisma.$transaction(async (tx) => {
       const db = tx as typeof prisma;
-      const roomType = await db.roomType.findUnique({
-        where: { id: roomTypeId },
+
+      // 1. Fetch room types and validate hotel
+      const roomTypeIds = rooms.map(r => r.roomTypeId);
+      const roomTypesData = await db.roomType.findMany({
+        where: { id: { in: roomTypeIds } },
       });
-      if (!roomType || roomType.hotelId !== hotelId) {
+
+      if (roomTypesData.length !== roomTypeIds.length || roomTypesData.some(rt => rt.hotelId !== hotelId)) {
         throw new Error("NOT_FOUND");
       }
 
-      if (numberOfGuests > roomType.capacity) {
+      let totalAmount = 0;
+      let totalCapacity = 0;
+      const roomsToCreate = [];
+
+      // 2. Validate availability and capacity per room type
+      for (const requestedRoom of rooms) {
+        const roomType = roomTypesData.find(rt => rt.id === requestedRoom.roomTypeId)!;
+        
+        // Calculate overlapping bookings for THIS room type using BookingRoom
+        const overlappingBookings = await db.bookingRoom.aggregate({
+          _sum: { quantity: true },
+          where: {
+            roomTypeId: roomType.id,
+            booking: {
+              status: { in: ["PENDING", "PAID", "CONFIRMED"] },
+              checkInDate: { lt: checkOut },
+              checkOutDate: { gt: checkIn },
+            },
+          },
+        });
+
+        const bookedQuantity = overlappingBookings._sum.quantity || 0;
+        if (bookedQuantity + requestedRoom.quantity > roomType.quantity) {
+          throw new Error("BOOKING_NOT_AVAILABLE");
+        }
+
+        totalAmount += numberOfNights * roomType.pricePerNight * requestedRoom.quantity;
+        totalCapacity += roomType.capacity * requestedRoom.quantity;
+
+        roomsToCreate.push({
+          roomTypeId: roomType.id,
+          quantity: requestedRoom.quantity,
+          pricePerNight: roomType.pricePerNight,
+        });
+      }
+
+      if (numberOfGuests > totalCapacity) {
         throw new Error("CAPACITY_EXCEEDED");
       }
 
-      // Check availability (Overlapping bookings count)
-      const overlappingBookings = await db.booking.count({
-        where: {
-          roomTypeId,
-          status: { in: ["PENDING", "PAID", "CONFIRMED"] },
-          AND: [
-            { checkInDate: { lt: checkOut } },
-            { checkOutDate: { gt: checkIn } },
-          ],
-        },
-      });
-
-      if (overlappingBookings >= roomType.quantity) {
-        throw new Error("BOOKING_NOT_AVAILABLE");
-      }
-
-      // Calculate total amount (in kobo)
-      const totalAmount = numberOfNights * roomType.pricePerNight;
-
-      // Get commission setting
+      // 3. Get commission setting
       const commissionSetting = await db.commissionSetting.findFirst();
       const commissionRate = commissionSetting
         ? Number(commissionSetting.rate)
@@ -101,12 +121,11 @@ export async function POST(req: Request) {
       const commissionAmount = Math.floor(totalAmount * commissionRate);
       const hotelPayout = totalAmount - commissionAmount;
 
-      // Create the booking
+      // 4. Create the booking with nested rooms
       const booking = await db.booking.create({
         data: {
           userId: payload.userId,
           hotelId,
-          roomTypeId,
           checkInDate: checkIn,
           checkOutDate: checkOut,
           numberOfGuests,
@@ -116,6 +135,9 @@ export async function POST(req: Request) {
           commissionAmount,
           hotelPayout,
           status: "PENDING",
+          rooms: {
+            create: roomsToCreate,
+          },
         },
       });
 

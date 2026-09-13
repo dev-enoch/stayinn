@@ -6,7 +6,6 @@ const QR_SIGNING_KEY = process.env.QR_SIGNING_KEY as string;
 export interface BookingQRPayload {
   bookingId: string;
   hotelId: string;
-  roomTypeId: string;
   guestName: string;
   checkInDate: string; // ISO String
   checkOutDate: string; // ISO String

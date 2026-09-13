@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   Plus,
   Minus,
@@ -65,12 +66,14 @@ function todayDate() {
 // ─── Simple Room Display Card ─────────────────────────────────────────────────
 export function RoomCard({
   room,
-  selected,
-  onSelect,
+  quantity,
+  onIncrease,
+  onDecrease,
 }: {
   room: RoomType;
-  selected: boolean;
-  onSelect: (id: string) => void;
+  quantity: number;
+  onIncrease: () => void;
+  onDecrease: () => void;
 }) {
   const img =
     room.images[0]?.url ||
@@ -78,16 +81,15 @@ export function RoomCard({
   return (
     <div
       id={`room-${room.id}`}
-      onClick={() => onSelect(room.id)}
-      className={`scroll-mt-36 bg-white rounded-2xl border overflow-hidden flex flex-col sm:flex-row cursor-pointer transition-all duration-200 shadow-sm
-        ${selected ? "border-teal-900 ring-2 ring-teal-900/20 shadow-md" : "border-slate-200 hover:border-teal-200 hover:shadow-md"}`}
+      className={`scroll-mt-36 bg-white rounded-2xl border overflow-hidden flex flex-col sm:flex-row transition-all duration-200 shadow-sm
+        ${quantity > 0 ? "border-teal-900 ring-2 ring-teal-900/20 shadow-md" : "border-slate-200"}`}
     >
       {/* Image */}
       <div className="w-full sm:w-44 h-40 sm:h-auto shrink-0 relative overflow-hidden bg-slate-100">
         <img src={img} alt={room.name} className="w-full h-full object-cover" />
-        {selected && (
+        {quantity > 0 && (
           <div className="absolute top-2 left-2 bg-teal-900 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
-            <Check size={10} /> Selected
+            <Check size={10} /> {quantity} Selected
           </div>
         )}
       </div>
@@ -149,11 +151,30 @@ export function RoomCard({
           </div>
         )}
 
-        <p className="text-xs text-teal-700 font-bold mt-auto pt-1">
-          {selected
-            ? "✓ Selected — configure your booking →"
-            : "Click to select this room"}
-        </p>
+        <div className="mt-auto pt-4 flex items-center justify-between">
+          <p className="text-xs text-slate-500 font-medium">
+            {room.quantity - quantity > 0
+              ? `${room.quantity - quantity} available`
+              : "No more rooms available"}
+          </p>
+          <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-1">
+            <button
+              onClick={onDecrease}
+              disabled={quantity === 0}
+              className="p-1 rounded-md text-slate-600 hover:bg-white hover:shadow-sm disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:shadow-none transition-all"
+            >
+              <Minus size={16} />
+            </button>
+            <span className="text-sm font-bold w-4 text-center">{quantity}</span>
+            <button
+              onClick={onIncrease}
+              disabled={quantity >= room.quantity}
+              className="p-1 rounded-md text-slate-600 hover:bg-white hover:shadow-sm disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:shadow-none transition-all"
+            >
+              <Plus size={16} />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -169,9 +190,7 @@ export default function HotelBookingSection({
   rooms: RoomType[];
   isLoggedIn: boolean;
 }) {
-  const [selectedRoomId, setSelectedRoomId] = useState<string>(
-    rooms[0]?.id ?? "",
-  );
+  const [selectedRooms, setSelectedRooms] = useState<Record<string, number>>({});
   const [nights, setNights] = useState(1);
   const [guests, setGuests] = useState(1);
   const [checkIn, setCheckIn] = useState(toISODate(addDays(todayDate(), 1)));
@@ -184,10 +203,21 @@ export default function HotelBookingSection({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bookingResult, setBookingResult] = useState<{ bookingId: string; amount: number } | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  const selectedRoom = rooms.find((r) => r.id === selectedRoomId) ?? rooms[0];
+  const selectedRoom = rooms[0] || { name: "Room" };
 
-  const totalPrice = selectedRoom ? selectedRoom.pricePerNight * nights : 0;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const totalRooms = Object.values(selectedRooms).reduce((a, b) => a + b, 0);
+
+  const totalPrice = Object.entries(selectedRooms).reduce((acc, [id, qty]) => {
+    const room = rooms.find(r => r.id === id);
+    if (!room) return acc;
+    return acc + (room.pricePerNight * qty * nights);
+  }, 0);
 
   const handleNightsChange = (delta: number) => {
     setNights((n) => {
@@ -221,7 +251,7 @@ export default function HotelBookingSection({
       window.location.href = `/login?redirect=/hotels/${hotel.slug}`;
       return;
     }
-    if (!selectedRoom) return;
+    if (totalRooms === 0) return;
     setStep("payment");
     setError(null);
     setModalOpen(true);
@@ -246,7 +276,10 @@ export default function HotelBookingSection({
         credentials: "include",
         body: JSON.stringify({
           hotelId: hotel.id,
-          roomTypeId: selectedRoom!.id,
+          rooms: Object.entries(selectedRooms).map(([id, qty]) => ({
+            roomTypeId: id,
+            quantity: qty,
+          })).filter(r => r.quantity > 0),
           checkInDate: checkIn,
           checkOutDate: checkOut,
           numberOfGuests: guests,
@@ -269,7 +302,7 @@ export default function HotelBookingSection({
     }
   };
 
-  if (!selectedRoom) return null;
+
 
   return (
     <>
@@ -291,8 +324,9 @@ export default function HotelBookingSection({
           <RoomCard
             key={room.id}
             room={room}
-            selected={selectedRoomId === room.id}
-            onSelect={setSelectedRoomId}
+            quantity={selectedRooms[room.id] || 0}
+            onIncrease={() => setSelectedRooms(prev => ({ ...prev, [room.id]: (prev[room.id] || 0) + 1 }))}
+            onDecrease={() => setSelectedRooms(prev => ({ ...prev, [room.id]: Math.max(0, (prev[room.id] || 0) - 1) }))}
           />
         ))}
       </div>
@@ -301,8 +335,8 @@ export default function HotelBookingSection({
       {/* This widget is rendered inside the right sticky column in the hotel page */}
 
       {/* ── PAYMENT MODAL ─────────────────────────────────────────────────── */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center">
+      {modalOpen && mounted && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -344,23 +378,33 @@ export default function HotelBookingSection({
                     <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
                       Booking Summary
                     </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 bg-slate-200">
-                        <img
-                          src={selectedRoom.images[0]?.url || ""}
-                          alt={selectedRoom.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="font-bold text-slate-900 text-sm">
-                          {selectedRoom.name}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {selectedRoom.bedType} · Sleeps{" "}
-                          {selectedRoom.capacity}
-                        </p>
-                      </div>
+                    <div className="flex flex-col gap-2 max-h-32 overflow-y-auto pr-1">
+                      {Object.entries(selectedRooms).map(([id, qty]) => {
+                        if (qty === 0) return null;
+                        const room = rooms.find(r => r.id === id)!;
+                        return (
+                          <div key={id} className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-100">
+                            <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-200 relative">
+                              <img
+                                src={room.images[0]?.url || ""}
+                                alt={room.name}
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute top-0.5 right-0.5 bg-teal-900 text-white text-[9px] font-bold px-1 rounded-sm">
+                                {qty}x
+                              </div>
+                            </div>
+                            <div>
+                              <p className="font-bold text-slate-900 text-sm leading-tight">
+                                {room.name}
+                              </p>
+                              <p className="text-[10px] text-slate-500 mt-0.5">
+                                {room.bedType} · Sleeps {room.capacity * qty}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div className="bg-white rounded-xl p-3 border border-slate-100">
@@ -557,7 +601,8 @@ export default function HotelBookingSection({
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <style>{`
@@ -575,14 +620,14 @@ export function BookingWidget({
   hotel,
   rooms,
   isLoggedIn,
-  selectedRoomId,
-  onSelectRoom,
+  selectedRooms,
+  setSelectedRooms,
 }: {
   hotel: Hotel;
   rooms: RoomType[];
   isLoggedIn: boolean;
-  selectedRoomId: string;
-  onSelectRoom: (id: string) => void;
+  selectedRooms: Record<string, number>;
+  setSelectedRooms: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }) {
   const [nights, setNights] = useState(1);
   const [guests, setGuests] = useState(1);
@@ -596,9 +641,19 @@ export function BookingWidget({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bookingResult, setBookingResult] = useState<{ bookingId: string; amount: number } | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  const selectedRoom = rooms.find((r) => r.id === selectedRoomId) ?? rooms[0];
-  const totalPrice = selectedRoom ? selectedRoom.pricePerNight * nights : 0;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const totalRooms = Object.values(selectedRooms).reduce((a, b) => a + b, 0);
+
+  const totalPrice = Object.entries(selectedRooms).reduce((acc, [id, qty]) => {
+    const room = rooms.find(r => r.id === id);
+    if (!room) return acc;
+    return acc + (room.pricePerNight * qty * nights);
+  }, 0);
 
   const handleNightsChange = (delta: number) => {
     setNights((n) => {
@@ -629,6 +684,7 @@ export function BookingWidget({
       window.location.href = `/login?redirect=/hotels/${hotel.slug}`;
       return;
     }
+    if (totalRooms === 0) return;
     setStep("payment");
     setError(null);
     setModalOpen(true);
@@ -653,7 +709,10 @@ export function BookingWidget({
         credentials: "include",
         body: JSON.stringify({
           hotelId: hotel.id,
-          roomTypeId: selectedRoom!.id,
+          rooms: Object.entries(selectedRooms).map(([id, qty]) => ({
+            roomTypeId: id,
+            quantity: qty,
+          })).filter(r => r.quantity > 0),
           checkInDate: checkIn,
           checkOutDate: checkOut,
           numberOfGuests: guests,
@@ -676,61 +735,64 @@ export function BookingWidget({
     }
   };
 
-  if (!selectedRoom) return null;
+  const totalCapacity = Object.entries(selectedRooms).reduce((acc, [id, qty]) => {
+    return acc + ((rooms.find(r => r.id === id)?.capacity || 0) * qty);
+  }, 0);
+
+  const minPrice = rooms.length > 0 ? Math.min(...rooms.map(r => r.pricePerNight)) : 0;
 
   return (
     <>
       <div className="bg-white rounded-3xl shadow-xl border border-slate-100 flex flex-col overflow-hidden">
         {/* Price Header */}
-        <div className="p-6 pb-4 border-b border-slate-100">
+        <div className="p-6 pb-4 border-b border-slate-100 bg-teal-50/50">
           <div className="flex items-baseline gap-1">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mr-1">
               From
             </span>
             <span className="font-serif text-3xl font-bold text-slate-900">
-              {fmt(selectedRoom.pricePerNight)}
+              {fmt(minPrice)}
             </span>
             <span className="text-sm font-semibold text-slate-500">
               / night
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            {rooms.length} room type{rooms.length !== 1 ? "s" : ""} available
+            Select rooms from the list to begin
           </p>
         </div>
 
         <div className="p-5 flex flex-col gap-5">
-          {/* Room Selector */}
-          <div className="flex flex-col gap-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Room Type
-            </p>
-            {rooms.map((room) => (
-              <button
-                key={room.id}
-                onClick={() => onSelectRoom(room.id)}
-                className={`flex items-center justify-between p-3 rounded-xl border-2 transition-all text-left ${selectedRoomId === room.id ? "border-teal-900 bg-teal-50" : "border-slate-200 bg-white hover:border-teal-200"}`}
-              >
-                <div>
-                  <p
-                    className={`text-sm font-bold ${selectedRoomId === room.id ? "text-teal-900" : "text-slate-900"}`}
-                  >
-                    {room.name}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    Sleeps {room.capacity}
-                    {room.bedType ? ` · ${room.bedType}` : ""}
-                  </p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-bold text-teal-900">
-                    {fmt(room.pricePerNight)}
-                  </p>
-                  <p className="text-[10px] text-slate-400">/night</p>
-                </div>
-              </button>
-            ))}
-          </div>
+          {/* Selected Rooms Summary */}
+          {totalRooms > 0 && (
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Selected Rooms
+              </p>
+              <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-1">
+                {Object.entries(selectedRooms).map(([id, qty]) => {
+                  if (qty === 0) return null;
+                  const room = rooms.find(r => r.id === id)!;
+                  return (
+                    <div key={id} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                      <div>
+                        <p className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                          <span className="bg-teal-900 text-white text-[10px] px-1.5 py-0.5 rounded-md">{qty}x</span>
+                          {room.name}
+                        </p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">
+                          Sleeps up to {room.capacity * qty}
+                        </p>
+                      </div>
+                      <p className="text-sm font-bold text-teal-900">
+                        {fmt(room.pricePerNight * qty)}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Date Pickers */}
           <div className="grid grid-cols-2 gap-2">
@@ -805,9 +867,9 @@ export function BookingWidget({
                 </span>
                 <button
                   onClick={() =>
-                    setGuests((g) => Math.min(selectedRoom.capacity, g + 1))
+                    setGuests((g) => Math.min(totalCapacity || 1, g + 1))
                   }
-                  disabled={guests >= selectedRoom.capacity}
+                  disabled={totalRooms === 0 || guests >= totalCapacity}
                   className="w-7 h-7 rounded-lg bg-teal-900 flex items-center justify-center text-white disabled:opacity-30 hover:bg-teal-800 transition-colors"
                 >
                   <Plus size={13} />
@@ -820,11 +882,10 @@ export function BookingWidget({
           <div className="flex items-center justify-between bg-teal-50 rounded-xl px-4 py-3 border border-teal-100">
             <div>
               <p className="text-xs text-teal-700 font-bold">
-                {nights} night{nights !== 1 ? "s" : ""} · {guests} guest
-                {guests !== 1 ? "s" : ""}
+                {totalRooms} room{totalRooms !== 1 ? "s" : ""} · {nights} night{nights !== 1 ? "s" : ""}
               </p>
               <p className="text-xs text-teal-600">
-                {fmt(selectedRoom.pricePerNight)} × {nights}
+                {guests} guest{guests !== 1 ? "s" : ""}
               </p>
             </div>
             <span className="text-xl font-bold text-teal-950">
@@ -835,9 +896,10 @@ export function BookingWidget({
           {/* CTA */}
           <button
             onClick={openModal}
-            className="w-full py-4 rounded-xl bg-teal-900 hover:bg-teal-800 text-white text-sm font-bold tracking-wide transition-all shadow-lg shadow-teal-900/20 flex items-center justify-center gap-2 active:scale-[0.98]"
+            disabled={totalRooms === 0}
+            className="w-full py-4 rounded-xl bg-teal-900 hover:bg-teal-800 text-white text-sm font-bold tracking-wide transition-all shadow-lg shadow-teal-900/20 flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
           >
-            Reserve Now <ChevronRight size={18} />
+            {totalRooms === 0 ? "Select a room" : "Reserve Now"} <ChevronRight size={18} />
           </button>
 
           {/* Trust */}
@@ -859,8 +921,8 @@ export function BookingWidget({
       </div>
 
       {/* ── PAYMENT MODAL ── */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center p-0 md:p-4">
+      {modalOpen && mounted && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center p-0 md:p-4">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={closeModal}
@@ -877,7 +939,7 @@ export function BookingWidget({
                     : "Complete Your Booking"}
                 </h2>
                 <p className="text-xs text-slate-500">
-                  {hotel.name} · {selectedRoom.name}
+                  {hotel.name} · {totalRooms} Room{totalRooms === 1 ? "" : "s"}
                 </p>
               </div>
               <button
@@ -924,7 +986,7 @@ export function BookingWidget({
                     <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                       <span className="text-sm text-slate-500">
                         {nights}n · {guests} guest{guests !== 1 ? "s" : ""} ·{" "}
-                        {selectedRoom.name}
+                        {totalRooms} Room{totalRooms === 1 ? "" : "s"}
                       </span>
                       <span className="text-xl font-bold text-teal-950">
                         {fmt(totalPrice)}
@@ -1086,7 +1148,8 @@ export function BookingWidget({
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <style>{`

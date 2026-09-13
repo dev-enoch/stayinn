@@ -27,7 +27,7 @@ export default async function BookingDetailPage(props: {
 
   const dbBooking = await prisma.booking.findUnique({
     where: { id: params.id },
-    include: { hotel: true, roomType: true, user: true },
+    include: { hotel: true, rooms: { include: { roomType: true } }, user: true },
   });
 
   if (!dbBooking) {
@@ -186,7 +186,7 @@ export default async function BookingDetailPage(props: {
               made.
             </p>
             <Link
-              href={`/book/${booking.roomTypeId}`}
+              href={`/hotels/${booking.hotel.slug}`}
               className="bg-gray-900 text-white font-bold py-4 px-8 rounded-full hover:bg-green-600 transition-colors inline-block"
             >
               Try Again

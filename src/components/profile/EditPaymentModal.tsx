@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, Loader2, Wallet, CheckCircle2, Building2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +21,10 @@ export default function EditPaymentModal({
   const [bankName, setBankName] = useState("Guaranty Trust Bank");
   const [accountNumber, setAccountNumber] = useState("0123456789");
 
-  if (!isOpen) return null;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!isOpen || !mounted) return null;
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +42,7 @@ export default function EditPaymentModal({
     }, 1000);
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
       <div
         className="bg-white rounded-lg shadow-xl border border-slate-100 w-full max-w-md overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200"
@@ -180,6 +184,7 @@ export default function EditPaymentModal({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -26,8 +26,9 @@ export async function GET(
       where: { id },
       include: {
         hotel: true,
-        roomType: true,
-        user: { select: { fullName: true, email: true, phone: true } },
+        rooms: {
+          include: { roomType: true },
+        },
         payment: true,
       },
     });
@@ -75,16 +76,18 @@ export async function GET(
         hotel: {
           id: booking.hotel.id,
           name: booking.hotel.name,
-          address: booking.hotel.address,
+          image: booking.hotel.coverImage,
         },
-        roomType: {
-          id: booking.roomType.id,
-          name: booking.roomType.name,
-        },
-        guest: booking.user,
+        rooms: booking.rooms.map(br => ({
+          id: br.roomType.id,
+          name: br.roomType.name,
+          quantity: br.quantity,
+          pricePerNight: br.pricePerNight / 100,
+        })),
         payment: booking.payment
           ? {
               status: booking.payment.status,
+              amount: booking.payment.amount / 100,
               gatewayReference: booking.payment.gatewayReference,
             }
           : null,

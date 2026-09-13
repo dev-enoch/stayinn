@@ -22,8 +22,9 @@ export async function GET(req: Request) {
     const bookings = await prisma.booking.findMany({
       where: { userId: payload.userId },
       include: {
-        hotel: { select: { name: true, coverImage: true, address: true } },
-        roomType: { select: { name: true } },
+        hotel: { select: { id: true, name: true, coverImage: true, slug: true } },
+        rooms: { include: { roomType: true } },
+        payment: { select: { status: true } },
       },
       orderBy: { createdAt: "desc" },
     });
@@ -31,17 +32,28 @@ export async function GET(req: Request) {
     const items = bookings.map(
       (
         b: Booking & {
-          hotel: { name: string; coverImage: string | null; address: string };
-          roomType: { name: string };
+          hotel: { id: string; name: string; coverImage: string | null; slug: string };
+          rooms: Array<{ roomType: { id: string; name: string }; quantity: number }>;
+          payment: { status: string } | null;
         },
       ) => ({
         id: b.id,
-        hotelName: b.hotel.name,
-        roomTypeName: b.roomType.name,
+        hotel: {
+          id: b.hotel.id,
+          name: b.hotel.name,
+          slug: b.hotel.slug,
+          image: b.hotel.coverImage,
+        },
+        rooms: b.rooms.map((br) => ({
+          id: br.roomType.id,
+          name: br.roomType.name,
+          quantity: br.quantity,
+        })),
         checkInDate: b.checkInDate,
         checkOutDate: b.checkOutDate,
         totalAmount: b.totalAmount / 100,
         status: b.status,
+        paymentStatus: b.payment?.status || null,
         qrData: b.qrData,
       }),
     );

@@ -133,8 +133,8 @@ model RoomType {
   createdAt     DateTime   @default(now()) @db.Timestamptz
   updatedAt     DateTime   @updatedAt @db.Timestamptz
 
-  images   RoomImage[]
-  bookings Booking[]
+  images       RoomImage[]
+  bookingRooms BookingRoom[]
 
   @@index([hotelId])
   @@index([status])
@@ -167,8 +167,7 @@ model Booking {
   user             User          @relation(fields: [userId], references: [id])
   hotelId          String
   hotel            Hotel         @relation(fields: [hotelId], references: [id])
-  roomTypeId       String
-  roomType         RoomType      @relation(fields: [roomTypeId], references: [id])
+  rooms            BookingRoom[]
   checkInDate      DateTime      @db.Date
   checkOutDate     DateTime      @db.Date
   numberOfGuests   Int
@@ -192,6 +191,21 @@ model Booking {
   @@index([hotelId, checkInDate, checkOutDate])
   @@index([userId])
   @@index([status])
+}
+
+// ============================================
+// BOOKING ROOM
+// ============================================
+model BookingRoom {
+  id            String   @id @default(cuid())
+  bookingId     String
+  booking       Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  roomTypeId    String
+  roomType      RoomType @relation(fields: [roomTypeId], references: [id])
+  quantity      Int      @default(1)
+  pricePerNight Int
+  
+  @@index([bookingId])
   @@index([roomTypeId])
 }
 

@@ -320,7 +320,13 @@ async function main() {
       data: {
         userId: booker.id,
         hotelId: hotel.id,
-        roomTypeId: room.id,
+        rooms: {
+          create: [{
+            roomTypeId: room.id,
+            quantity: 1,
+            pricePerNight: room.pricePerNight,
+          }]
+        },
         checkInDate: checkIn,
         checkOutDate: checkOut,
         numberOfGuests: Math.floor(Math.random() * room.capacity) + 1,

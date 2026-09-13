@@ -44,7 +44,7 @@ export async function GET(
     const bookings = await prisma.booking.findMany({
       where: { hotelId },
       include: {
-        roomType: { select: { name: true } },
+        rooms: { include: { roomType: true } },
         user: { select: { fullName: true } },
       },
       orderBy: { createdAt: "desc" },
@@ -52,11 +52,14 @@ export async function GET(
 
     const items = bookings.map(
       (
-        b: Booking & { roomType: { name: string }; user: { fullName: string } },
+        b: Booking & {
+          rooms: Array<{ roomType: { name: string } }>;
+          user: { fullName: string };
+        },
       ) => ({
         id: b.id,
         guestName: b.user.fullName,
-        roomTypeName: b.roomType.name,
+        roomTypeName: b.rooms.map(r => r.roomType.name).join(", "),
         checkInDate: b.checkInDate,
         checkOutDate: b.checkOutDate,
         hotelPayout: b.hotelPayout / 100,

@@ -25,7 +25,7 @@ export async function GET(req: Request) {
           include: {
             user: true,
             hotel: true,
-            roomType: true,
+            rooms: { include: { roomType: true } },
           },
         },
       },
@@ -64,7 +64,6 @@ export async function GET(req: Request) {
       const qrPayload = {
         bookingId: booking.id,
         hotelId: booking.hotelId,
-        roomTypeId: booking.roomTypeId,
         guestName: booking.user.fullName,
         checkInDate: booking.checkInDate.toISOString(),
         checkOutDate: booking.checkOutDate.toISOString(),
@@ -88,7 +87,7 @@ export async function GET(req: Request) {
         guestName: booking.user.fullName,
         guestEmail: booking.user.email,
         hotelName: booking.hotel.name,
-        roomTypeName: booking.roomType.name,
+        roomTypeName: booking.rooms.map(r => r.roomType.name).join(", "),
         checkInDate: booking.checkInDate.toISOString().split("T")[0],
         checkOutDate: booking.checkOutDate.toISOString().split("T")[0],
         qrImageBase64: qrResult.qrImageBase64,
